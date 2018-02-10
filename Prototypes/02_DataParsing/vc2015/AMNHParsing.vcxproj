@@ -46,7 +46,7 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>..\include;..\..\..\..\include;..\blocks\BluecadetText\src;..\blocks\BluecadetUtils\src;..\blocks\BluecadetViews\src;..\..\..\..\blocks\OSC\src;..\..\..\..\blocks\TUIO\src</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\include;..\..\..\Cinder\include;..\blocks\BluecadetText\src;..\blocks\BluecadetUtils\src;..\blocks\BluecadetViews\src;..\..\..\Cinder\blocks\OSC\src;..\..\..\Cinder\blocks\TUIO\src</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_WIN32_WINNT=0x0601;_WINDOWS;NOMINMAX;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
@@ -56,11 +56,11 @@
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <ResourceCompile>
-      <AdditionalIncludeDirectories>"..\..\..\..\include";..\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>"..\..\..\Cinder\include";..\include</AdditionalIncludeDirectories>
     </ResourceCompile>
     <Link>
       <AdditionalDependencies>cinder.lib;OpenGL32.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>..\..\..\..\lib\msw\$(PlatformTarget);..\..\..\..\lib\msw\$(PlatformTarget)\$(Configuration)\$(PlatformToolset)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>..\..\..\Cinder\lib\msw\$(PlatformTarget);..\..\..\Cinder\lib\msw\$(PlatformTarget)\$(Configuration)\$(PlatformToolset)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
       <RandomizedBaseAddress>false</RandomizedBaseAddress>
@@ -70,7 +70,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
-      <AdditionalIncludeDirectories>..\include;..\..\..\..\include;..\blocks\BluecadetText\src;..\blocks\BluecadetUtils\src;..\blocks\BluecadetViews\src;..\..\..\..\blocks\OSC\src;..\..\..\..\blocks\TUIO\src</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\include;..\..\..\Cinder\include;..\blocks\BluecadetText\src;..\blocks\BluecadetUtils\src;..\blocks\BluecadetViews\src;..\..\..\Cinder\blocks\OSC\src;..\..\..\Cinder\blocks\TUIO\src</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_WIN32_WINNT=0x0601;_WINDOWS;NOMINMAX;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <PrecompiledHeader />
@@ -82,11 +82,11 @@
       <LinkLibraryDependencies>true</LinkLibraryDependencies>
     </ProjectReference>
     <ResourceCompile>
-      <AdditionalIncludeDirectories>"..\..\..\..\include";..\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>"..\..\..\Cinder\include";..\include</AdditionalIncludeDirectories>
     </ResourceCompile>
     <Link>
       <AdditionalDependencies>cinder.lib;OpenGL32.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>..\..\..\..\lib\msw\$(PlatformTarget);..\..\..\..\lib\msw\$(PlatformTarget)\$(Configuration)\$(PlatformToolset)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>..\..\..\Cinder\lib\msw\$(PlatformTarget);..\..\..\Cinder\lib\msw\$(PlatformTarget)\$(Configuration)\$(PlatformToolset)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>false</GenerateDebugInformation>
       <GenerateMapFile>true</GenerateMapFile>
       <SubSystem>Windows</SubSystem>
@@ -140,8 +140,8 @@
     <ClCompile Include="..\blocks\BluecadetViews\src\bluecadet\touch\drivers\NativeTouchDriver.cpp" />
     <ClCompile Include="..\blocks\BluecadetViews\src\bluecadet\touch\drivers\SimulatedTouchDriver.cpp" />
     <ClCompile Include="..\blocks\BluecadetViews\src\bluecadet\touch\drivers\TuioDriver.cpp" />
-    <ClCompile Include="..\..\..\..\blocks\OSC\src\cinder\osc\Osc.cpp" />
-    <ClCompile Include="..\..\..\..\blocks\TUIO\src\cinder\tuio\Tuio.cpp" />
+    <ClCompile Include="..\..\..\Cinder\blocks\OSC\src\cinder\osc\Osc.cpp" />
+    <ClCompile Include="..\..\..\Cinder\blocks\TUIO\src\cinder\tuio\Tuio.cpp" />
     <ClCompile Include="..\src\models\DrifterModel.cpp" />
     <ClCompile Include="..\src\models\HurricaneModel.cpp" />
     <ClCompile Include="..\src\Parser.cpp" />
@@ -188,8 +188,8 @@
     <ClInclude Include="..\blocks\BluecadetViews\src\bluecadet\touch\drivers\NativeTouchDriver.h" />
     <ClInclude Include="..\blocks\BluecadetViews\src\bluecadet\touch\drivers\SimulatedTouchDriver.h" />
     <ClInclude Include="..\blocks\BluecadetViews\src\bluecadet\touch\drivers\TuioDriver.h" />
-    <ClInclude Include="..\..\..\..\blocks\OSC\src\cinder\osc\Osc.h" />
-    <ClInclude Include="..\..\..\..\blocks\TUIO\src\cinder\tuio\Tuio.h" />
+    <ClInclude Include="..\..\..\Cinder\blocks\OSC\src\cinder\osc\Osc.h" />
+    <ClInclude Include="..\..\..\Cinder\blocks\TUIO\src\cinder\tuio\Tuio.h" />
     <ClInclude Include="..\src\models\DrifterModel.h" />
     <ClInclude Include="..\src\models\HurricaneModel.h" />
     <ClInclude Include="..\src\Parser.h" />
