@@ -28,9 +28,9 @@ namespace amnh {
 		~Parser();
 
 		// Functions
-		void							parseHurricanData();
-		void							parseDrifterData();
-
+		void							parseHurricaneData();
+		void				  			parseDrifterData();
+		void							parseFloatsData();
 	protected:
 		// Functions
 		void							parseJSON(ci::JsonTree & tree);

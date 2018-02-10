@@ -31,7 +31,7 @@ void AMNHParsingApp::setup()
 
 void AMNHParsingApp::mouseDown( MouseEvent event )
 {
-	Parser::getInstance()->parseHurricanData();
+	Parser::getInstance()->parseHurricaneData();
 	Parser::getInstance()->parseDrifterData();
 
 }

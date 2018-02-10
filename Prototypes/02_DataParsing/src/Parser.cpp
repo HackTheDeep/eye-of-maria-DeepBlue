@@ -45,7 +45,7 @@ namespace amnh {
 
 	}
 	
-	void Parser::parseHurricanData()
+	void Parser::parseHurricaneData()
 	{
 		std::string fileName = "../assets/data/storm_track_statistics.csv";
 		std::ifstream file;
@@ -98,6 +98,11 @@ namespace amnh {
 			result.push_back("");
 		}
 		return result;
+	}
+
+	void Parser::parseFloatsData() {
+
+
 	}
 
 }

@@ -145,6 +145,7 @@
     <ClCompile Include="..\src\models\DrifterModel.cpp" />
     <ClCompile Include="..\src\models\HurricaneModel.cpp" />
     <ClCompile Include="..\src\Parser.cpp" />
+    <ClCompile Include="FloatModel.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\include\Resources.h" />
@@ -193,6 +194,7 @@
     <ClInclude Include="..\src\models\DrifterModel.h" />
     <ClInclude Include="..\src\models\HurricaneModel.h" />
     <ClInclude Include="..\src\Parser.h" />
+    <ClInclude Include="FloatModel.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets" />

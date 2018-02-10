@@ -351,6 +351,9 @@
     <ClCompile Include="..\src\models\DrifterModel.cpp">
       <Filter>Source Files\models</Filter>
     </ClCompile>
+    <ClCompile Include="FloatModel.cpp">
+      <Filter>Source Files\models</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\include\Resources.h">
@@ -363,6 +366,9 @@
       <Filter>Source Files\models</Filter>
     </ClInclude>
     <ClInclude Include="..\src\models\DrifterModel.h">
+      <Filter>Source Files\models</Filter>
+    </ClInclude>
+    <ClInclude Include="FloatModel.h">
       <Filter>Source Files\models</Filter>
     </ClInclude>
   </ItemGroup>
