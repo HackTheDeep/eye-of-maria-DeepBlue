@@ -330,16 +330,16 @@
     <ClCompile Include="..\blocks\BluecadetViews\src\bluecadet\touch\drivers\TuioDriver.cpp">
       <Filter>Blocks\BluecadetViews\src\bluecadet\touch\drivers</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\blocks\OSC\src\cinder\osc\Osc.cpp">
+    <ClCompile Include="..\..\..\..\blocks\OSC\src\cinder\osc\Osc.cpp">
       <Filter>Blocks\OSC\src\cinder\osc</Filter>
     </ClCompile>
-    <ClInclude Include="..\..\blocks\OSC\src\cinder\osc\Osc.h">
+    <ClInclude Include="..\..\..\..\blocks\OSC\src\cinder\osc\Osc.h">
       <Filter>Blocks\OSC\src\cinder\osc</Filter>
     </ClInclude>
-    <ClCompile Include="..\..\blocks\TUIO\src\cinder\tuio\Tuio.cpp">
+    <ClCompile Include="..\..\..\..\blocks\TUIO\src\cinder\tuio\Tuio.cpp">
       <Filter>Blocks\TUIO\src\cinder\tuio</Filter>
     </ClCompile>
-    <ClInclude Include="..\..\blocks\TUIO\src\cinder\tuio\Tuio.h">
+    <ClInclude Include="..\..\..\..\blocks\TUIO\src\cinder\tuio\Tuio.h">
       <Filter>Blocks\TUIO\src\cinder\tuio</Filter>
     </ClInclude>
     <ClCompile Include="..\src\Parser.cpp">

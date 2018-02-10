@@ -23,7 +23,6 @@ void AMNHParsingApp::prepareSettings(ci::app::App::Settings* settings) {
 	SettingsManager::getInstance()->setup(settings, ci::app::getAssetPath("settings.json"), [](SettingsManager * manager) {});
 }
 
-
 void AMNHParsingApp::setup()
 {
 	BaseApp::setup();
