@@ -29,7 +29,6 @@ void MainController::setup() {
 }
 
 void MainController::update() {
-
 	mEarth.update();
 	DataPointController::getInstance()->update();
 }

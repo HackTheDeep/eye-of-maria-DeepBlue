@@ -113,6 +113,9 @@ void TimelineView::update(double deltaTime) {
 	// update time
 	mCurrentTime->setText(data->getDateStringFromTimestamp(timelineManager->getAbsProgress()));
 	mCurrentTime->setPosition(vec2(mTrack->getBounds().getUpperRight().x - mCurrentTime->getWidth(), mCurrentTime->getPosition()().y));
+
+	// update time label
+	mCurrentTimeLabel->setText("Time (x" + bluecadet::text::toPrecision(timelineManager->getSpeed(), 3) + ")");
 }
 
 void TimelineView::play() {

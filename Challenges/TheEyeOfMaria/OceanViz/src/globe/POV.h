@@ -17,6 +17,8 @@ public:
 	void setEye( ci::vec3 v );
 	void setCenter( ci::vec3 v );
 
+	void applyMatrix();
+
 public:
 	ci::CameraPersp  mCam;
 	ci::vec3         mEye;

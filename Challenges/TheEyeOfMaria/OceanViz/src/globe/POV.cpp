@@ -27,8 +27,6 @@ void POV::update()
 
 	mCam.lookAt( mEye, mCenter );
 	mCam.setPerspective( mFOV, mApp->getWindowAspectRatio(), 1, 20000 );
-
-	ci::gl::setMatrices( mCam );
 }
 
 void POV::adjustAngle( float angleDelta, float pitch )
@@ -50,4 +48,8 @@ void POV::setEye( ci::vec3 v )
 void POV::setCenter( ci::vec3 v )
 {
 	mCenter = v;
+}
+
+void POV::applyMatrix() {
+	ci::gl::setMatrices(mCam);
 }
