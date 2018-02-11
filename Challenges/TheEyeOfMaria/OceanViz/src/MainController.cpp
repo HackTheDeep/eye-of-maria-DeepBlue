@@ -137,7 +137,6 @@ void MainController::draw() {
 
 	mEarth.draw();
 
-	DataPointController::getInstance()->drawLines();
 	DataPointController::getInstance()->draw();
 }
 

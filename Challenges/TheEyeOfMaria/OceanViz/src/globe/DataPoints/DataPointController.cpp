@@ -470,6 +470,8 @@ void DataPointController::toggleHurricane() {
 
 void DataPointController::draw() {
 
+	drawLines();
+
 	mPointsShader->uniform("uViewScale", 1.0f);
 	mPointsShader->uniform("uTrailDuration", OceanSettings::getInstance()->mTrailDuration);
 	mPointsShader->uniform("uTrailFadePower", OceanSettings::getInstance()->mTrailFadePower);
@@ -481,7 +483,7 @@ void DataPointController::draw() {
 
 void DataPointController::drawLines() {
 
-	if (bShowDrifterPts) {
+	if (bShowFloatPts) {
 		gl::color(ColorA::gray(1.0f, 1.0f ));
 		mLinesBatch->draw();
 	}
