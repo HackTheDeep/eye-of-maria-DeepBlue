@@ -18,22 +18,36 @@ DataPointController::~DataPointController() {
 void DataPointController::setup() {
 
 
-	int numPoints = 2880;
+	int numPoints = 100000;
+	mNumUsedPoints = 0;
+
 	for (int i = 0; i < numPoints; i++) {
-
-		float lat = lmap((float)i, 0.0f, (float)numPoints, 90.0f, -90.0f);
-		float lon = i;
-
-		float theta = glm::radians(90 - lat);
-		float phi = glm::radians(180 + lon);
-
+		//setup all the placeholder points
 		DataPoint p;
-		vec3 pos = vec3(sin(theta) * sin(phi), cos(theta), sin(theta) * cos(phi));
-		pos *= vec3(255.0f);
-		p.setup( i, pos );
-
+		vec3 pos = vec3(0.0f);
+		p.setup(i, pos);
+		p.mColor = ColorA::gray(0.0f, 0.0f);
 		mPointsList.push_back(p);
+
+		//if (i < 2880) {
+		//	float lat = lmap((float)i, 0.0f, (float)2880, 90.0f, -90.0f);
+		//	float lon = i;
+
+		//	float theta = glm::radians(90 - lat);
+		//	float phi = glm::radians(180 + lon);
+
+		//	DataPoint p;
+		//	vec3 pos = vec3(sin(theta) * sin(phi), cos(theta), sin(theta) * cos(phi));
+		//	pos *= vec3(255.0f);
+		//	p.setup( i, pos );
+		//	mPointsList.push_back(p);
+		//} else {
+
+		//}
+
 	}
+
+
 
 
 	// Create mPoints buffer on GPU and copy over data.
@@ -60,6 +74,13 @@ void DataPointController::setup() {
 
 }
 
+void DataPointController::addDataPoint( DataPoint::DataType type ) {
+
+
+
+}
+
+
 void DataPointController::loadShader() {
 	try {
 		mPointsShader = gl::GlslProg::create(loadAsset("points/point.vert"), loadAsset("points/point.frag"), loadAsset("points/point.geom"));
@@ -78,6 +99,8 @@ void DataPointController::replaceBatchShader() {
 
 void DataPointController::update() {
 
+
+	
 
 	// Copy particle data onto the GPU.
 	// Map the GPU memory and write over it.
