@@ -60,8 +60,20 @@ void MainController::setup(bluecadet::views::BaseViewRef rootView) {
 	//add the data points
 	DataPointController::getInstance()->addDrifterData();
 	DataPointController::getInstance()->addHurricaneData();
+	DataPointController::getInstance()->addFloaterData();
 
+	DataPointController::getInstance()->reMapHurricaneColors(DataPointController::HurricaneColor::WIND);
 	
+	auto params = OceanSettings::getInstance()->getParams();
+	params->addParam("Enable Depth Test", &bEnableDepthTest );
+
+	params->addButton("Hurricane Color: Pressure", [=]{ 
+		DataPointController::getInstance()->reMapHurricaneColors(DataPointController::HurricaneColor::PRESSURE);
+	});
+	params->addButton("Hurricane Color: Wind", [=] { 
+		DataPointController::getInstance()->reMapHurricaneColors(DataPointController::HurricaneColor::WIND);
+	});
+
 	//wire up signals
 	getWindow()->getSignalMouseDown().connect(100, bind(&MainController::handleMouseDown, this, std::placeholders::_1));
 	getWindow()->getSignalMouseDrag().connect(100, bind(&MainController::handleMouseDrag, this, std::placeholders::_1));
@@ -79,7 +91,8 @@ void MainController::update() {
 
 void MainController::draw() {
 	gl::ScopedMatrices scopedMatrices;
-	gl::ScopedDepth	depth(true);
+
+	if( bEnableDepthTest ) gl::ScopedDepth depth(true);
 
 	//mPov->applyMatrix();
 

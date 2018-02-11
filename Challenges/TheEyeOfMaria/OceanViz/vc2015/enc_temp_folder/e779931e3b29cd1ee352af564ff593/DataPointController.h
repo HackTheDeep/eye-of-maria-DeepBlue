@@ -49,8 +49,7 @@ namespace amnh {
 
 		enum class HurricaneColor {
 			PRESSURE,
-			WIND,
-			CATEGORY
+			WIND
 		};
 
 

@@ -230,7 +230,7 @@ void DataPointController::reMapHurricaneColors(HurricaneColor colorType) {
 		CI_LOG_I("Mapping Hurricane colors to Wind");
 		break;
 	case HurricaneColor::PRESSURE:
-		startCol = ColorA(0.0f, 0.0f, 1.0f, 1.0f);
+		startCol = ColorA(0.5f, 0.5f, 1.0f, 1.0f);
 		endCol = ColorA(1.0f, 1.0f, 1.0f, 1.0f);
 		startVal = minHurPressure;
 		endVal = maxHurPressure;

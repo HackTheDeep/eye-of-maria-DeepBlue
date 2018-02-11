@@ -8,10 +8,12 @@ in float iPointRadius;
 in float iTimeStamp;
 out float uRadius;
 out vec4 vColor;
+out float vTimeStamp;
 
 void main(void) {
 	gl_Position = ciModelView * ciPosition;
 	uRadius = iPointRadius;
+	vTimeStamp = iTimeStamp;
 	
 	if (iTimeStamp < uPlayhead) {
 		vColor = ciColor;	

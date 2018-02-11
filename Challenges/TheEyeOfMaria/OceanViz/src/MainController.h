@@ -46,6 +46,8 @@ protected:
 	//POVRef              mPov = nullptr;
 	UiControllerRef		mUiController = nullptr;
 
+	bool				bEnableDepthTest;
+
 	//camera and mouse manipulation
 	//ci::vec2			mLastMouse;
 	//ci::vec2			mCurrentMouse;
