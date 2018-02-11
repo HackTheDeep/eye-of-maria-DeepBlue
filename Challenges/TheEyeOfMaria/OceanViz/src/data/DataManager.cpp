@@ -123,8 +123,6 @@ namespace amnh {
 	}
 
 	void DataManager::parseFloatData() {
-		fs::path filePath = getAssetPath("data/floats.json");
-
 		try {
 			fs::path filePath = getAssetPath("data/floats.json");
 			if (fs::exists(filePath)) {
