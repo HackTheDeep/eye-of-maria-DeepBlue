@@ -111,7 +111,7 @@ void TimelineView::update(double deltaTime) {
 	}
 
 	// update time
-	mCurrentTime->setText(data->getDateStringFromTimestamp(timelineManager->getAbsProgress()), "label.small");
+	mCurrentTime->setText(data->getDateStringFromTimestamp(timelineManager->getAbsProgress()));
 	mCurrentTime->setPosition(vec2(mTrack->getBounds().getUpperRight().x - mCurrentTime->getWidth(), mCurrentTime->getPosition()().y));
 }
 
