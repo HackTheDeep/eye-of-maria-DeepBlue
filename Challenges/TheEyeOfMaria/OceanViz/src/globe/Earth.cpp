@@ -58,3 +58,15 @@ void Earth::draw()
 
 }
 
+void Earth::loadShader() {
+	auto earthShader = gl::GlslProg::create(loadAsset("earth/earth.vert"), loadAsset("earth/earth.frag"));
+	earthShader->uniform("texDiffuse", 0);
+	earthShader->uniform("texNormal", 1);
+	earthShader->uniform("texMask", 2);
+	if (mEarth) {
+		mEarth->replaceGlslProg(earthShader);
+	} else {
+		mEarth = gl::Batch::create(geom::Sphere().radius(mRadius).subdivisions(120), earthShader);
+	}
+}
+
