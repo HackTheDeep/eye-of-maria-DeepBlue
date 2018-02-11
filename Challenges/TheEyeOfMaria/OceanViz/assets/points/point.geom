@@ -11,6 +11,9 @@ in vec4 vColor[]; // Output from vertex shader for each vertex
 out vec4 gColor; // Output to fragment shader
 uniform mat4 ciProjectionMatrix;
 uniform float uViewScale;
+uniform float uPlayhead;
+in float vTimeStamp[];
+out float timeStamp;
 
 vec4 getPointOnCircle( float rad, float ang){
 	return rad * vec4( cos( M_PI * ang / 180.0f ), sin( M_PI * ang / 180.0f ), 0.0f, 0.0f);
@@ -19,6 +22,7 @@ vec4 getPointOnCircle( float rad, float ang){
 void main()
 {
 	gColor = vColor[0];
+	timeStamp = vTimeStamp[0];
 
 	// int numPoints = 12;
 	// float theta = 360.0f/float(numPoints);

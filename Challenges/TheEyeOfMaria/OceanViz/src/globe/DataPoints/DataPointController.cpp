@@ -74,6 +74,9 @@ void DataPointController::setup() {
 	mPointsBatch = gl::Batch::create(mesh, mPointsShader, { { geom::CUSTOM_0, "iPointRadius" },
 															{ geom::CUSTOM_1, "iTimeStamp" } });
 
+
+	//CI_LOG_I("Min TimeStamp: " << DataManager::getInstance()->getMinTimestamp() << "Max TimeStamp: " << DataManager::getInstance()->getMaxTimestamp());
+	
 }
 
 void DataPointController::addDrifterData() {
@@ -129,7 +132,7 @@ void DataPointController::addHurricaneData() {
 			mPointsList[mNumUsedPoints].mStormType = events[j].stormType;
 			mPointsList[mNumUsedPoints].mCategory = events[j].category;
 
-			CI_LOG_I("Hurricane Time: " << mPointsList[mNumUsedPoints].mTimeStamp);
+			//CI_LOG_I("Hurricane Time: " << mPointsList[mNumUsedPoints].mTimeStamp);
 
 			mNumUsedPoints++;
 			numHurricanePoints++;
