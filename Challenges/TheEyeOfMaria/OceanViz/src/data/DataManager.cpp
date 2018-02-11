@@ -19,6 +19,7 @@ namespace amnh {
 		parseDrifterDirectoryData();
 		parseDrifterData();
 		parseHurricanData();
+		parseFloatData();
 	};
 
 	//		setFieldFromJsonIfExists(&mVideosPreload, "videos.preload");
@@ -119,7 +120,7 @@ namespace amnh {
 	}
 
 	void DataManager::parseFloatData() {
-		std::string fileName = "../assets/data/float.json";
+		std::string fileName = "../assets/data/floats.json";
 		if (fs::exists(fileName)) {
 			try {
 				JsonTree floatBase = JsonTree(loadFile(fileName));
