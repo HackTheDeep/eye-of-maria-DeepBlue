@@ -13,7 +13,7 @@ namespace amnh {
 			float			wind;
 			float			pressure;
 			std::string		stormType;
-			int				category;
+			std::string		category;
 
 		};
 
@@ -22,6 +22,8 @@ namespace amnh {
 
 		// Functions
 		void							addSampleEvent(SampleEvent sample) { mSampleEvents.push_back(sample); }
+		std::vector<SampleEvent>		getAllSampleEvents() { return mSampleEvents; };
+
 		void							setId(std::string id) { mId = id; };
 		std::string						getId() { return mId; };
 

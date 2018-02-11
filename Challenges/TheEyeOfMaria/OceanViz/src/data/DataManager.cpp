@@ -79,38 +79,34 @@ namespace amnh {
 		std::ifstream file;
 		file.open(fileName);
 		bool didReadFirstLine = false;
+		HurricaneModel hurricane = HurricaneModel(); // Hard coded because we're only handling one hurricane
+		hurricane.setId("Maria");
+
 		while (file.good()) {
 			std::vector<string> results = getNextLineAndSplitIntoTokens(file, '\t');
 			//CI_LOG_I(results);
 
 			if (didReadFirstLine && results.size() > 7) {
-				HurricaneModel hurricane = HurricaneModel();
-				hurricane.setId("Maria");
 				string dateString = getHurricaneDateString(results[mHurricane_DateIndex], results[mHurricane_TimeIndex]);
 				auto timestamp = dateStringToTimestamp(dateString);
-				vector<float> latLong = cleanHurricaneCoordinates(results[mHurricane_LatIndex], results[mHurricane_LongIndex]);
+				std::string  latString = results[mHurricane_LatIndex].substr(0, results[mHurricane_LatIndex].length() - 2); //Trim special Chars
+				std::string  longString = results[mHurricane_LatIndex].substr(0, results[mHurricane_LatIndex].length() - 2); //Trim sepcial Chars
+				std::string  windString = results[mHurricane_WindIndex].substr(0, results[mHurricane_WindIndex].find(" ")); //Trim mph
+				std::string  pressureString = results[mHurricane_PressureIndex].substr(0, results[mHurricane_PressureIndex].find(" ")); //Trim mb
 
 				HurricaneModel::SampleEvent hurricaneEvent = HurricaneModel::SampleEvent();
 				hurricaneEvent.timestamp = timestamp;
-				std::string  latString = results[mHurricane_LatIndex].substr(0, results[mHurricane_LatIndex].length() - 2); //Trim special Chars
-				std::string  longString = results[mHurricane_LatIndex].substr(0, results[mHurricane_LatIndex].length() - 2); //Trim sepcial Chars
-
-				/*				hurricaneEvent.latitude = std::stof(results[mHurricane_LatIndex]);
-				hurricaneEvent.longitude = std::stof(results[mHurricane_LongIndex]);
-				hurricaneEvent.category = stoi(results[mHurricane_CategoryIndex]);
-				hurricaneEvent.wind = 
-				hurricane->setDate(results[mHurricane_DateIndex]);
-				hurricane->setTime(results[mHurricane_TimeIndex]);
-				hurricane->setLat(results[mHurricane_LatIndex]);
-				hurricane->setLong(results[mHurricane_LongIndex]);
-				hurricane->setWind(results[mHurricane_WindIndex]);
-				hurricane->setPressure(results[mHurricane_PressureIndex]);
-				hurricane->setStormType(results[mHurricane_StormTypeIndex]);
-				hurricane->setCategory(results[mHurricane_CategoryIndex]);*/
-				mHurricaneModels.push_back(hurricane);
+				hurricaneEvent.latitude = stof(latString);
+				hurricaneEvent.longitude = std::stof(longString);
+				hurricaneEvent.category = results[mHurricane_CategoryIndex];
+				hurricaneEvent.wind = stof(windString);
+				hurricaneEvent.stormType = results[mHurricane_StormTypeIndex];
+				hurricane.addSampleEvent(hurricaneEvent);
+				
 			}
 			didReadFirstLine = true;
 		}
+		mHurricaneModels.push_back(hurricane);
 		CI_LOG_I("Done parsing HURRICANES:");
 		CI_LOG_I(mHurricaneModels.size());
 		CI_LOG_I("");
@@ -201,16 +197,6 @@ namespace amnh {
 		std::string timeString_minutes = time.substr(3, 2);
 		string timeString = timeString_year + "." + timeString_month + "." + timeString_day + " " + timeString_hour + ":" + timeString_minutes + ":" + timeString_seconds;
 		return timeString;
-	}
-
-
-	std::vector<float> DataManager::cleanHurricaneCoordinates(std::string latitude, std::string longitude) {
-		CI_LOG_I("");
-		CI_LOG_I("");
-		CI_LOG_I("");
-		CI_LOG_I("");
-		CI_LOG_I("");
-		return vector<float>();
 	}
 
 

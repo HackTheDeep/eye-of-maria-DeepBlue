@@ -34,6 +34,7 @@ namespace amnh {
 		void							parseHurricanData();
 //		void							parseBuoyData();
 
+		std::vector<HurricaneModel>		getAllHurricaneModels() { return mHurricaneModels; }
 		std::time_t						getMinTimestamp() { return mMinTimeStamp; }
 		std::time_t						getMaxTimestamp() { return mMaxTimeStamp; }
 		std::string						getDateStringFromTimestamp(time_t timestamp);
@@ -48,7 +49,6 @@ namespace amnh {
 		// Converts drifter's unique day format (2017, 8, 27.0.024) to a date string formated for our utility function dateStringToTimestamp
 		std::string						getDrifterDateString(std::string year, std::string month, std::string day);
 		std::string						getHurricaneDateString(std::string date, std::string time);
-		std::vector<float>				cleanHurricaneCoordinates(std::string latitude, std::string longitude);
 
 
 		// Properties
