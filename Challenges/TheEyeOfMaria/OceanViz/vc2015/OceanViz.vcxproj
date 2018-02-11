@@ -1,0 +1,194 @@
+<Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{67E3C32C-3393-43CE-B546-42A81A38A5D8}</ProjectGuid>
+    <RootNamespace>OceanViz</RootNamespace>
+    <Keyword>Win32Proj</Keyword>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v140</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+    <WholeProgramOptimization>false</WholeProgramOptimization>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v140</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings" />
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>10.0.30319.1</_ProjectFileVersion>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</LinkIncremental>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</LinkIncremental>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <Optimization>Disabled</Optimization>
+      <AdditionalIncludeDirectories>..\include;"..\..\..\..\Cinder\include";..\blocks\BluecadetText\src;..\blocks\BluecadetUtils\src;..\blocks\BluecadetViews\src;..\..\..\..\Cinder\blocks\OSC\src;..\..\..\..\Cinder\blocks\TUIO\src</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;_WIN32_WINNT=0x0601;_WINDOWS;NOMINMAX;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <PrecompiledHeader />
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+    </ClCompile>
+    <ResourceCompile>
+      <AdditionalIncludeDirectories>"..\..\..\..\Cinder\include";..\include</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Link>
+      <AdditionalDependencies>cinder.lib;OpenGL32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>"..\..\..\..\Cinder\lib\msw\$(PlatformTarget)";"..\..\..\..\Cinder\lib\msw\$(PlatformTarget)\$(Configuration)\$(PlatformToolset)"</AdditionalLibraryDirectories>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Windows</SubSystem>
+      <RandomizedBaseAddress>false</RandomizedBaseAddress>
+      <DataExecutionPrevention />
+      <IgnoreSpecificDefaultLibraries>LIBCMT;LIBCPMT</IgnoreSpecificDefaultLibraries>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>..\include;..\..\..\..\Cinder\include;..\blocks\BluecadetText\src;..\blocks\BluecadetUtils\src;..\blocks\BluecadetViews\src;..\..\..\..\Cinder\blocks\OSC\src;..\..\..\..\Cinder\blocks\TUIO\src;..\src</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;_WIN32_WINNT=0x0601;_WINDOWS;NOMINMAX;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <PrecompiledHeader />
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+    </ClCompile>
+    <ProjectReference>
+      <LinkLibraryDependencies>true</LinkLibraryDependencies>
+    </ProjectReference>
+    <ResourceCompile>
+      <AdditionalIncludeDirectories>"..\..\..\..\Cinder\include";..\include</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Link>
+      <AdditionalDependencies>cinder.lib;OpenGL32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>"..\..\..\..\Cinder\lib\msw\$(PlatformTarget)";"..\..\..\..\Cinder\lib\msw\$(PlatformTarget)\$(Configuration)\$(PlatformToolset)"</AdditionalLibraryDirectories>
+      <GenerateDebugInformation>false</GenerateDebugInformation>
+      <GenerateMapFile>true</GenerateMapFile>
+      <SubSystem>Windows</SubSystem>
+      <OptimizeReferences>true</OptimizeReferences>
+      <EnableCOMDATFolding />
+      <RandomizedBaseAddress>false</RandomizedBaseAddress>
+      <DataExecutionPrevention />
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Resources.rc" />
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup />
+  <ItemGroup>
+    <ClCompile Include="..\src\data\OceanSettings.cpp" />
+    <ClCompile Include="..\src\OceanVizApp.cpp" />
+    <ClCompile Include="..\blocks\BluecadetText\src\bluecadet\text\FontManager.cpp" />
+    <ClCompile Include="..\blocks\BluecadetText\src\bluecadet\text\StyledTextLayout.cpp" />
+    <ClCompile Include="..\blocks\BluecadetText\src\bluecadet\text\StyledTextParser.cpp" />
+    <ClCompile Include="..\blocks\BluecadetText\src\bluecadet\text\StyleManager.cpp" />
+    <ClCompile Include="..\blocks\BluecadetUtils\src\bluecadet\utils\AsyncImageLoader.cpp" />
+    <ClCompile Include="..\blocks\BluecadetUtils\src\bluecadet\utils\FileUtils.cpp" />
+    <ClCompile Include="..\blocks\BluecadetUtils\src\bluecadet\utils\Histogram.cpp" />
+    <ClCompile Include="..\blocks\BluecadetUtils\src\bluecadet\utils\ImageManager.cpp" />
+    <ClCompile Include="..\blocks\BluecadetUtils\src\bluecadet\utils\ShaderManager.cpp" />
+    <ClCompile Include="..\blocks\BluecadetUtils\src\bluecadet\utils\ThreadedTaskQueue.cpp" />
+    <ClCompile Include="..\blocks\BluecadetUtils\src\bluecadet\utils\TimedTaskQueue.cpp" />
+    <ClCompile Include="..\blocks\BluecadetViews\src\bluecadet\core\BaseApp.cpp" />
+    <ClCompile Include="..\blocks\BluecadetViews\src\bluecadet\core\ScreenCamera.cpp" />
+    <ClCompile Include="..\blocks\BluecadetViews\src\bluecadet\core\ScreenLayout.cpp" />
+    <ClCompile Include="..\blocks\BluecadetViews\src\bluecadet\core\SettingsManager.cpp" />
+    <ClCompile Include="..\blocks\BluecadetViews\src\bluecadet\views\AnimatedView.cpp" />
+    <ClCompile Include="..\blocks\BluecadetViews\src\bluecadet\views\ArcView.cpp" />
+    <ClCompile Include="..\blocks\BluecadetViews\src\bluecadet\views\BaseView.cpp" />
+    <ClCompile Include="..\blocks\BluecadetViews\src\bluecadet\views\EllipseView.cpp" />
+    <ClCompile Include="..\blocks\BluecadetViews\src\bluecadet\views\FboView.cpp" />
+    <ClCompile Include="..\blocks\BluecadetViews\src\bluecadet\views\GraphView.cpp" />
+    <ClCompile Include="..\blocks\BluecadetViews\src\bluecadet\views\ImageView.cpp" />
+    <ClCompile Include="..\blocks\BluecadetViews\src\bluecadet\views\LineView.cpp" />
+    <ClCompile Include="..\blocks\BluecadetViews\src\bluecadet\views\MaskView.cpp" />
+    <ClCompile Include="..\blocks\BluecadetViews\src\bluecadet\views\MiniMapView.cpp" />
+    <ClCompile Include="..\blocks\BluecadetViews\src\bluecadet\views\StatsView.cpp" />
+    <ClCompile Include="..\blocks\BluecadetViews\src\bluecadet\views\StrokedCircleView.cpp" />
+    <ClCompile Include="..\blocks\BluecadetViews\src\bluecadet\views\StrokedRectView.cpp" />
+    <ClCompile Include="..\blocks\BluecadetViews\src\bluecadet\views\TextView.cpp" />
+    <ClCompile Include="..\blocks\BluecadetViews\src\bluecadet\views\TouchView.cpp" />
+    <ClCompile Include="..\blocks\BluecadetViews\src\bluecadet\views\ViewEvent.cpp" />
+    <ClCompile Include="..\blocks\BluecadetViews\src\bluecadet\touch\Touch.cpp" />
+    <ClCompile Include="..\blocks\BluecadetViews\src\bluecadet\touch\TouchManager.cpp" />
+    <ClCompile Include="..\blocks\BluecadetViews\src\bluecadet\touch\drivers\MouseDriver.cpp" />
+    <ClCompile Include="..\blocks\BluecadetViews\src\bluecadet\touch\drivers\NativeTouchDriver.cpp" />
+    <ClCompile Include="..\blocks\BluecadetViews\src\bluecadet\touch\drivers\SimulatedTouchDriver.cpp" />
+    <ClCompile Include="..\blocks\BluecadetViews\src\bluecadet\touch\drivers\TuioDriver.cpp" />
+    <ClCompile Include="..\..\..\..\Cinder\blocks\OSC\src\cinder\osc\Osc.cpp" />
+    <ClCompile Include="..\..\..\..\Cinder\blocks\TUIO\src\cinder\tuio\Tuio.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\include\Resources.h" />
+    <ClInclude Include="..\blocks\BluecadetText\src\bluecadet\text\FontManager.h" />
+    <ClInclude Include="..\blocks\BluecadetText\src\bluecadet\text\StyledTextLayout.h" />
+    <ClInclude Include="..\blocks\BluecadetText\src\bluecadet\text\StyledTextParser.h" />
+    <ClInclude Include="..\blocks\BluecadetText\src\bluecadet\text\StyleManager.h" />
+    <ClInclude Include="..\blocks\BluecadetText\src\bluecadet\text\Text.h" />
+    <ClInclude Include="..\blocks\BluecadetUtils\src\bluecadet\utils\AsyncImageLoader.h" />
+    <ClInclude Include="..\blocks\BluecadetUtils\src\bluecadet\utils\FileUtils.h" />
+    <ClInclude Include="..\blocks\BluecadetUtils\src\bluecadet\utils\Histogram.h" />
+    <ClInclude Include="..\blocks\BluecadetUtils\src\bluecadet\utils\ImageManager.h" />
+    <ClInclude Include="..\blocks\BluecadetUtils\src\bluecadet\utils\ShaderManager.h" />
+    <ClInclude Include="..\blocks\BluecadetUtils\src\bluecadet\utils\ThreadedTaskQueue.h" />
+    <ClInclude Include="..\blocks\BluecadetUtils\src\bluecadet\utils\TimedTaskQueue.h" />
+    <ClInclude Include="..\blocks\BluecadetViews\src\bluecadet\core\BaseApp.h" />
+    <ClInclude Include="..\blocks\BluecadetViews\src\bluecadet\core\ScreenCamera.h" />
+    <ClInclude Include="..\blocks\BluecadetViews\src\bluecadet\core\ScreenLayout.h" />
+    <ClInclude Include="..\blocks\BluecadetViews\src\bluecadet\core\SettingsManager.h" />
+    <ClInclude Include="..\blocks\BluecadetViews\src\bluecadet\views\AnimatedView.h" />
+    <ClInclude Include="..\blocks\BluecadetViews\src\bluecadet\views\AnimOperators.h" />
+    <ClInclude Include="..\blocks\BluecadetViews\src\bluecadet\views\ArcView.h" />
+    <ClInclude Include="..\blocks\BluecadetViews\src\bluecadet\views\BaseView.h" />
+    <ClInclude Include="..\blocks\BluecadetViews\src\bluecadet\views\EllipseView.h" />
+    <ClInclude Include="..\blocks\BluecadetViews\src\bluecadet\views\FboView.h" />
+    <ClInclude Include="..\blocks\BluecadetViews\src\bluecadet\views\GraphView.h" />
+    <ClInclude Include="..\blocks\BluecadetViews\src\bluecadet\views\ImageView.h" />
+    <ClInclude Include="..\blocks\BluecadetViews\src\bluecadet\views\LineView.h" />
+    <ClInclude Include="..\blocks\BluecadetViews\src\bluecadet\views\MaskView.h" />
+    <ClInclude Include="..\blocks\BluecadetViews\src\bluecadet\views\MiniMapView.h" />
+    <ClInclude Include="..\blocks\BluecadetViews\src\bluecadet\views\StatsView.h" />
+    <ClInclude Include="..\blocks\BluecadetViews\src\bluecadet\views\StrokedCircleView.h" />
+    <ClInclude Include="..\blocks\BluecadetViews\src\bluecadet\views\StrokedRectView.h" />
+    <ClInclude Include="..\blocks\BluecadetViews\src\bluecadet\views\TextView.h" />
+    <ClInclude Include="..\blocks\BluecadetViews\src\bluecadet\views\TouchView.h" />
+    <ClInclude Include="..\blocks\BluecadetViews\src\bluecadet\views\ViewEvent.h" />
+    <ClInclude Include="..\blocks\BluecadetViews\src\bluecadet\touch\Touch.h" />
+    <ClInclude Include="..\blocks\BluecadetViews\src\bluecadet\touch\TouchManager.h" />
+    <ClInclude Include="..\blocks\BluecadetViews\src\bluecadet\touch\TouchManagerPlugin.h" />
+    <ClInclude Include="..\blocks\BluecadetViews\src\bluecadet\touch\drivers\MouseDriver.h" />
+    <ClInclude Include="..\blocks\BluecadetViews\src\bluecadet\touch\drivers\NativeTouchDriver.h" />
+    <ClInclude Include="..\blocks\BluecadetViews\src\bluecadet\touch\drivers\SimulatedTouchDriver.h" />
+    <ClInclude Include="..\blocks\BluecadetViews\src\bluecadet\touch\drivers\TuioDriver.h" />
+    <ClInclude Include="..\..\..\..\Cinder\blocks\OSC\src\cinder\osc\Osc.h" />
+    <ClInclude Include="..\..\..\..\Cinder\blocks\TUIO\src\cinder\tuio\Tuio.h" />
+    <ClInclude Include="..\src\data\OceanSettings.h" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets" />
+</Project>
