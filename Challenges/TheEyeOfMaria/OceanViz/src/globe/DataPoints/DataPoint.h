@@ -47,7 +47,8 @@ public:
 	std::string	mCategory;
 
 	//for floats
-
+	float mPSalinity;
+	float mTemp;
 
 };
 

@@ -31,10 +31,10 @@ void DataPoint::setType(DataType type) {
 	switch (type)
 	{
 	case amnh::DataPoint::DataType::FLOAT:
-		mColor = ColorA(0.0f, 1.0f, 0.0f, 1.0f);
+		mColor = ColorA(0.0f, 0.5f, 1.0f, 1.0f);
 		break;
 	case amnh::DataPoint::DataType::DRIFTER:
-		mColor = ColorA(0.0f, 0.5f, 0.0f, 1.0f);
+		mColor = ColorA(0.0f, 1.0f, 0.0f, 1.0f);
 		mRadius = 1.0f;
 		break;
 	case amnh::DataPoint::DataType::HURRICANE:
