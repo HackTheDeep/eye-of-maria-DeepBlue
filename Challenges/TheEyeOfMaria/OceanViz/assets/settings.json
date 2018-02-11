@@ -13,7 +13,7 @@
 		"window": {
 			"fps": 60,
 			"vsync": true,
-			"fullscreen": true,
+			"fullscreen": false,
 			"borderless": false,
 			"size": {"x": 1280, "y": 720},
 			"cameraOffset": {"x": 0, "y": 0},

@@ -5,8 +5,13 @@
 #include <codecvt>
 #include <string>
 
+#include <iomanip> // setprecision
+#include <sstream> // stringstream
+
 #include <boost/algorithm/string.hpp>
 #include <boost/tokenizer.hpp>
+
+
 
 namespace bluecadet {
 namespace text {
@@ -174,6 +179,12 @@ inline ci::ColorA getColorFromString(std::string colorStr) {
 		return getColorFromRGB(c);
 	}
 	return getColorFromRGBA(c);
+}
+
+inline std::string toPrecision(float v, int precision = 2) {
+	std::stringstream stream;
+	stream << std::fixed << std::setprecision(precision) << v;
+	return stream.str();
 }
 
 //==================================================
