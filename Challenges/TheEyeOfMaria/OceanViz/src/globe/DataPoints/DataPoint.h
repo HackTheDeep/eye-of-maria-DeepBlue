@@ -18,7 +18,8 @@ public:
 	DataPoint();
 	~DataPoint() {};
 
-	void setup(int id, ci::vec3 pos );
+	void setup(ci::vec3 pos );
+
 
 	enum class DataType {
 		FLOAT,
@@ -26,13 +27,27 @@ public:
 		HURRICANE
 	};
 
+	void setType(DataType type);
+
 	DataType	mDataType;
 
-	int			mId;
 	ci::vec3	mPos;
 	ci::ColorA	mColor;
 	float		mRadius;
 	float		bShow;
+
+	//for drifters
+	std::time_t mTimeStamp;
+	float		mQualityIndex;
+
+	//for hurricanes
+	float		mWind;
+	float		mPressure;
+	std::string	mStormType;
+	std::string	mCategory;
+
+	//for floats
+
 
 };
 

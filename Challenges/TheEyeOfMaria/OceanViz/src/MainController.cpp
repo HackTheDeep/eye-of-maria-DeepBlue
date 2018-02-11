@@ -49,8 +49,13 @@ void MainController::setup(bluecadet::views::BaseViewRef rootView) {
 	//create earth model
 	mEarth.setup();
 
-	//setup the data points
+	//setup the points placeholders and VBO
 	DataPointController::getInstance()->setup();
+
+	//add the data points
+	DataPointController::getInstance()->addDrifterData();
+	DataPointController::getInstance()->addHurricaneData();
+
 	
 	//wire up signals
 	getWindow()->getSignalMouseDown().connect(bind(&MainController::handleMouseDown, this, std::placeholders::_1));
