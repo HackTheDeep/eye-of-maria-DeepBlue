@@ -3,6 +3,10 @@
 #include "cinder/app/RendererGl.h"
 #include "cinder/gl/gl.h"
 
+#include "cinder/Arcball.h"
+#include "cinder/Camera.h"
+#include "cinder/Sphere.h"
+
 #include "bluecadet/core/ScreenLayout.h"
 #include "bluecadet/views/BaseView.h"
 #include "ui/UiController.h"
@@ -26,17 +30,21 @@ public:
 	void draw() ;
 
 protected:
+	void handleMouseDown(const ci::app::MouseEvent & event);
+	void handleMouseDrag(const ci::app::MouseEvent & event);
 	void handleMouseWheel(const ci::app::MouseEvent & event);
-	void handleMouseMove(const ci::app::MouseEvent & event);
 
+	ci::Arcball			mArcball;
+	ci::CameraPersp		mCamera;
+	ci::Sphere			mArcballSphere;
 
 	Earth				mEarth;
-	POVRef              mPov = nullptr;
+	//POVRef              mPov = nullptr;
 	UiControllerRef		mUiController = nullptr;
 
 	//camera and mouse manipulation
-	ci::vec2			mLastMouse;
-	ci::vec2			mCurrentMouse;
+	//ci::vec2			mLastMouse;
+	//ci::vec2			mCurrentMouse;
 
 };
 }
