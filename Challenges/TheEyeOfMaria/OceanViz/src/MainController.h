@@ -9,6 +9,7 @@
 
 #include "data/OceanSettings.h"
 #include "globe/Earth.h"
+#include "globe/POV.h"
 
 namespace amnh {
 
@@ -20,15 +21,22 @@ public:
 	MainController();
 	~MainController();
 
-	void setup();
+	void setup(bluecadet::views::BaseViewRef rootView);
 	void update();
 	void draw() ;
 
 protected:
+	void handleMouseWheel(const ci::app::MouseEvent & event);
+	void handleMouseMove(const ci::app::MouseEvent & event);
 
 
-	Earth             mEarth;
+	Earth				mEarth;
+	POVRef              mPov = nullptr;
+	UiControllerRef		mUiController = nullptr;
 
+	//camera and mouse manipulation
+	ci::vec2			mLastMouse;
+	ci::vec2			mCurrentMouse;
 
 };
 }
