@@ -108,7 +108,7 @@ namespace amnh {
 				hurricaneEvent.timestamp = timestamp;
 				hurricaneEvent.latitude = stof(latString);
 				hurricaneEvent.longitude = std::stof(longString);
-				hurricaneEvent.category = results[mHurricane_CategoryIndex];
+				hurricaneEvent.category = (results[mHurricane_CategoryIndex] == "-")? 0 : stoi(results[mHurricane_CategoryIndex]);
 				hurricaneEvent.wind = stof(windString);
 				hurricaneEvent.stormType = results[mHurricane_StormTypeIndex];
 				hurricane.addSampleEvent(hurricaneEvent);
