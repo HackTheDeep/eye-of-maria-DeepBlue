@@ -22,5 +22,10 @@ public:
 
 	OceanSettings();
 	~OceanSettings();
+
+	void initParams();
+
+	float mTrailDuration = 0.8f; // 0...1
+	float mTrailFadePower = 10.0f; // trail alpha = progress ^ mTrailFadePower
 };
 }

@@ -2,6 +2,8 @@
 
 #include "cinder/Log.h"
 
+#include "data/OceanSettings.h"
+
 using namespace ci;
 using namespace ci::app;
 using namespace std;
@@ -267,6 +269,8 @@ void DataPointController::reMapHurricaneColors(HurricaneColor colorType) {
 void DataPointController::draw() {
 
 	mPointsShader->uniform("uViewScale", 1.0f);
+	mPointsShader->uniform("uTrailDuration", OceanSettings::getInstance()->mTrailDuration);
+	mPointsShader->uniform("uTrailFadePower", OceanSettings::getInstance()->mTrailFadePower);
 	float t = TimelineManager::getInstance()->getNormProgress();
 	gl::ScopedBlendAdditive scopedBlend;
 	mPointsShader->uniform("uPlayhead", t);

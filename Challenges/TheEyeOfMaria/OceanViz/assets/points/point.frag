@@ -6,6 +6,8 @@ in vec4 gColor;
 in float gTimeStamp;
 
 uniform float uPlayhead;
+uniform float uTrailDuration;
+uniform float uTrailFadePower;
 
 void main(void) {
 
@@ -21,12 +23,11 @@ void main(void) {
 
 	// oColor = gColor * vec4(1.0f, 1.0f, 1.0f, pct);
 
-	float trailDuration = 0.4; // out of 1.0
-	float endTime = gTimeStamp + trailDuration;
-	float progress = 1.0 - clamp((uPlayhead - gTimeStamp) / trailDuration, 0, 1.0);
+	float endTime = gTimeStamp + uTrailDuration;
+	float progress = 1.0 - clamp((uPlayhead - gTimeStamp) / uTrailDuration, 0, 1.0);
 
 	// since we have so many stacked samples, we need to work with lower alphas
-	float alpha = pow(progress, 6.0);
+	float alpha = pow(progress, uTrailFadePower);
 
 	oColor = gColor * vec4(1.0, 1.0, 1.0, alpha);
 }
