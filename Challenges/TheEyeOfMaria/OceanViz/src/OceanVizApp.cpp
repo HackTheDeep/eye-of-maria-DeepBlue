@@ -55,7 +55,7 @@ void OceanVizApp::lateSetup() {
 	// do heavy lifting setup here
 
 	// Front load data
-	bool parseData = false;
+	bool parseData = true;
 	if (parseData) {
 		DataManager::getInstance()->parseDrifterDirectoryData();
 		DataManager::getInstance()->parseDrifterData();
