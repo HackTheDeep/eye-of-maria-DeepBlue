@@ -20,6 +20,10 @@ UiController::~UiController() {
 }
 
 void amnh::UiController::setup() {
+	mTimelineView = make_shared<TimelineView>();
+	mTimelineView->setPosition(vec2(50, 40));
+	mTimelineView->setup();
+	addChild(mTimelineView);
 
 
 }
