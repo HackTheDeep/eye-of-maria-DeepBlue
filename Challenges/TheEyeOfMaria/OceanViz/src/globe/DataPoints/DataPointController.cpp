@@ -2,6 +2,8 @@
 
 #include "cinder/Log.h"
 
+#include "data/OceanSettings.h"
+
 using namespace ci;
 using namespace ci::app;
 using namespace std;
@@ -72,18 +74,17 @@ void DataPointController::addDrifterData() {
 	driftersStartIndex = mNumUsedPoints;
 
 	//iterate through each drifter
-	map<string, DrifterModel>::iterator it;
-	for (it = drifterMap.begin(); it != drifterMap.end(); it++){
+	for (auto & drifter : drifterMap){
 	
 		//go through each drifter model and get all the data points
-		vector<DrifterModel::SampleEvent> events = it->second.getAllSampleEvents();
+		vector<DrifterModel::SampleEvent> events = drifter.second.getAllSampleEvents();
 
-		for (int i = 0; i < events.size(); i++) {
+		for (const auto & event : events) {
 
-			mPointsList[mNumUsedPoints].setup(getPolarFromLatLong( events[i].latitude, events[i].longitude ));
+			mPointsList[mNumUsedPoints].setup(getPolarFromLatLong( event.latitude, event.longitude ));
 			mPointsList[mNumUsedPoints].setType(DataPoint::DataType::DRIFTER);
-			mPointsList[mNumUsedPoints].mTimeStamp = (float)events[i].time;
-			mPointsList[mNumUsedPoints].mQualityIndex = events[i].qaulityIndex;
+			mPointsList[mNumUsedPoints].mTimeStamp = event.normalizedTime;
+			mPointsList[mNumUsedPoints].mQualityIndex = event.qaulityIndex;
 
 			mNumUsedPoints++;
 			mNumDrifterPts++;
@@ -99,6 +100,9 @@ void DataPointController::addHurricaneData() {
 	//get drifter data
 	auto hurricanes = DataManager::getInstance()->getAllHurricaneModels();
 
+	float minTimestamp = DataManager::getInstance()->getMinTimestamp();
+	float totalDuration = DataManager::getInstance()->getMaxTimestamp() - minTimestamp;
+
 	CI_LOG_I("Adding Hurricane Data...");
 
 	mNumHurricanePts = 0;
@@ -110,24 +114,23 @@ void DataPointController::addHurricaneData() {
 	maxHurWindSpeed = -1;
 
 	//go through hurricanes
-	for (int i = 0; i < hurricanes.size(); i++) {
+	for (auto & hurricane : hurricanes) {
 
-		auto events = hurricanes[i].getAllSampleEvents();
 		//go through sample events of hurricane
-		for(int j = 0; j < events.size(); j++){
+		for(const auto & event : hurricane.getAllSampleEvents()){
 
-			mPointsList[mNumUsedPoints].setup(getPolarFromLatLong(events[j].latitude, events[j].longitude));
+			mPointsList[mNumUsedPoints].setup(getPolarFromLatLong(event.latitude, event.longitude));
 			mPointsList[mNumUsedPoints].setType(DataPoint::DataType::HURRICANE);
-			mPointsList[mNumUsedPoints].mTimeStamp = (float)events[j].timestamp;
-			mPointsList[mNumUsedPoints].mWind = events[j].wind;
-			mPointsList[mNumUsedPoints].mPressure = events[j].pressure;
-			mPointsList[mNumUsedPoints].mStormType = events[j].stormType;
-			mPointsList[mNumUsedPoints].mCategory = events[j].category;
+			mPointsList[mNumUsedPoints].mTimeStamp = event.normalizedTime;
+			mPointsList[mNumUsedPoints].mWind = event.wind;
+			mPointsList[mNumUsedPoints].mPressure = event.pressure;
+			mPointsList[mNumUsedPoints].mStormType = event.stormType;
+			mPointsList[mNumUsedPoints].mCategory = event.category;
 
-			if (events[j].wind > maxHurWindSpeed) maxHurWindSpeed = events[j].wind;
-			if (events[j].wind < minHurWindSpeed) minHurWindSpeed = events[j].wind;
-			if (events[j].pressure > maxHurPressure) maxHurPressure = events[j].pressure;
-			if (events[j].pressure < minHurPressure) minHurPressure = events[j].pressure;
+			if (event.wind > maxHurWindSpeed) maxHurWindSpeed = event.wind;
+			if (event.wind < minHurWindSpeed) minHurWindSpeed = event.wind;
+			if (event.pressure > maxHurPressure) maxHurPressure = event.pressure;
+			if (event.pressure < minHurPressure) minHurPressure = event.pressure;
 			
 			CI_LOG_I("Hurricane wind: " << mPointsList[mNumUsedPoints].mWind);
 
@@ -145,26 +148,28 @@ void DataPointController::addFloaterData() {
 	//get drifter data
 	auto floaterMap = DataManager::getInstance()->getAllFloats();
 
+	float minTimestamp = DataManager::getInstance()->getMinTimestamp();
+	float totalDuration = DataManager::getInstance()->getMaxTimestamp() - minTimestamp;
+
 	CI_LOG_I("Adding Floater Data...");
 
 	mNumFloatPts = 0;
 	floaterStartIndex = mNumUsedPoints;
 
 	//iterate through each drifter
-	map<string, FloatModel>::iterator it;
-	for (it = floaterMap.begin(); it != floaterMap.end(); it++) {
+	for (auto & floater : floaterMap) {
 
 		//go through each drifter model and get all the data points
-		vector<FloatModel::SampleEvent> events = it->second.getAllSampleEvents();
+		vector<FloatModel::SampleEvent> events = floater.second.getAllSampleEvents();
 
-		for (int i = 0; i < events.size(); i++) {
+		for (const auto & event : events) {
 
-			mPointsList[mNumUsedPoints].setup(getPolarFromLatLong(events[i].latitude, events[i].longitude));
+			mPointsList[mNumUsedPoints].setup(getPolarFromLatLong(event.latitude, event.longitude));
 			mPointsList[mNumUsedPoints].setType(DataPoint::DataType::FLOAT);
-			mPointsList[mNumUsedPoints].mTimeStamp = (float)events[i].timestamp;
-			mPointsList[mNumUsedPoints].mTemp = events[i].temp;
-			mPointsList[mNumUsedPoints].mPSalinity = events[i].psal;
-			mPointsList[mNumUsedPoints].mPressure = events[i].pressure;
+			mPointsList[mNumUsedPoints].mTimeStamp = event.normalizedTime;
+			mPointsList[mNumUsedPoints].mTemp = event.temp;
+			mPointsList[mNumUsedPoints].mPSalinity = event.psal;
+			mPointsList[mNumUsedPoints].mPressure = event.pressure;
 
 			mNumUsedPoints++;
 			mNumFloatPts++;
@@ -264,7 +269,10 @@ void DataPointController::reMapHurricaneColors(HurricaneColor colorType) {
 void DataPointController::draw() {
 
 	mPointsShader->uniform("uViewScale", 1.0f);
-	float t = TimelineManager::getInstance()->getAbsProgress();
+	mPointsShader->uniform("uTrailDuration", OceanSettings::getInstance()->mTrailDuration);
+	mPointsShader->uniform("uTrailFadePower", OceanSettings::getInstance()->mTrailFadePower);
+	float t = TimelineManager::getInstance()->getNormProgress();
+	gl::ScopedBlendAdditive scopedBlend;
 	mPointsShader->uniform("uPlayhead", t);
 	mPointsBatch->draw();
 }

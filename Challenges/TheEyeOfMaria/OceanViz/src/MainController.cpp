@@ -64,15 +64,16 @@ void MainController::setup(bluecadet::views::BaseViewRef rootView) {
 
 	DataPointController::getInstance()->reMapHurricaneColors(DataPointController::HurricaneColor::WIND);
 	
+	OceanSettings::getInstance()->initParams();
 	auto params = OceanSettings::getInstance()->getParams();
-	params->addParam("Enable Depth Test", &bEnableDepthTest );
+	params->addParam("Enable Depth Test", &bEnableDepthTest ).group("Earth");
 
-	params->addButton("Hurricane Color: Pressure", [=]{ 
+	params->addButton("Pressure Color", [=]{ 
 		DataPointController::getInstance()->reMapHurricaneColors(DataPointController::HurricaneColor::PRESSURE);
-	});
-	params->addButton("Hurricane Color: Wind", [=] { 
+	}, "group=Hurricane");
+	params->addButton("Wind Color", [=] { 
 		DataPointController::getInstance()->reMapHurricaneColors(DataPointController::HurricaneColor::WIND);
-	});
+	}, "group=Hurricane");
 
 	//wire up signals
 	getWindow()->getSignalMouseDown().connect(100, bind(&MainController::handleMouseDown, this, std::placeholders::_1));

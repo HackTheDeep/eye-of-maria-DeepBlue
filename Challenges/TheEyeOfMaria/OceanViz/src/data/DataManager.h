@@ -38,6 +38,9 @@ namespace amnh {
 		std::time_t								getMinTimestamp() { return mMinTimeStamp; }
 		std::time_t								getMaxTimestamp() { return mMaxTimeStamp; }
 		std::string								getDateStringFromTimestamp(time_t timestamp);
+
+		inline float							getNormalizedTime(float absoluteTimestamp);
+
 	protected:
 		// Functions
 		void									parseDrifterData();

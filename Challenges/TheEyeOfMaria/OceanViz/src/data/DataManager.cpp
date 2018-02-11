@@ -20,6 +20,24 @@ namespace amnh {
 		parseDrifterData();
 		parseHurricanData();
 		parseFloatData();
+
+		// normalize timestamps
+		for (auto & drifter : mDrifterMap) {
+			for (auto & event : drifter.second.getAllSampleEvents()) {
+				event.normalizedTime = getNormalizedTime(event.timestamp);
+			}
+		}
+		for (auto & hurricane : mHurricaneModels) {
+			for (auto & event : hurricane.getAllSampleEvents()) {
+				event.normalizedTime = getNormalizedTime(event.timestamp);
+			}
+		}
+		for (auto & floater : mFloatMap) {
+			for (auto & event : floater.second.getAllSampleEvents()) {
+				event.normalizedTime = getNormalizedTime(event.timestamp);
+			}
+		}
+
 	};
 
 	//		setFieldFromJsonIfExists(&mVideosPreload, "videos.preload");
@@ -49,7 +67,7 @@ namespace amnh {
 					drifterEvent.latitude = std::stof(results[mDrifter_LatIndex]);
 					drifterEvent.longitude = std::stof(results[mDrifter_LongIndex]);
 					drifterEvent.qaulityIndex = std::stof(results[mDrifter_QualIndexIndex]);
-					drifterEvent.time = timestamp;
+					drifterEvent.timestamp = timestamp;
 					it->second.addSampleEvent(drifterEvent);
 				}
 			}
@@ -130,7 +148,7 @@ namespace amnh {
 				ci::JsonTree floatTree = (JsonTree)floatSource;
 				if (floatTree.hasChild("features")) {
 					JsonTree array_o_floats = floatTree.getChild("features");
-					CI_LOG_I(array_o_floats.getNumChildren());
+					//CI_LOG_I(array_o_floats.getNumChildren());
 					for (int i = 0; i < array_o_floats.getNumChildren(); i++) {
 						if (array_o_floats[i].hasChild("properties") && array_o_floats[i].hasChild("geometry")) {
 							string id = array_o_floats[i].getValueForKey<std::string>("properties.platform_number");
@@ -290,6 +308,10 @@ namespace amnh {
 		string seconds = (ptm->tm_sec >= 10) ? to_string(ptm->tm_sec) : "0" + to_string(ptm->tm_sec);
 		string dateString = year + "-" + month + "-" + day + " " + hour + ":" + minutes + ":" + seconds;
 		return dateString;
+	}
+
+	inline float DataManager::getNormalizedTime(float absoluteTimestamp) {
+		return (absoluteTimestamp - mMinTimeStamp) / (mMaxTimeStamp - mMinTimeStamp);
 	}
 
 

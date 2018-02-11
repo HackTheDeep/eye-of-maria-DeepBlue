@@ -9,6 +9,7 @@ namespace amnh {
 	public:
 		struct SampleEvent {
 			time_t			timestamp;
+			float			normalizedTime;
 			float			latitude;
 			float			longitude;
 			float			wind;
@@ -21,8 +22,8 @@ namespace amnh {
 		~HurricaneModel();
 
 		// Functions
-		void							addSampleEvent(SampleEvent sample) { mSampleEvents.push_back(sample); }
-		std::vector<SampleEvent>		getAllSampleEvents() { return mSampleEvents; };
+		inline void							addSampleEvent(SampleEvent sample) { mSampleEvents.push_back(sample); }
+		inline std::vector<SampleEvent> &	getAllSampleEvents() { return mSampleEvents; };
 
 		void							setId(std::string id) { mId = id; };
 		std::string						getId() { return mId; };
