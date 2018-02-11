@@ -7,6 +7,7 @@
 
 #include "data/OceanSettings.h"
 #include "MainController.h"
+#include "data/DataManager.h"
 
 using namespace ci;
 using namespace ci::app;
@@ -53,10 +54,15 @@ void OceanVizApp::lateSetup() {
 
 	// do heavy lifting setup here
 
+	// Front load data
+	DataManager::getInstance()->parseDrifterDirectoryData();
+	DataManager::getInstance()->parseDrifterData();
+
 	getRootView()->setBackgroundColor(Color::gray(0));
 	mMainController = make_shared<MainController>();
 	getRootView()->addChild(mMainController);
 	mMainController->setup();
+
 }
 
 void OceanVizApp::update() {
