@@ -6,7 +6,7 @@
 #include "bluecadet/views/BaseView.h"
 #include "bluecadet/views/ImageView.h"
 #include "bluecadet/views/TouchView.h"
-//#include "models/HurricaneModel.h"
+#include "models/HurricaneModel.h"
 #include "models/DrifterModel.h"
 //#include "models/BuoyModel.h"
 
@@ -31,7 +31,7 @@ namespace amnh {
 		// Functions
 		void							parseDrifterData();
 		void							parseDrifterDirectoryData();
-//		void							parseHurricanData();
+		void							parseHurricanData();
 //		void							parseBuoyData();
 
 		std::time_t						getMinTimestamp() { return mMinTimeStamp; }
@@ -47,6 +47,8 @@ namespace amnh {
 
 		// Converts drifter's unique day format (2017, 8, 27.0.024) to a date string formated for our utility function dateStringToTimestamp
 		std::string						getDrifterDateString(std::string year, std::string month, std::string day);
+		std::string						getHurricaneDateString(std::string date, std::string time);
+		std::vector<float>				cleanHurricaneCoordinates(std::string latitude, std::string longitude);
 
 
 		// Properties
@@ -55,6 +57,7 @@ namespace amnh {
 
 
 		// Model Vectors
+		std::vector<HurricaneModel>			mHurricaneModels;
 		std::map<std::string, DrifterModel> mDrifterMap;
 
 		/***********************/
@@ -89,8 +92,6 @@ namespace amnh {
 		int mDirectory_DeathCodeIndex = 16;
 
 
-//		Old Hardcoded Index properties. To be Deleted if we don't implement their data models
-/*
 		// Hurricane Properties (hardcoded)
 		int mHurricane_DateIndex = 0;
 		int mHurricane_TimeIndex = 1;
@@ -102,6 +103,9 @@ namespace amnh {
 		int mHurricane_CategoryIndex = 7;
 
 
+
+//		Old Hardcoded Index properties. To be Deleted if we don't implement their data models
+/*
 		// Buoy Properites
 		int mBuoy_IdIndex = 0;
 		int mBuoy_MonthIndex = 1;

@@ -104,6 +104,7 @@
   <ItemGroup>
     <ClCompile Include="..\src\data\DataManager.cpp" />
     <ClCompile Include="..\src\data\models\DrifterModel.cpp" />
+    <ClCompile Include="..\src\data\models\HurricaneModel.cpp" />
     <ClCompile Include="..\src\data\OceanSettings.cpp" />
     <ClCompile Include="..\src\data\TimelineManager.cpp" />
     <ClCompile Include="..\src\MainController.cpp" />
@@ -196,6 +197,7 @@
     <ClInclude Include="..\..\..\..\Cinder\blocks\TUIO\src\cinder\tuio\Tuio.h" />
     <ClInclude Include="..\src\data\DataManager.h" />
     <ClInclude Include="..\src\data\models\DrifterModel.h" />
+    <ClInclude Include="..\src\data\models\HurricaneModel.h" />
     <ClInclude Include="..\src\data\OceanSettings.h" />
     <ClInclude Include="..\src\data\TimelineManager.h" />
     <ClInclude Include="..\src\MainController.h" />

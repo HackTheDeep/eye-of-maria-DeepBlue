@@ -59,6 +59,7 @@ void OceanVizApp::lateSetup() {
 	if (parseData) {
 		DataManager::getInstance()->parseDrifterDirectoryData();
 		DataManager::getInstance()->parseDrifterData();
+		DataManager::getInstance()->parseHurricanData();
 	}
 
 	getRootView()->setBackgroundColor(Color::gray(0));

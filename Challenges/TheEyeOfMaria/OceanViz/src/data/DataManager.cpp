@@ -73,6 +73,50 @@ namespace amnh {
 		CI_LOG_I("");
 	}
 
+	void DataManager::parseHurricanData()
+	{
+		std::string fileName = "../assets/data/storm_track_statistics.csv";
+		std::ifstream file;
+		file.open(fileName);
+		bool didReadFirstLine = false;
+		while (file.good()) {
+			std::vector<string> results = getNextLineAndSplitIntoTokens(file, '\t');
+			//CI_LOG_I(results);
+
+			if (didReadFirstLine && results.size() > 7) {
+				HurricaneModel hurricane = HurricaneModel();
+				hurricane.setId("Maria");
+				string dateString = getHurricaneDateString(results[mHurricane_DateIndex], results[mHurricane_TimeIndex]);
+				auto timestamp = dateStringToTimestamp(dateString);
+				vector<float> latLong = cleanHurricaneCoordinates(results[mHurricane_LatIndex], results[mHurricane_LongIndex]);
+
+				HurricaneModel::SampleEvent hurricaneEvent = HurricaneModel::SampleEvent();
+				hurricaneEvent.timestamp = timestamp;
+				std::string  latString = results[mHurricane_LatIndex].substr(0, results[mHurricane_LatIndex].length() - 2); //Trim special Chars
+				std::string  longString = results[mHurricane_LatIndex].substr(0, results[mHurricane_LatIndex].length() - 2); //Trim sepcial Chars
+
+				/*				hurricaneEvent.latitude = std::stof(results[mHurricane_LatIndex]);
+				hurricaneEvent.longitude = std::stof(results[mHurricane_LongIndex]);
+				hurricaneEvent.category = stoi(results[mHurricane_CategoryIndex]);
+				hurricaneEvent.wind = 
+				hurricane->setDate(results[mHurricane_DateIndex]);
+				hurricane->setTime(results[mHurricane_TimeIndex]);
+				hurricane->setLat(results[mHurricane_LatIndex]);
+				hurricane->setLong(results[mHurricane_LongIndex]);
+				hurricane->setWind(results[mHurricane_WindIndex]);
+				hurricane->setPressure(results[mHurricane_PressureIndex]);
+				hurricane->setStormType(results[mHurricane_StormTypeIndex]);
+				hurricane->setCategory(results[mHurricane_CategoryIndex]);*/
+				mHurricaneModels.push_back(hurricane);
+			}
+			didReadFirstLine = true;
+		}
+		CI_LOG_I("Done parsing HURRICANES:");
+		CI_LOG_I(mHurricaneModels.size());
+		CI_LOG_I("");
+
+	}
+
 
 	/////////////////////////////////////
 	//	Utility Functions
@@ -144,6 +188,31 @@ namespace amnh {
 		string timeString = year + "." + timeString_month + "." + timeString_day + " " + timeString_hour + ":" + timeString_minutes + ":" + timeString_seconds;
 		return timeString;
 	}
+
+	std::string DataManager::getHurricaneDateString(std::string date, std::string time) {
+		std::string timeString_month = "09"; // Hardcoded because Maria only took place in september 
+		std::string timeString_seconds = "00"; // Hardcoded because Maria Data only reports hours and minutes
+		std::string timeString_year = "2017"; // Hardcoded because Maria Data only reports hours and minutes
+
+		int day = stoi(date.substr(0, date.find("-")));
+		std::string timeString_day = (day >= 10) ? to_string(day) : "0" + to_string(day);
+		std::string hurricaneTime = time.substr(0, time.find(" "));
+		std::string timeString_hour = time.substr(0, 2);
+		std::string timeString_minutes = time.substr(3, 2);
+		string timeString = timeString_year + "." + timeString_month + "." + timeString_day + " " + timeString_hour + ":" + timeString_minutes + ":" + timeString_seconds;
+		return timeString;
+	}
+
+
+	std::vector<float> DataManager::cleanHurricaneCoordinates(std::string latitude, std::string longitude) {
+		CI_LOG_I("");
+		CI_LOG_I("");
+		CI_LOG_I("");
+		CI_LOG_I("");
+		CI_LOG_I("");
+		return vector<float>();
+	}
+
 
 	std::string DataManager::getDateStringFromTimestamp(time_t timestamp) {
 		std::tm * ptm = std::localtime(&timestamp);
