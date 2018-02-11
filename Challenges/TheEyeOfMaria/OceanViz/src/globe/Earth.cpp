@@ -33,11 +33,15 @@ void Earth::setup(){
 	mTexMask = gl::Texture2d::create(loadImage(getAssetPath("earth/earthMask.png")), fmt);
 
 	// Create the Earth mesh with a custom shader.
+
+	mEarthSphere = Sphere(vec3(), mRadius);
+	mEarthSphereGeom = geom::Sphere(mEarthSphere).subdivisions(120);
+
 	auto earthShader = gl::GlslProg::create(loadAsset("earth/earth.vert"), loadAsset("earth/earth.frag"));
 	earthShader->uniform("texDiffuse", 0);
 	earthShader->uniform("texNormal", 1);
 	earthShader->uniform("texMask", 2);
-	mEarth = gl::Batch::create(geom::Sphere().radius(mRadius).subdivisions(120), earthShader);
+	mEarth = gl::Batch::create(mEarthSphereGeom, earthShader);
 
 }
 

@@ -26,6 +26,7 @@ namespace amnh {
 
 		void							setId(std::string id) { mId = id; };
 		std::string						getId() { return mId; };
+		void							sortEvents();
 	protected:
 		// Functions
 

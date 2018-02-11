@@ -110,7 +110,6 @@
     <ClCompile Include="..\src\globe\DataPoints\DataPoint.cpp" />
     <ClCompile Include="..\src\globe\DataPoints\DataPointController.cpp" />
     <ClCompile Include="..\src\globe\Earth.cpp" />
-    <ClCompile Include="..\src\globe\POV.cpp" />
     <ClCompile Include="..\src\data\TimelineManager.cpp" />
     <ClCompile Include="..\src\MainController.cpp" />
     <ClCompile Include="..\src\OceanVizApp.cpp" />
@@ -209,7 +208,6 @@
     <ClInclude Include="..\src\globe\DataPoints\DataPoint.h" />
     <ClInclude Include="..\src\globe\DataPoints\DataPointController.h" />
     <ClInclude Include="..\src\globe\Earth.h" />
-    <ClInclude Include="..\src\globe\POV.h" />
     <ClInclude Include="..\src\data\TimelineManager.h" />
     <ClInclude Include="..\src\MainController.h" />
     <ClInclude Include="..\src\ui\ImageButton.h" />
