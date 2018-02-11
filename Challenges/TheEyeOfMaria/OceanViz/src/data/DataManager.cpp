@@ -15,6 +15,12 @@ namespace amnh {
 
 	DataManager::~DataManager() {}
 
+	void DataManager::setup() {
+		parseDrifterDirectoryData();
+		parseDrifterData();
+		parseHurricanData();
+	};
+
 //		setFieldFromJsonIfExists(&mVideosPreload, "videos.preload");
 //		setFieldFromJsonIfExists(&mVideosAssetDir, "videos.assetDir");
 
@@ -71,6 +77,46 @@ namespace amnh {
 		CI_LOG_I("Done parsing DRIFTER DIRECTORY:");
 		CI_LOG_I(mDrifterMap.size());
 		CI_LOG_I("");
+	}
+
+	void DataManager::parseHurricanData()
+	{
+		std::string fileName = "../assets/data/storm_track_statistics.csv";
+		std::ifstream file;
+		file.open(fileName);
+		bool didReadFirstLine = false;
+		HurricaneModel hurricane = HurricaneModel(); // Hard coded because we're only handling one hurricane
+		hurricane.setId("Maria");
+
+		while (file.good()) {
+			std::vector<string> results = getNextLineAndSplitIntoTokens(file, '\t');
+			//CI_LOG_I(results);
+
+			if (didReadFirstLine && results.size() > 7) {
+				string dateString = getHurricaneDateString(results[mHurricane_DateIndex], results[mHurricane_TimeIndex]);
+				auto timestamp = dateStringToTimestamp(dateString);
+				std::string  latString = results[mHurricane_LatIndex].substr(0, results[mHurricane_LatIndex].length() - 2); //Trim special Chars
+				std::string  longString = results[mHurricane_LatIndex].substr(0, results[mHurricane_LatIndex].length() - 2); //Trim sepcial Chars
+				std::string  windString = results[mHurricane_WindIndex].substr(0, results[mHurricane_WindIndex].find(" ")); //Trim mph
+				std::string  pressureString = results[mHurricane_PressureIndex].substr(0, results[mHurricane_PressureIndex].find(" ")); //Trim mb
+
+				HurricaneModel::SampleEvent hurricaneEvent = HurricaneModel::SampleEvent();
+				hurricaneEvent.timestamp = timestamp;
+				hurricaneEvent.latitude = stof(latString);
+				hurricaneEvent.longitude = std::stof(longString);
+				hurricaneEvent.category = results[mHurricane_CategoryIndex];
+				hurricaneEvent.wind = stof(windString);
+				hurricaneEvent.stormType = results[mHurricane_StormTypeIndex];
+				hurricane.addSampleEvent(hurricaneEvent);
+				
+			}
+			didReadFirstLine = true;
+		}
+		mHurricaneModels.push_back(hurricane);
+		CI_LOG_I("Done parsing HURRICANES:");
+		CI_LOG_I(mHurricaneModels.size());
+		CI_LOG_I("");
+
 	}
 
 
@@ -144,6 +190,21 @@ namespace amnh {
 		string timeString = year + "." + timeString_month + "." + timeString_day + " " + timeString_hour + ":" + timeString_minutes + ":" + timeString_seconds;
 		return timeString;
 	}
+
+	std::string DataManager::getHurricaneDateString(std::string date, std::string time) {
+		std::string timeString_month = "09"; // Hardcoded because Maria only took place in september 
+		std::string timeString_seconds = "00"; // Hardcoded because Maria Data only reports hours and minutes
+		std::string timeString_year = "2017"; // Hardcoded because Maria Data only reports hours and minutes
+
+		int day = stoi(date.substr(0, date.find("-")));
+		std::string timeString_day = (day >= 10) ? to_string(day) : "0" + to_string(day);
+		std::string hurricaneTime = time.substr(0, time.find(" "));
+		std::string timeString_hour = time.substr(0, 2);
+		std::string timeString_minutes = time.substr(3, 2);
+		string timeString = timeString_year + "." + timeString_month + "." + timeString_day + " " + timeString_hour + ":" + timeString_minutes + ":" + timeString_seconds;
+		return timeString;
+	}
+
 
 	std::string DataManager::getDateStringFromTimestamp(time_t timestamp) {
 		std::tm * ptm = std::localtime(&timestamp);

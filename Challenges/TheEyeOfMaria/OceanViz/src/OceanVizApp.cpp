@@ -4,13 +4,9 @@
 
 #include "bluecadet/core/BaseApp.h"
 #include "bluecadet/views/TouchView.h"
-#include "bluecadet/text/StyleManager.h"
-
-#include "globe/POV.h"
 
 #include "MainController.h"
-#include "globe/DataPoints/DataPointController.h"
-#include "data/DataManager.h"
+
 
 using namespace ci;
 using namespace ci::app;
@@ -31,19 +27,10 @@ public:
 	void setup() override;
 	void update() override;
 	void draw() override;
-
-	void mouseMove(MouseEvent event);
-	void mouseWheel(MouseEvent event);
 	void keyDown(KeyEvent event) override;
 
 protected:
-
 	MainControllerRef	mMainController = nullptr;
-	UiControllerRef		mUiController = nullptr;
-	//camera and mouse manipulation
-	POVRef              mPov;
-	vec2				mLastMouse;
-	vec2				mCurrentMouse;
 
 };
 
@@ -58,70 +45,24 @@ void OceanVizApp::prepareSettings(ci::app::App::Settings* settings) {
 
 void OceanVizApp::setup() {
 	BaseApp::setup();
-
-	StyleManager::getInstance()->setup(getAssetPath("fonts/styles.json"));
-
-	// Front load data
-	bool parseData = true;
-	if (parseData) {
-		DataManager::getInstance()->parseDrifterDirectoryData();
-		DataManager::getInstance()->parseDrifterData();
-	}
-
-	mUiController = make_shared<UiController>();
-	mUiController->setup();
-	getRootView()->addChild(mUiController);
-
+	// Configure params
 	auto params = OceanSettings::getInstance()->getParams();
 	params->setSize(ivec2(400, 500));
 
-	// Create the camera controller.
-	mPov = make_shared<POV>(this, ci::vec3(0.0f, 0.0f, 1000.0f), ci::vec3(0.0f, 0.0f, 0.0f));
-
-	//Main Controller not in BC Views hierarchy
+	// Main Controller not in BC Views hierarchy
 	mMainController = make_shared<MainController>();
-	mMainController->setup();
+	mMainController->setup(getRootView());
 }
 
 void OceanVizApp::update() {
 	BaseApp::update();
-
-	mPov->update();
-
 	mMainController->update();
 }
 
 void OceanVizApp::draw() {
 	gl::clear();
-	{
-		gl::ScopedMatrices scopedMatrices;
-		mPov->applyMatrix();
-		mMainController->draw();
-	}
-	
-	{
-		BaseApp::draw(false);
-	}
-}
-
-
-void OceanVizApp::mouseWheel(MouseEvent event) {
-	mPov->adjustDist(event.getWheelIncrement() * -5.0f);
-}
-
-void OceanVizApp::mouseMove(MouseEvent event) {
-	static bool firstMouseMove = true;
-
-	if (!firstMouseMove) {
-		mLastMouse = mCurrentMouse;
-	} else {
-		mLastMouse = event.getPos();
-		firstMouseMove = false;
-	}
-
-	mCurrentMouse = event.getPos();
-
-	mPov->adjustAngle((mLastMouse.x - mCurrentMouse.x) * 0.01f, mCurrentMouse.y - (getWindowHeight() * 0.5f));
+	mMainController->draw();
+	BaseApp::draw(false);
 }
 
 void OceanVizApp::keyDown(KeyEvent event) {

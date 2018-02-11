@@ -3,10 +3,10 @@
 #include "cinder/gl/gl.h"
 #include "cinder/CinderMath.h"
 
-POV::POV( ci::app::App *aApp, ci::vec3 aEye, ci::vec3 aCenter )
-	: mApp( aApp ), mEye( aEye ), mCenter( aCenter )
+POV::POV( ci::vec3 aEye, ci::vec3 aCenter )
+	: mEye( aEye ), mCenter( aCenter )
 {
-	mAspectRatio = mApp->getWindowAspectRatio();
+	mAspectRatio = ci::app::getWindow()->getAspectRatio();
 	mFOV = 60.0f;
 
 	mAngle = 0.0f;
@@ -26,7 +26,7 @@ void POV::update()
 	mEyeNormal = glm::normalize( mEye - mCenter );
 
 	mCam.lookAt( mEye, mCenter );
-	mCam.setPerspective( mFOV, mApp->getWindowAspectRatio(), 1, 20000 );
+	mCam.setPerspective( mFOV, ci::app::getWindow()->getAspectRatio(), 1, 20000 );
 }
 
 void POV::adjustAngle( float angleDelta, float pitch )

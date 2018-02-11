@@ -8,7 +8,7 @@ typedef std::shared_ptr<class POV> POVRef;
 class POV {
 public:
 	POV() {}
-	POV( ci::app::App *aApp, ci::vec3 aEye, ci::vec3 aCenter );
+	POV( ci::vec3 aEye, ci::vec3 aCenter );
 
 	void update();
 
@@ -29,8 +29,6 @@ public:
 	float            mDist, mDistDest;
 
 private:
-	ci::app::App    *mApp;
-
 	float            mAspectRatio;
 	float            mFOV;
 
