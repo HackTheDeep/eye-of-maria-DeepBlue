@@ -102,6 +102,8 @@
   <ItemGroup />
   <ItemGroup>
     <ClCompile Include="..\src\data\OceanSettings.cpp" />
+    <ClCompile Include="..\src\globe\DataPoints\DataPoint.cpp" />
+    <ClCompile Include="..\src\globe\DataPoints\DataPointController.cpp" />
     <ClCompile Include="..\src\globe\Earth.cpp" />
     <ClCompile Include="..\src\globe\POV.cpp" />
     <ClCompile Include="..\src\OceanVizApp.cpp" />
@@ -190,6 +192,8 @@
     <ClInclude Include="..\..\..\..\Cinder\blocks\OSC\src\cinder\osc\Osc.h" />
     <ClInclude Include="..\..\..\..\Cinder\blocks\TUIO\src\cinder\tuio\Tuio.h" />
     <ClInclude Include="..\src\data\OceanSettings.h" />
+    <ClInclude Include="..\src\globe\DataPoints\DataPoint.h" />
+    <ClInclude Include="..\src\globe\DataPoints\DataPointController.h" />
     <ClInclude Include="..\src\globe\Earth.h" />
     <ClInclude Include="..\src\globe\POV.h" />
   </ItemGroup>

@@ -93,6 +93,9 @@
     <Filter Include="Source Files\globe">
       <UniqueIdentifier>{37c3dd97-d227-4923-9d8c-79d4018ae09f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\globe\DataPoints">
+      <UniqueIdentifier>{b7c7af0d-3255-493f-a0ed-6eff8f4007e7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\OceanVizApp.cpp">
@@ -356,6 +359,12 @@
     <ClCompile Include="..\src\globe\POV.cpp">
       <Filter>Source Files\globe</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\globe\DataPoints\DataPoint.cpp">
+      <Filter>Source Files\globe\DataPoints</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\globe\DataPoints\DataPointController.cpp">
+      <Filter>Source Files\globe\DataPoints</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\include\Resources.h">
@@ -369,6 +378,12 @@
     </ClInclude>
     <ClInclude Include="..\src\globe\POV.h">
       <Filter>Source Files\globe</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\globe\DataPoints\DataPoint.h">
+      <Filter>Source Files\globe\DataPoints</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\globe\DataPoints\DataPointController.h">
+      <Filter>Source Files\globe\DataPoints</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
