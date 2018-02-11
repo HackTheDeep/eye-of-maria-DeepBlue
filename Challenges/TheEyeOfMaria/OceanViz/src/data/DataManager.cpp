@@ -145,5 +145,18 @@ namespace amnh {
 		return timeString;
 	}
 
+	std::string DataManager::getDateStringFromTimestamp(time_t timestamp) {
+		std::tm * ptm = std::localtime(&timestamp);
+		string year = to_string(1900 + ptm->tm_year);
+		string month = (ptm->tm_mon >= 10) ? to_string(ptm->tm_mon + 1) : "0" + to_string(ptm->tm_mon + 1);
+		string day = (ptm->tm_mday >= 10) ? to_string(ptm->tm_mday) : "0" + to_string(ptm->tm_mday);
+		string hour = (ptm->tm_hour >= 10) ? to_string(ptm->tm_hour) : "0" + to_string(ptm->tm_hour);
+		string minutes = (ptm->tm_min >= 10) ? to_string(ptm->tm_min) : "0" + to_string(ptm->tm_min);
+		string seconds = (ptm->tm_sec >= 10) ? to_string(ptm->tm_sec) : "0" + to_string(ptm->tm_sec);
+		string dateString = year + "-" + month + "-" + day + " " + hour + ":" + minutes + ":" + seconds;
+		return dateString;
+	}
+
+
 
 }
