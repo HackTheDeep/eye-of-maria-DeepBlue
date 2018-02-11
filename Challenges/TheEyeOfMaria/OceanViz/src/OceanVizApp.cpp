@@ -55,8 +55,11 @@ void OceanVizApp::lateSetup() {
 	// do heavy lifting setup here
 
 	// Front load data
-	DataManager::getInstance()->parseDrifterDirectoryData();
-	DataManager::getInstance()->parseDrifterData();
+	bool parseData = false;
+	if (parseData) {
+		DataManager::getInstance()->parseDrifterDirectoryData();
+		DataManager::getInstance()->parseDrifterData();
+	}
 
 	getRootView()->setBackgroundColor(Color::gray(0));
 	mMainController = make_shared<MainController>();
