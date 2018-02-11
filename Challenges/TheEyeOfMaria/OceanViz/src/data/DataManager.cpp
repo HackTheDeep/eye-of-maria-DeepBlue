@@ -126,9 +126,9 @@ namespace amnh {
 		fs::path filePath = getAssetPath("data/floats.json");
 
 		try {
-			fs::path sitesPath = getAssetPath("data/floats.json");
-			if (fs::exists(sitesPath)) {
-				DataSourceRef floatSource = loadFile(sitesPath);
+			fs::path filePath = getAssetPath("data/floats.json");
+			if (fs::exists(filePath)) {
+				DataSourceRef floatSource = loadFile(filePath);
 				ci::JsonTree floatTree = (JsonTree)floatSource;
 				if (floatTree.hasChild("features")) {
 					JsonTree array_o_floats = floatTree.getChild("features");

@@ -64,6 +64,9 @@ public:
 	//! Time in seconds of the most recent touch event regardless of touch type or phase
 	float                   getLatestTouchTime() { return mLatestTouchTime; };
 
+	//! The number of views currently handling touches
+	int						getNumTouchedViews() const { return mViewsByTouchId.size(); }
+
 	//! Immediately discard touches that begin outside of any active touch view if enabled
 	bool					getDiscardMissedTouches() const { return mDiscardMissedTouches; }
 	void					setDiscardMissedTouches(const bool value) { mDiscardMissedTouches = value; }

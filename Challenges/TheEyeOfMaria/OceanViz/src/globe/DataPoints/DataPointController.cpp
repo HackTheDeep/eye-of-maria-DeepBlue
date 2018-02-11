@@ -59,7 +59,8 @@ void DataPointController::setup() {
 	particleLayout.append(geom::Attrib::POSITION, 3, sizeof(DataPoint), offsetof(DataPoint, mPos));
 	particleLayout.append(geom::Attrib::COLOR, 4, sizeof(DataPoint), offsetof(DataPoint, mColor));
 	particleLayout.append(geom::Attrib::CUSTOM_0, 1, sizeof(DataPoint), offsetof(DataPoint, mRadius));
-	particleLayout.append(geom::Attrib::CUSTOM_1, 1, sizeof(DataPoint), offsetof(DataPoint, bShow));
+	//particleLayout.append(geom::Attrib::CUSTOM_1, 1, sizeof(DataPoint), offsetof(DataPoint, bShow));
+	particleLayout.append(geom::Attrib::CUSTOM_1, 1, sizeof(DataPoint), offsetof(DataPoint, mTimeStamp));
 
 	// Create mesh by pairing our particle layout with our particle Vbo.
 	// A VboMesh is an array of layout + vbo pairs
@@ -70,7 +71,8 @@ void DataPointController::setup() {
 	loadShader();
 
 	//create the batch
-	mPointsBatch = gl::Batch::create(mesh, mPointsShader, { { geom::CUSTOM_0, "iPointRadius" },{ geom::CUSTOM_1, "iShowPoint" } });
+	mPointsBatch = gl::Batch::create(mesh, mPointsShader, { { geom::CUSTOM_0, "iPointRadius" },
+															{ geom::CUSTOM_1, "iTimeStamp" } });
 
 }
 
@@ -92,7 +94,7 @@ void DataPointController::addDrifterData() {
 
 			mPointsList[mNumUsedPoints].setup(getPolarFromLatLong( events[i].latitude, events[i].longitude ));
 			mPointsList[mNumUsedPoints].setType(DataPoint::DataType::DRIFTER);
-			mPointsList[mNumUsedPoints].mTimeStamp = events[i].time;
+			mPointsList[mNumUsedPoints].mTimeStamp = (float)events[i].time;
 			mPointsList[mNumUsedPoints].mQualityIndex = events[i].qaulityIndex;
 
 			mNumUsedPoints++;
@@ -110,7 +112,7 @@ void DataPointController::addHurricaneData() {
 
 	CI_LOG_I("Adding Hurricane Data...");
 
-	int numHurricanePoints;
+	int numHurricanePoints = 0;
 
 	//go through hurricanes
 	for (int i = 0; i < hurricanes.size(); i++) {
@@ -119,13 +121,15 @@ void DataPointController::addHurricaneData() {
 		//go through sample events of hurricane
 		for(int j = 0; j < events.size(); j++){
 
-			mPointsList[mNumUsedPoints].setup(getPolarFromLatLong(events[i].latitude, events[i].longitude));
+			mPointsList[mNumUsedPoints].setup(getPolarFromLatLong(events[j].latitude, events[j].longitude));
 			mPointsList[mNumUsedPoints].setType(DataPoint::DataType::HURRICANE);
-			mPointsList[mNumUsedPoints].mTimeStamp = events[i].timestamp;
-			mPointsList[mNumUsedPoints].mWind = events[i].wind;
-			mPointsList[mNumUsedPoints].mPressure = events[i].pressure;
-			mPointsList[mNumUsedPoints].mStormType = events[i].stormType;
-			mPointsList[mNumUsedPoints].mCategory = events[i].category;
+			mPointsList[mNumUsedPoints].mTimeStamp = (float)events[j].timestamp;
+			mPointsList[mNumUsedPoints].mWind = events[j].wind;
+			mPointsList[mNumUsedPoints].mPressure = events[j].pressure;
+			mPointsList[mNumUsedPoints].mStormType = events[j].stormType;
+			mPointsList[mNumUsedPoints].mCategory = events[j].category;
+
+			CI_LOG_I("Hurricane Time: " << mPointsList[mNumUsedPoints].mTimeStamp);
 
 			mNumUsedPoints++;
 			numHurricanePoints++;
@@ -183,6 +187,8 @@ void DataPointController::update() {
 void DataPointController::draw() {
 
 	mPointsShader->uniform("uViewScale", 1.0f);
+	float t = TimelineManager::getInstance()->getAbsProgress();
+	mPointsShader->uniform("uPlayhead", t);
 	mPointsBatch->draw();
 }
 

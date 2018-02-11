@@ -24,6 +24,8 @@ public:
 	void update();
 	void draw();
 
+	void loadShader();
+
 public:
 
 	float mRadius;

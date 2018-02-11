@@ -3,6 +3,7 @@
 #include "cinder/Log.h"
 
 #include "bluecadet/core/ScreenLayout.h"
+#include "bluecadet/utils/ImageManager.h"
 
 #include "data/OceanSettings.h"
 #include "data/TimelineManager.h"
@@ -14,6 +15,7 @@ using namespace std;
 
 using namespace bluecadet::core;
 using namespace bluecadet::views;
+using namespace bluecadet::utils;
 
 namespace amnh {
 
@@ -25,6 +27,9 @@ TimelineView::~TimelineView() {
 
 void TimelineView::setup() {
 	setSize(vec2(350, 115));
+	setDragEnabled(true);
+	getSignalTouchBegan().connect([=](...) { setTint(Color::gray(0.8f)); });
+	getSignalTouchEnded().connect([=](...) { setTint(Color::gray(1.0f)); });
 
 	auto timelineManager = TimelineManager::getInstance();
 	auto data = DataManager::getInstance();
@@ -85,7 +90,7 @@ void TimelineView::setup() {
 	mSpeed = make_shared<TextView>();
 	mSpeed->setText("<speed>", "label.small.highlighted");
 	mSpeed->setTextAlign(bluecadet::text::TextAlign::Right);
-	mSpeed->setPosition(getBounds().getLowerRight() - mSpeed->getSize() - vec2(30));
+	mSpeed->setPosition(getBounds().getLowerRight() - mSpeed->getSize() - vec2(30, 25));
 	addChild(mSpeed);
 
 	mTrack->getSignalTouchMoved().connect([=] (const bluecadet::touch::TouchEvent & event) {
@@ -98,12 +103,43 @@ void TimelineView::setup() {
 		TimelineManager::getInstance()->setNormProgress(progress);
 	});
 
+	// buttons
+	const float buttonSpacing = 0.0f;
+
+	mSlower = make_shared<ImageButton>();
+	mSlower->setTexture(ImageManager::getInstance()->getTexture("btn_slower.png"));
+	mSlower->setScale(0.5f);
+	mSlower->setPosition(vec2(20, 85));
+	mSlower->getSignalTapped().connect([=] (...) { slower(); });
+	addChild(mSlower);
+
+	mPlay = make_shared<ImageButton>();
+	mPlay->setTexture(ImageManager::getInstance()->getTexture("btn_play.png"));
+	mPlay->setScale(0.5f);
+	mPlay->setPosition(mSlower->getBounds().getUpperRight() + vec2(buttonSpacing, 0));
+	mPlay->getSignalTapped().connect([=](...) { play(); });
+	addChild(mPlay);
+
+	mPause = make_shared<ImageButton>();
+	mPause->setTexture(ImageManager::getInstance()->getTexture("btn_pause.png"));
+	mPause->setScale(0.5f);
+	mPause->setPosition(mPlay->getBounds().getUpperRight() + vec2(buttonSpacing, 0));
+	mPause->getSignalTapped().connect([=](...) { pause(); });
+	addChild(mPause);
+
+	mFaster = make_shared<ImageButton>();
+	mFaster->setTexture(ImageManager::getInstance()->getTexture("btn_faster.png"));
+	mFaster->setScale(0.5f);
+	mFaster->setPosition(mPause->getBounds().getUpperRight() + vec2(buttonSpacing, 0));
+	mFaster->getSignalTapped().connect([=](...) { faster(); });
+	addChild(mFaster);
+
 	// params
-	auto params = OceanSettings::getInstance()->getParams();
-	params->addButton("Play", [=] { play(); });
-	params->addButton("Pause", [=] { pause(); });
-	params->addButton("Faster", [=] { faster(); });
-	params->addButton("Slower", [=] { slower(); });
+	//auto params = OceanSettings::getInstance()->getParams();
+	//params->addButton("Play", [=] { play(); });
+	//params->addButton("Pause", [=] { pause(); });
+	//params->addButton("Faster", [=] { faster(); });
+	//params->addButton("Slower", [=] { slower(); });
 }
 
 void TimelineView::update(double deltaTime) {

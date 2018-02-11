@@ -29,6 +29,8 @@ public:
 	void update();
 	void draw() ;
 
+	Earth & getEarth() { return mEarth; }
+
 protected:
 	inline void invertMouseCoords(ci::app::MouseEvent & event);
 
