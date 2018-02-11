@@ -82,7 +82,7 @@ void DataPointController::addDrifterData() {
 
 			mPointsList[mNumUsedPoints].setup(getPolarFromLatLong( events[i].latitude, events[i].longitude ));
 			mPointsList[mNumUsedPoints].setType(DataPoint::DataType::DRIFTER);
-			mPointsList[mNumUsedPoints].mTimeStamp = (float)events[i].time;
+			mPointsList[mNumUsedPoints].mTimeStamp = events[i].normalizedTime;
 			mPointsList[mNumUsedPoints].mQualityIndex = events[i].qaulityIndex;
 
 			mNumUsedPoints++;
@@ -98,6 +98,9 @@ void DataPointController::addHurricaneData() {
 
 	//get drifter data
 	auto hurricanes = DataManager::getInstance()->getAllHurricaneModels();
+
+	float minTimestamp = DataManager::getInstance()->getMinTimestamp();
+	float totalDuration = DataManager::getInstance()->getMaxTimestamp() - minTimestamp;
 
 	CI_LOG_I("Adding Hurricane Data...");
 
@@ -118,7 +121,7 @@ void DataPointController::addHurricaneData() {
 
 			mPointsList[mNumUsedPoints].setup(getPolarFromLatLong(events[j].latitude, events[j].longitude));
 			mPointsList[mNumUsedPoints].setType(DataPoint::DataType::HURRICANE);
-			mPointsList[mNumUsedPoints].mTimeStamp = (float)events[j].timestamp;
+			mPointsList[mNumUsedPoints].mTimeStamp = events[i].normalizedTime;
 			mPointsList[mNumUsedPoints].mWind = events[j].wind;
 			mPointsList[mNumUsedPoints].mPressure = events[j].pressure;
 			mPointsList[mNumUsedPoints].mStormType = events[j].stormType;
@@ -145,6 +148,9 @@ void DataPointController::addFloaterData() {
 	//get drifter data
 	auto floaterMap = DataManager::getInstance()->getAllFloats();
 
+	float minTimestamp = DataManager::getInstance()->getMinTimestamp();
+	float totalDuration = DataManager::getInstance()->getMaxTimestamp() - minTimestamp;
+
 	CI_LOG_I("Adding Floater Data...");
 
 	mNumFloatPts = 0;
@@ -161,7 +167,7 @@ void DataPointController::addFloaterData() {
 
 			mPointsList[mNumUsedPoints].setup(getPolarFromLatLong(events[i].latitude, events[i].longitude));
 			mPointsList[mNumUsedPoints].setType(DataPoint::DataType::FLOAT);
-			mPointsList[mNumUsedPoints].mTimeStamp = (float)events[i].timestamp;
+			mPointsList[mNumUsedPoints].mTimeStamp = events[i].normalizedTime;
 			mPointsList[mNumUsedPoints].mTemp = events[i].temp;
 			mPointsList[mNumUsedPoints].mPSalinity = events[i].psal;
 			mPointsList[mNumUsedPoints].mPressure = events[i].pressure;
@@ -264,7 +270,8 @@ void DataPointController::reMapHurricaneColors(HurricaneColor colorType) {
 void DataPointController::draw() {
 
 	mPointsShader->uniform("uViewScale", 1.0f);
-	float t = TimelineManager::getInstance()->getAbsProgress();
+	float t = TimelineManager::getInstance()->getNormProgress();
+	gl::ScopedBlendAdditive scopedBlend;
 	mPointsShader->uniform("uPlayhead", t);
 	mPointsBatch->draw();
 }

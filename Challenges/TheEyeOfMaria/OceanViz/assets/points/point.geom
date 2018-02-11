@@ -13,7 +13,7 @@ uniform mat4 ciProjectionMatrix;
 uniform float uViewScale;
 uniform float uPlayhead;
 in float vTimeStamp[];
-out float timeStamp;
+out float gTimeStamp;
 
 vec4 getPointOnCircle( float rad, float ang){
 	return rad * vec4( cos( M_PI * ang / 180.0f ), sin( M_PI * ang / 180.0f ), 0.0f, 0.0f);
@@ -22,7 +22,7 @@ vec4 getPointOnCircle( float rad, float ang){
 void main()
 {
 	gColor = vColor[0];
-	timeStamp = vTimeStamp[0];
+	gTimeStamp = vTimeStamp[0];
 
 	// int numPoints = 12;
 	// float theta = 360.0f/float(numPoints);
