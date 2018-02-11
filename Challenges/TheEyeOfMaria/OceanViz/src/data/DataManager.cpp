@@ -120,23 +120,19 @@ namespace amnh {
 	}
 
 	void DataManager::parseFloatData() {
-		std::string fileName = "../assets/data/floats.json";
-		if (fs::exists(fileName)) {
-			try {
-				JsonTree floatBase = JsonTree(loadFile(fileName));
+		fs::path filePath = getAssetPath("data/floats.json");
 
+		try {
+			fs::path sitesPath = getAssetPath("data/floats.json");
+			if (fs::exists(sitesPath)) {
+				DataSourceRef sitesSource = loadFile(sitesPath);
+				ci::JsonTree sitesTree = (JsonTree)sitesSource;
+				CI_LOG_I(sitesTree.getNumChildren());
 			}
-			catch (Exception e) {
-				CI_LOG_EXCEPTION("Could not parse json", e);
-			}
 		}
-		else if (!fileName.empty()) {
-			CI_LOG_E("Settings file does not exist at '" << fileName << "'");
+		catch (std::exception& e) {
+			CI_LOG_EXCEPTION("Sites.json data could not be loaded", e);
 		}
-		else {
-			CI_LOG_D("No settings file specified. Using defaults.");
-		}
-
 
 
 	}
