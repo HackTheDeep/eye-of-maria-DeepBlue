@@ -40,7 +40,7 @@ void OceanVizApp::prepareSettings(ci::app::App::Settings* settings) {
 		manager->mFullscreen = false;
 		manager->mWindowSize = ivec2(1280, 720);
 		manager->mDisplaySize = manager->mWindowSize; // set display to app size to prevent zooming
-		manager->mMinimizeParams = true;
+		//manager->mMinimizeParams = true;
 	});
 }
 

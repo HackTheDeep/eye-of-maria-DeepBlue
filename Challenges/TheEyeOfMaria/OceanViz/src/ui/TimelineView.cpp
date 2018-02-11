@@ -59,6 +59,13 @@ void TimelineView::setup() {
 
 		TimelineManager::getInstance()->setNormProgress(progress);
 	});
+
+	// params
+	auto params = OceanSettings::getInstance()->getParams();
+	auto timelineManager = TimelineManager::getInstance();
+	params->addParam<bool>("Play", [=](bool v) { timelineManager->setPaused(!v); }, [=] { return !timelineManager->isPaused(); }).group("Timeline");
+	params->addButton("Faster", [=] { if (timelineManager->getSpeed() < 8.0f) timelineManager->animateSpeedTo(timelineManager->getSpeed() * 2.0f); });
+	params->addButton("Slower", [=] { if (timelineManager->getSpeed() > 0.125f) timelineManager->animateSpeedTo(timelineManager->getSpeed() * 0.5f); });
 }
 
 void TimelineView::update(double deltaTime) {

@@ -21,12 +21,16 @@ void TimelineManager::setup() {
 }
 
 void TimelineManager::update(double deltaTime) {
+	if (mIsPaused) {
+		return;
+	}
 	float deltaProgress = mSpeedMult * deltaTime / mSecondsPerPlaythrough;
 	mProgress = fmodf(mProgress + deltaProgress, 1.0f);
 }
 
-void TimelineManager::animateSpeedTo(float speed) {
-	timeline().apply(&mSpeedMult, speed, 0.3, easeInOutQuad);
+void TimelineManager::animateSpeedTo(float speed, float duration) {
+	mTargetSpeedMult = speed;
+	timeline().apply(&mSpeedMult, speed, duration, easeInOutQuad);
 }
 
 }

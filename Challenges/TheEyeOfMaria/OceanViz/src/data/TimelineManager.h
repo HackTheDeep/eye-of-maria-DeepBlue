@@ -37,16 +37,23 @@ public:
 	void setEndTime(const float value) { mEndTime = value; }
 	float getEndTime() const { return mEndTime; }
 
-	void animateSpeedTo(float speed);
+	void animateSpeedTo(float speed, float duration = 0.3f);
+	float getSpeed() const { return mTargetSpeedMult; }
+	void setSpeed(float speed) { mTargetSpeedMult = speed; mSpeedMult = speed; }
+
+	void setPaused(const bool value) { mIsPaused = value; }
+	bool isPaused() const { return mIsPaused; }
 
 protected:
-
+	float mTargetSpeedMult = 1.0f;
 	ci::Anim<float> mSpeedMult = 1.0f;
 	float mSecondsPerPlaythrough = 30.0f;
 	float mProgress = 0.0f;
 
 	float mStartTime = 0;
 	float mEndTime = 0;
+
+	bool mIsPaused = false;
 
 };
 }
