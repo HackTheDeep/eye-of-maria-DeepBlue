@@ -18,6 +18,8 @@
 #include "data/models/DrifterModel.h"
 #include "data/models/HurricaneModel.h"
 
+#include "../../data/TimelineManager.h"
+
 namespace amnh {
 
 	typedef std::shared_ptr<class DataPointController> DataPointControllerRef;

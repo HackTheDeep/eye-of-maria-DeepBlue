@@ -37,7 +37,7 @@ public:
 	float		bShow;
 
 	//for drifters
-	std::time_t mTimeStamp;
+	float mTimeStamp = std::numeric_limits<float>::max();
 	float		mQualityIndex;
 
 	//for hurricanes
