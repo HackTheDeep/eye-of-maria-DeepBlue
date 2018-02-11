@@ -46,7 +46,7 @@ void MainController::setup(bluecadet::views::BaseViewRef rootView) {
 	mCamera.setPerspective(60.0f, getWindowAspectRatio(), 0.1f, 20000.0f);
 	mCamera.lookAt(vec3(0, 0, 2000.0f), vec3(0));
 
-	mArcballSphere = Sphere(vec3(0), 800.0f);
+	mArcballSphere = Sphere(vec3(0), 850.0f);
 
 	mArcball = Arcball(&mCamera, mArcballSphere);
 	mArcball.setQuat(glm::angleAxis(1.89068f, vec3(0.277f, -0.950f, -0.145f)));
@@ -67,34 +67,32 @@ void MainController::setup(bluecadet::views::BaseViewRef rootView) {
 	DataPointController::getInstance()->reMapDrifterColors(DataPointController::DrifterColor::QUALITY);
 	DataPointController::getInstance()->reMapFloaterColors(DataPointController::FloaterColor::PRESSURE);
 
+
+	OceanSettings::getInstance()->initParams();
 	auto params = OceanSettings::getInstance()->getParams();
 	params->addButton("Toggle Depth Test", [=] {
 		toggleDepthTest();
-	});
-
-	params->addSeparator("");
-
+	}, "group=Rendering");
 	params->addButton("Toggle Hurricane Data", [=] {
 		DataPointController::getInstance()->toggleHurricane();
-	});
+	}, "group=Layers");
 	params->addButton("Toggle Drifter Data", [=] {
 		DataPointController::getInstance()->toggleDrifters();
-	});
+	}, "group=Layers");
 	params->addButton("Toggle Float Data", [=] {
 		DataPointController::getInstance()->toggleFloats();
-	});
+	}, "group=Layers");
 
-	params->addSeparator("");
-
-	params->addButton("Hurricane Color: Pressure", [=]{ 
+	params->addButton("Pressure Color", [=]{
 		DataPointController::getInstance()->reMapHurricaneColors(DataPointController::HurricaneColor::PRESSURE);
-	});
-	params->addButton("Hurricane Color: Wind", [=] { 
+	}, "group=Hurricane");
+	params->addButton("Wind Color", [=] {
 		DataPointController::getInstance()->reMapHurricaneColors(DataPointController::HurricaneColor::WIND);
-	});
-	params->addButton("Hurricane Color: Category", [=] {
+	}, "group=Hurricane");
+
+	params->addButton("Category Color", [=] {
 		DataPointController::getInstance()->reMapHurricaneColors(DataPointController::HurricaneColor::CATEGORY);
-	});
+	}, "group=Hurricane");
 
 	params->addSeparator("");
 
@@ -115,8 +113,8 @@ void MainController::setup(bluecadet::views::BaseViewRef rootView) {
 	});
 
 	//wire up signals
-	getWindow()->getSignalMouseDown().connect(100, bind(&MainController::handleMouseDown, this, std::placeholders::_1));
-	getWindow()->getSignalMouseDrag().connect(100, bind(&MainController::handleMouseDrag, this, std::placeholders::_1));
+	getWindow()->getSignalMouseDown().connect(-100, bind(&MainController::handleMouseDown, this, std::placeholders::_1));
+	getWindow()->getSignalMouseDrag().connect(-100, bind(&MainController::handleMouseDrag, this, std::placeholders::_1));
 	getWindow()->getSignalMouseWheel().connect(bind(&MainController::handleMouseWheel, this, std::placeholders::_1));
 
 	//OceanSettings::getInstance()->getParams()->addParam<quat>("Cam Rot", [&] (quat q) { mArcball.setQuat(q); }, [&] { return mArcball.getQuat(); });
@@ -157,7 +155,7 @@ void MainController::handleMouseDown(ci::app::MouseEvent event) {
 	if (bluecadet::touch::TouchManager::getInstance()->getNumTouchedViews() > 0) {
 		return;
 	}
-	invertMouseCoords(event);
+	//invertMouseCoords(event);
 	mArcball.mouseDown(event);
 }
 
@@ -165,7 +163,7 @@ void MainController::handleMouseDrag(ci::app::MouseEvent event) {
 	if (bluecadet::touch::TouchManager::getInstance()->getNumTouchedViews() > 0) {
 		return;
 	}
-	invertMouseCoords(event);
+	//invertMouseCoords(event);
 	mArcball.mouseDrag(event);
 	/*static bool firstMouseMove = true;
 
@@ -182,5 +180,3 @@ void MainController::handleMouseDrag(ci::app::MouseEvent event) {
 }
 
 }
-
- 

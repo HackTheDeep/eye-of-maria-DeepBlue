@@ -15,9 +15,9 @@ void main(void) {
 	gl_Position = ciModelView * ciPosition;
 	uRadius = iPointRadius;
 	vTimeStamp = iTimeStamp;
-	
-	if (iTimeStamp < uPlayhead && iShowPoint > 0.5f) {
-		vColor = ciColor;	
+
+	if (iTimeStamp <= uPlayhead && iShowPoint > 0.5f) {
+		vColor = ciColor;
 	} else {
 		vColor = vec4(0.0f, 0.0f, 0.0f, 0.0f);
 	}
