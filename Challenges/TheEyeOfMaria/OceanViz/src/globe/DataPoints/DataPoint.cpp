@@ -21,7 +21,7 @@ void DataPoint::setup(ci::vec3 pos) {
 
 	mColor = ColorA(1.0f, 0.0f, 0.0f, 1.0f);
 	mRadius = 1.0f;
-	bShow = 1.0f;
+	bShow = 0.0f;
 
 }
 
