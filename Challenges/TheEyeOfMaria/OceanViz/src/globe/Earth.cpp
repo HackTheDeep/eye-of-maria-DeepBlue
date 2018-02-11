@@ -23,7 +23,7 @@ Earth::Earth(){
 void Earth::setup(){
 
 	mLoc = vec3(0);
-	mRadius = 250.0f;
+	mRadius = 325.0f;
 	mLightDir = glm::normalize(vec3(0.025f, 0.25f, 1.0f));
 
 	// Load the textures for the Earth.

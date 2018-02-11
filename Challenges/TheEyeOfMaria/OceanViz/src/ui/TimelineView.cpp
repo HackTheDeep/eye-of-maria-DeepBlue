@@ -42,7 +42,7 @@ void TimelineView::setup() {
 
 	mTrack = make_shared<TouchView>();
 	mTrack->setSize(vec2(310, 15));
-	mTrack->setPosition(vec2(20, 30));
+	mTrack->setPosition(vec2(20, 40));
 	addChild(mTrack);
 
 	mProgress = make_shared<BaseView>();
@@ -57,16 +57,16 @@ void TimelineView::setup() {
 	mTrack->addChild(trackBg);
 
 	// current time
-	const float timeMargin = 5.0f;
+	const float timeMargin = 10.0f;
 	mCurrentTimeLabel = make_shared<TextView>();
-	mCurrentTimeLabel->setText("Current:", "label.large");
+	mCurrentTimeLabel->setText("TIME", "label.large");
 	mCurrentTimeLabel->setPosition(mTrack->getPosition() + vec2(0, -mCurrentTimeLabel->getHeight() - timeMargin));
 	addChild(mCurrentTimeLabel);
 
 	mCurrentTime = make_shared<TextView>();
-	mCurrentTime->setText("<time>", "label.large");
-	mCurrentTime->setPosition(mTrack->getPosition() + vec2(mTrack->getWidth() - mCurrentTime->getWidth(), -mCurrentTime->getHeight() - timeMargin));
+	mCurrentTime->setText("<time>", "label.large.highlighted");
 	mCurrentTime->setTextAlign(bluecadet::text::TextAlign::Right);
+	mCurrentTime->setPosition(mTrack->getPosition() + vec2(mTrack->getWidth() - mCurrentTime->getWidth(), -mCurrentTime->getHeight() - timeMargin));
 	addChild(mCurrentTime);
 
 	// start/end times
@@ -80,6 +80,13 @@ void TimelineView::setup() {
 	mEndTime->setText(data->getDateStringFromTimestamp(DataManager::getInstance()->getMaxTimestamp()), "label.small");
 	mEndTime->setPosition(mTrack->getPosition() + mTrack->getSize() + vec2(-mEndTime->getWidth(), timeMargin));
 	addChild(mEndTime);
+
+	// speed
+	mSpeed = make_shared<TextView>();
+	mSpeed->setText("<speed>", "label.small.highlighted");
+	mSpeed->setTextAlign(bluecadet::text::TextAlign::Right);
+	mSpeed->setPosition(getBounds().getLowerRight() - mSpeed->getSize() - vec2(30));
+	addChild(mSpeed);
 
 	mTrack->getSignalTouchMoved().connect([=] (const bluecadet::touch::TouchEvent & event) {
 		vec2 posInTrack = mTrack->convertGlobalToLocal(event.globalPosition);
@@ -114,8 +121,13 @@ void TimelineView::update(double deltaTime) {
 	mCurrentTime->setText(data->getDateStringFromTimestamp(timelineManager->getAbsProgress()));
 	mCurrentTime->setPosition(vec2(mTrack->getBounds().getUpperRight().x - mCurrentTime->getWidth(), mCurrentTime->getPosition()().y));
 
-	// update time label
-	mCurrentTimeLabel->setText("Time (x" + bluecadet::text::toPrecision(timelineManager->getSpeed(), 3) + ")");
+	// update speed
+	float speed = timelineManager->getSpeed();
+	int precision = 1;
+	if (speed < 0.25f) precision = 3;
+	else if (speed < 0.5f) precision = 2;
+	mSpeed->setText("x" + bluecadet::text::toPrecision(speed, precision));
+	mSpeed->setPosition(getSize() - mSpeed->getSize() - vec2(20, 15));
 }
 
 void TimelineView::play() {
