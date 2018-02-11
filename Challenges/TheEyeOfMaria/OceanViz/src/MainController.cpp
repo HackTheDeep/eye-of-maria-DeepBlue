@@ -4,6 +4,7 @@
 
 #include "bluecadet/text/StyleManager.h"
 #include "bluecadet/touch/TouchManager.h"
+#include "bluecadet/utils/ImageManager.h"
 
 #include "data/OceanSettings.h"
 #include "data/DataManager.h"
@@ -15,6 +16,7 @@ using namespace std;
 using namespace bluecadet::core;
 using namespace bluecadet::text;
 using namespace bluecadet::views;
+using namespace bluecadet::utils;
 
 namespace amnh {
 
@@ -26,6 +28,7 @@ MainController::~MainController() {
 
 void MainController::setup(bluecadet::views::BaseViewRef rootView) {
 	StyleManager::getInstance()->setup(getAssetPath("fonts/styles.json"));
+	ImageManager::getInstance()->loadAllFromDir(getAssetPath("ui"));
 
 	// Front load data
 	bool parseData = true;
@@ -64,7 +67,7 @@ void MainController::setup(bluecadet::views::BaseViewRef rootView) {
 	getWindow()->getSignalMouseDrag().connect(100, bind(&MainController::handleMouseDrag, this, std::placeholders::_1));
 	getWindow()->getSignalMouseWheel().connect(bind(&MainController::handleMouseWheel, this, std::placeholders::_1));
 
-	OceanSettings::getInstance()->getParams()->addParam<quat>("Quat", [&] (quat q) { mArcball.setQuat(q); }, [&] { return mArcball.getQuat(); });
+	//OceanSettings::getInstance()->getParams()->addParam<quat>("Cam Rot", [&] (quat q) { mArcball.setQuat(q); }, [&] { return mArcball.getQuat(); });
 }
 
 void MainController::update() {

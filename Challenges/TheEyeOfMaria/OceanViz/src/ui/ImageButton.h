@@ -19,6 +19,12 @@ public:
 	void  setTexture(const ci::gl::TextureRef texture);
 	ci::gl::TextureRef  getTexture() const { return mTexture; }
 
+	void  setMouseDownColor(const ci::ColorA value) { mMouseDownColor = value; }
+	ci::ColorA  getMouseDownColor() const { return mMouseDownColor; }
+
+	void  setMouseUpColor(const ci::ColorA value) { mMouseUpColor = value; }
+	ci::ColorA  getMouseUpColor() const { return mMouseUpColor; }
+
 protected:
 	void draw() override;
 

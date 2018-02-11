@@ -36,7 +36,7 @@ void ImageButton::setTexture(const ci::gl::TextureRef texture) {
 
 void ImageButton::draw() {
 	if (mTexture) {
-		gl::ScopedColor scopedColor(getNumTouches() > 0 ? mMouseDownColor : mMouseDownColor);
+		gl::ScopedColor scopedColor(getNumTouches() > 0 ? mMouseDownColor : mMouseUpColor);
 		gl::draw(mTexture);
 	}
 }
