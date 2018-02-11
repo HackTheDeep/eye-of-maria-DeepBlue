@@ -6,6 +6,7 @@
 #include "bluecadet/views/TouchView.h"
 
 #include "data/OceanSettings.h"
+#include "MainController.h"
 
 using namespace ci;
 using namespace ci::app;
@@ -23,6 +24,10 @@ public:
 	void setup() override;
 	void update() override;
 	void draw() override;
+	void lateSetup() override;
+
+protected:
+	MainControllerRef mMainController = nullptr;
 };
 
 void OceanVizApp::prepareSettings(ci::app::App::Settings* settings) {
@@ -40,16 +45,18 @@ void OceanVizApp::prepareSettings(ci::app::App::Settings* settings) {
 void OceanVizApp::setup() {
 	BaseApp::setup();
 
-	// Optional: configure your root view
-	getRootView()->setBackgroundColor(Color::gray(0.5f));
+	// do lightweight setup here
+}
 
-	// Sample content
-	auto button = make_shared<TouchView>();
-	button->setPosition(vec2(400, 300));
-	button->setSize(vec2(200, 100));
-	button->setBackgroundColor(Color(1, 0, 0));
-	button->getSignalTapped().connect([=](bluecadet::touch::TouchEvent e) { CI_LOG_I("Button tapped"); });
-	getRootView()->addChild(button);
+void OceanVizApp::lateSetup() {
+	BaseApp::lateSetup();
+
+	// do heavy lifting setup here
+
+	getRootView()->setBackgroundColor(Color::gray(0));
+	mMainController = make_shared<MainController>();
+	getRootView()->addChild(mMainController);
+	mMainController->setup();
 }
 
 void OceanVizApp::update() {
