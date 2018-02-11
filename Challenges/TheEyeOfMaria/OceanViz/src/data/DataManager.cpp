@@ -48,7 +48,7 @@ namespace amnh {
 					DrifterModel::SampleEvent drifterEvent;
 					drifterEvent.latitude = std::stof(results[mDrifter_LatIndex]);
 					drifterEvent.longitude = std::stof(results[mDrifter_LongIndex]);
-					drifterEvent.qaulityIndex = std::stof(results[mDrifter_QualIndexIndex]);
+					drifterEvent.qualityIndex = std::stof(results[mDrifter_QualIndexIndex]);
 					drifterEvent.time = timestamp;
 					it->second.addSampleEvent(drifterEvent);
 				}

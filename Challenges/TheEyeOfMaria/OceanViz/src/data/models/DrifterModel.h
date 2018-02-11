@@ -12,7 +12,7 @@ namespace amnh {
 			std::time_t		time;
 			float			latitude;
 			float			longitude;
-			float			qaulityIndex;
+			float			qualityIndex;
 		};
 
 		DrifterModel();

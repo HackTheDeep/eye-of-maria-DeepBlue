@@ -69,6 +69,9 @@ void DataPointController::addDrifterData() {
 	mNumDrifterPts = 0;
 	driftersStartIndex = mNumUsedPoints;
 
+	minDrifterQuality = 999999999999;
+	maxDrifterQuality = -1;
+
 	//iterate through each drifter
 	map<string, DrifterModel>::iterator it;
 	for (it = drifterMap.begin(); it != drifterMap.end(); it++){
@@ -81,7 +84,10 @@ void DataPointController::addDrifterData() {
 			mPointsList[mNumUsedPoints].setup(getPolarFromLatLong( events[i].latitude, events[i].longitude ));
 			mPointsList[mNumUsedPoints].setType(DataPoint::DataType::DRIFTER);
 			mPointsList[mNumUsedPoints].mTimeStamp = (float)events[i].time;
-			mPointsList[mNumUsedPoints].mQualityIndex = events[i].qaulityIndex;
+			mPointsList[mNumUsedPoints].mQualityIndex = events[i].qualityIndex;
+
+			if (events[i].qualityIndex > maxDrifterQuality) maxDrifterQuality = events[i].qualityIndex;
+			if (events[i].qualityIndex < minDrifterQuality) minDrifterQuality = events[i].qualityIndex;
 
 			mNumUsedPoints++;
 			mNumDrifterPts++;
@@ -148,6 +154,13 @@ void DataPointController::addFloaterData() {
 	mNumFloatPts = 0;
 	floaterStartIndex = mNumUsedPoints;
 
+	minFloatSalinity = 9999999999;
+	maxFloatSalinity -1;
+	minFloatTemp = 9999999999;
+	maxFloatTemp = -1;
+	minFloatPressure = 999999999;
+	maxFloatPressure = -1;
+
 	//iterate through each drifter
 	map<string, FloatModel>::iterator it;
 	for (it = floaterMap.begin(); it != floaterMap.end(); it++) {
@@ -163,6 +176,15 @@ void DataPointController::addFloaterData() {
 			mPointsList[mNumUsedPoints].mTemp = events[i].temp;
 			mPointsList[mNumUsedPoints].mPSalinity = events[i].psal;
 			mPointsList[mNumUsedPoints].mPressure = events[i].pressure;
+
+			if (events[i].temp > maxFloatTemp) maxFloatTemp = events[i].temp;
+			if (events[i].temp < minFloatTemp) minFloatTemp = events[i].temp;
+			
+			if (events[i].psal > maxFloatSalinity) maxFloatSalinity = events[i].psal;
+			if (events[i].psal < minFloatSalinity) minFloatSalinity = events[i].psal;
+
+			if (events[i].pressure > maxFloatPressure) maxFloatPressure = events[i].pressure;
+			if (events[i].pressure < minFloatPressure) minFloatPressure = events[i].pressure;
 
 			mNumUsedPoints++;
 			mNumFloatPts++;
@@ -256,6 +278,107 @@ void DataPointController::reMapHurricaneColors(HurricaneColor colorType) {
 			break;
 		case HurricaneColor::CATEGORY:
 			val = (float)mPointsList[i].mCategory;
+			break;
+		default:
+			break;
+		}
+
+		float pct = clamp(lmap(val, startVal, endVal, 0.0f, 1.0f), 0.0f, 1.0f);
+		mPointsList[i].mColor = startCol.lerp(pct, endCol);
+	}
+
+
+}
+
+
+void DataPointController::reMapDrifterColors(DrifterColor colorType) {
+
+	ColorA startCol;
+	ColorA endCol;
+
+	float startVal;
+	float endVal;
+
+	float val;
+
+	switch (colorType) {
+	case DrifterColor::QUALITY:
+		startCol = ColorA(1.0f, 0.0f, 1.0f, 1.0f);	//magenta
+		endCol = ColorA(1.0f, 1.0f, 0.0f, 1.0f);	//yellow
+		startVal = minDrifterQuality;
+		endVal = maxDrifterQuality;
+		CI_LOG_I("Mapping Drifter colors to Quality Index");
+		break;
+
+	default:
+		break;
+	}
+
+	for (int i = driftersStartIndex; i < driftersStartIndex + mNumDrifterPts; i++) {
+
+		switch (colorType) {
+		case DrifterColor::QUALITY:
+			val = (float)mPointsList[i].mQualityIndex;
+			break;
+
+		default:
+			break;
+		}
+
+		float pct = clamp(lmap(val, startVal, endVal, 0.0f, 1.0f), 0.0f, 1.0f);
+		mPointsList[i].mColor = startCol.lerp(pct, endCol);
+	}
+
+
+}
+
+void DataPointController::reMapFloaterColors(FloaterColor colorType) {
+
+	ColorA startCol;
+	ColorA endCol;
+
+	float startVal;
+	float endVal;
+
+	float val;
+
+	switch (colorType) {
+	case FloaterColor::PRESSURE:
+		startCol = ColorA::gray(0.4f, 1.0f);	//gray
+		endCol = ColorA::gray(1.0f, 1.0f);		//white
+		startVal = minFloatPressure;
+		endVal = maxFloatPressure;
+		CI_LOG_I("Mapping Floater colors to Pressure");
+		break;
+	case FloaterColor::TEMP:
+		startCol = ColorA(1.0f, 1.0f, 0.0f, 1.0f);	//yellow
+		endCol = ColorA(1.0f, 0.0f, 0.0f, 1.0f);	//red
+		startVal = minFloatTemp;
+		endVal = maxFloatTemp;
+		CI_LOG_I("Mapping Floater colors to Temperature");
+		break;
+	case FloaterColor::SALINITY:
+		startCol = ColorA(1.0f, 1.0f, 1.0f, 1.0f);	//white
+		endCol = ColorA(0.0f, 1.0f, 1.0f, 1.0f);	//cyan
+		startVal = minFloatSalinity;
+		endVal = maxFloatSalinity;
+		CI_LOG_I("Mapping Floater colors to Salinity");
+		break;
+	default:
+		break;
+	}
+
+	for (int i = floaterStartIndex; i < floaterStartIndex + mNumFloatPts; i++) {
+
+		switch (colorType) {
+		case FloaterColor::PRESSURE:
+			val = mPointsList[i].mPressure;
+			break;
+		case FloaterColor::TEMP:
+			val = mPointsList[i].mTemp;
+			break;
+		case FloaterColor::SALINITY:
+			val = (float)mPointsList[i].mPSalinity;
 			break;
 		default:
 			break;
