@@ -9,13 +9,9 @@ namespace amnh {
 	public:
 		struct SampleEvent {
 			std::time_t		time;
-			//float			latitude;
-			//float			longitude;
-			//float			qaulityIndex;
-			std::string		latitude;
-			std::string		longitude;
-			std::string		qaulityIndex;
-
+			float			latitude;
+			float			longitude;
+			float			qaulityIndex;
 		};
 
 		DrifterModel();

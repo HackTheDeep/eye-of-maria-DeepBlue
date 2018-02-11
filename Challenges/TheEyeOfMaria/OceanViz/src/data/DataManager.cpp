@@ -32,9 +32,9 @@ namespace amnh {
 					string dateString = getDrifterDateString(results[mDrifter_YearIndex], results[mDrifter_MonthIndex], results[mDrifter_DayIndex]);
 					auto timeStamp = dateStringToTimestamp(dateString);
 
-					drifterEvent.latitude = results[mDrifter_LatIndex];
-					drifterEvent.longitude = results[mDrifter_LongIndex];
-					drifterEvent.qaulityIndex = results[mDrifter_QualIndexIndex];
+					drifterEvent.latitude = std::stof(results[mDrifter_LatIndex]);
+					drifterEvent.longitude = std::stof(results[mDrifter_LongIndex]);
+					drifterEvent.qaulityIndex = std::stof(results[mDrifter_QualIndexIndex]);
 					drifterEvent.time = timeStamp;
 					it->second.addSampleEvent(drifterEvent);
 				}
