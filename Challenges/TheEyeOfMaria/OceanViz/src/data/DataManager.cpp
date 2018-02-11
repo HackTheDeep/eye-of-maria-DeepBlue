@@ -21,8 +21,8 @@ namespace amnh {
 		parseHurricanData();
 	};
 
-//		setFieldFromJsonIfExists(&mVideosPreload, "videos.preload");
-//		setFieldFromJsonIfExists(&mVideosAssetDir, "videos.assetDir");
+	//		setFieldFromJsonIfExists(&mVideosPreload, "videos.preload");
+	//		setFieldFromJsonIfExists(&mVideosAssetDir, "videos.assetDir");
 
 
 	void DataManager::parseDrifterData() {
@@ -108,7 +108,7 @@ namespace amnh {
 				hurricaneEvent.wind = stof(windString);
 				hurricaneEvent.stormType = results[mHurricane_StormTypeIndex];
 				hurricane.addSampleEvent(hurricaneEvent);
-				
+
 			}
 			didReadFirstLine = true;
 		}
@@ -116,6 +116,27 @@ namespace amnh {
 		CI_LOG_I("Done parsing HURRICANES:");
 		CI_LOG_I(mHurricaneModels.size());
 		CI_LOG_I("");
+	}
+
+	void DataManager::parseFloatData() {
+		std::string fileName = "../assets/data/float.json";
+		if (fs::exists(fileName)) {
+			try {
+				JsonTree floatBase = JsonTree(loadFile(fileName));
+
+			}
+			catch (Exception e) {
+				CI_LOG_EXCEPTION("Could not parse json", e);
+			}
+		}
+		else if (!fileName.empty()) {
+			CI_LOG_E("Settings file does not exist at '" << fileName << "'");
+		}
+		else {
+			CI_LOG_D("No settings file specified. Using defaults.");
+		}
+
+
 
 	}
 

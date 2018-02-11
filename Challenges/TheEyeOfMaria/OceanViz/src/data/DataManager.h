@@ -41,6 +41,7 @@ namespace amnh {
 		void									parseDrifterData();
 		void									parseDrifterDirectoryData();
 		void									parseHurricanData();
+		void									parseFloatData();
 
 		// Reads next line and returns array of tokens split on delimeter 
 		std::vector<std::string>		getNextLineAndSplitIntoTokens(std::istream& str, const char delimeter);
