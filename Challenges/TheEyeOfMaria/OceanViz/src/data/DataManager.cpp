@@ -123,8 +123,6 @@ namespace amnh {
 	}
 
 	void DataManager::parseFloatData() {
-		fs::path filePath = getAssetPath("data/floats.json");
-
 		try {
 			fs::path filePath = getAssetPath("data/floats.json");
 			if (fs::exists(filePath)) {
@@ -146,8 +144,8 @@ namespace amnh {
 							if (timestamp < mMinTimeStamp) { mMinTimeStamp = timestamp; }
 
 							JsonTree coordinates = array_o_floats[i].getChild("geometry").getChild("coordinates");
-							float latitude = coordinates.getValueAtIndex<float>(0);
-							float longitude = coordinates.getValueAtIndex<float>(1);
+							float latitude = coordinates.getValueAtIndex<float>(1);
+							float longitude = coordinates.getValueAtIndex<float>(0);
 
 							FloatModel::SampleEvent floatEvent = FloatModel::SampleEvent();
 							floatEvent.timestamp = timestamp;
