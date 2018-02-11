@@ -165,8 +165,12 @@ void SettingsManager::applyToAppSettings(ci::app::App::Settings * settings) {
 
 	// Keep window top-left within display bounds
 	if (settings->getWindowPos().x == 0 && settings->getWindowPos().y == 0) {
-		ivec2 windowPos = (Display::getMainDisplay()->getSize() - settings->getWindowSize()) / 2;
-		windowPos = glm::max(windowPos, ivec2(0));
+		vec2 displaySize = Display::getMainDisplay()->getSize();
+		if (settings->isHighDensityDisplayEnabled()) {
+			displaySize /= Display::getMainDisplay()->getContentScale();
+		}
+		vec2 windowPos = (displaySize - vec2(settings->getWindowSize())) * 0.5f;
+		windowPos = glm::max(windowPos, vec2(0));
 		settings->setWindowPos(windowPos);
 	}
 }

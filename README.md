@@ -1,4 +1,4 @@
-# BluecaDeep for AMNH #HackTheDeep
+# DeepBlue for AMNH #HackTheDeep
 
 ## Setup
 
