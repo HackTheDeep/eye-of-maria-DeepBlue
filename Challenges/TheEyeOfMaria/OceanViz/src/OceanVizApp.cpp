@@ -25,6 +25,7 @@ class OceanVizApp : public BaseApp {
 public:
 	static void prepareSettings(ci::app::App::Settings* settings);
 	void setup() override;
+	void lateSetup() override;
 	void update() override;
 	void draw() override;
 	void keyDown(KeyEvent event) override;
@@ -45,13 +46,16 @@ void OceanVizApp::prepareSettings(ci::app::App::Settings* settings) {
 
 void OceanVizApp::setup() {
 	BaseApp::setup();
-	// Configure params
-	auto params = OceanSettings::getInstance()->getParams();
-	params->setSize(ivec2(400, 500));
 
 	// Main Controller not in BC Views hierarchy
 	mMainController = make_shared<MainController>();
 	mMainController->setup(getRootView());
+}
+
+void OceanVizApp::lateSetup() {
+	auto params = OceanSettings::getInstance()->getParams();
+	params->setSize(ivec2(400, 500));
+	params->setPosition(vec2(20, getWindowHeight() * getWindow()->getContentScale() - params->getHeight() - 20));
 }
 
 void OceanVizApp::update() {

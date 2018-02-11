@@ -77,23 +77,29 @@ void MainController::draw() {
 	//mPov->applyMatrix();
 
 	gl::setMatrices(mCamera);
-	gl::rotate(glm::inverse(mArcball.getQuat()));
+	gl::rotate(mArcball.getQuat());
 
 	mEarth.draw();
 
 	DataPointController::getInstance()->draw();
 }
 
-void MainController::handleMouseWheel(const ci::app::MouseEvent & event) {
+inline void MainController::invertMouseCoords(ci::app::MouseEvent & event) {
+	event.setPos(event.getWindow()->getSize() - event.getPos());
+}
+
+void MainController::handleMouseWheel(ci::app::MouseEvent event) {
 	//mPov->adjustDist(event.getWheelIncrement() * -5.0f);
 	mCamera.setEyePoint(mCamera.getEyePoint() + vec3(0, 0, event.getWheelIncrement() * -5.0f));
 }
 
-void MainController::handleMouseDown(const ci::app::MouseEvent & event) {
+void MainController::handleMouseDown(ci::app::MouseEvent event) {
+	invertMouseCoords(event);
 	mArcball.mouseDown(event);
 }
 
-void MainController::handleMouseDrag(const ci::app::MouseEvent & event) {
+void MainController::handleMouseDrag(ci::app::MouseEvent event) {
+	invertMouseCoords(event);
 	mArcball.mouseDrag(event);
 	/*static bool firstMouseMove = true;
 
@@ -111,3 +117,4 @@ void MainController::handleMouseDrag(const ci::app::MouseEvent & event) {
 
 }
 
+ 
