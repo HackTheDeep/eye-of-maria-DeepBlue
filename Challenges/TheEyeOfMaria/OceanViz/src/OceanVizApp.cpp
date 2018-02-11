@@ -36,19 +36,14 @@ public:
 	void mouseWheel(MouseEvent event);
 	void keyDown(KeyEvent event) override;
 
-public:
-
-	//camera and mouse manipulation
-	POVRef              mPov;
-	vec2              mLastMouse;
-	vec2              mCurrentMouse;
-
-	void lateSetup() override;
-
 protected:
 
-	MainControllerRef mMainController;
-	UiControllerRef mUiController = nullptr;
+	MainControllerRef	mMainController = nullptr;
+	UiControllerRef		mUiController = nullptr;
+	//camera and mouse manipulation
+	POVRef              mPov;
+	vec2				mLastMouse;
+	vec2				mCurrentMouse;
 
 };
 
@@ -59,16 +54,12 @@ void OceanVizApp::prepareSettings(ci::app::App::Settings* settings) {
 
 	SettingsManager::getInstance()->setup(settings, ci::app::getAssetPath("settings.json"), [=](SettingsManager * manager) {
 	});
-
-
 }
 
 void OceanVizApp::setup() {
 	BaseApp::setup();
 
-	// Optional: configure your root view
-	getRootView()->setBackgroundColor(Color::gray(0.0f));
-
+	StyleManager::getInstance()->setup(getAssetPath("fonts/styles.json"));
 
 	// Front load data
 	bool parseData = true;
@@ -84,57 +75,46 @@ void OceanVizApp::setup() {
 	auto params = OceanSettings::getInstance()->getParams();
 	params->setSize(ivec2(400, 500));
 
-
 	// Create the camera controller.
 	mPov = make_shared<POV>(this, ci::vec3(0.0f, 0.0f, 1000.0f), ci::vec3(0.0f, 0.0f, 0.0f));
 
 	//Main Controller not in BC Views hierarchy
 	mMainController = make_shared<MainController>();
 	mMainController->setup();
-	
-	StyleManager::getInstance()->setup(getAssetPath("fonts/styles.json"));
-}
-
-void OceanVizApp::lateSetup() {
-	BaseApp::lateSetup();
-
-	// do heavy lifting setup here
-
-
-
 }
 
 void OceanVizApp::update() {
 	BaseApp::update();
 
-	if(mPov != nullptr) mPov->update();
-	
-	mMainController->update();
+	mPov->update();
 
+	mMainController->update();
 }
 
 void OceanVizApp::draw() {
+	gl::clear();
+	{
+		gl::ScopedMatrices scopedMatrices;
+		mPov->applyMatrix();
+		mMainController->draw();
+	}
 	
-	BaseApp::draw();
-
-	mMainController->draw();
-	
+	{
+		BaseApp::draw(false);
+	}
 }
 
 
-void OceanVizApp::mouseWheel(MouseEvent event)
-{
+void OceanVizApp::mouseWheel(MouseEvent event) {
 	mPov->adjustDist(event.getWheelIncrement() * -5.0f);
 }
 
-void OceanVizApp::mouseMove(MouseEvent event)
-{
+void OceanVizApp::mouseMove(MouseEvent event) {
 	static bool firstMouseMove = true;
 
 	if (!firstMouseMove) {
 		mLastMouse = mCurrentMouse;
-	}
-	else {
+	} else {
 		mLastMouse = event.getPos();
 		firstMouseMove = false;
 	}
@@ -149,15 +129,15 @@ void OceanVizApp::keyDown(KeyEvent event) {
 	//just play through slides manually for now
 	switch (event.getCode()) {
 
-	case KeyEvent::KEY_RSHIFT:
+		case KeyEvent::KEY_RSHIFT:
 
-		DataPointController::getInstance()->loadShader();
-		DataPointController::getInstance()->replaceBatchShader();
+			DataPointController::getInstance()->loadShader();
+			DataPointController::getInstance()->replaceBatchShader();
 
-		break;
+			break;
 
-	default:
-		BaseApp::keyDown(event);
+		default:
+			BaseApp::keyDown(event);
 	}
 
 }

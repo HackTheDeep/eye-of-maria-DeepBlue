@@ -19,22 +19,15 @@ MainController::~MainController() {
 }
 
 void MainController::setup() {
-
 	mEarth.setup();
-	
 }
 
 void MainController::update() {
-
 	mEarth.update();
-
 }
 
 void MainController::draw() {
-
-
 	mEarth.draw();
-
 }
 
 }
