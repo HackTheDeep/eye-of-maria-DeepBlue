@@ -112,7 +112,7 @@ void DataPointController::addHurricaneData() {
 
 	CI_LOG_I("Adding Hurricane Data...");
 
-	int numHurricanePoints;
+	int numHurricanePoints = 0;
 
 	//go through hurricanes
 	for (int i = 0; i < hurricanes.size(); i++) {
@@ -123,11 +123,13 @@ void DataPointController::addHurricaneData() {
 
 			mPointsList[mNumUsedPoints].setup(getPolarFromLatLong(events[j].latitude, events[j].longitude));
 			mPointsList[mNumUsedPoints].setType(DataPoint::DataType::HURRICANE);
-			mPointsList[mNumUsedPoints].mTimeStamp = (float)events[i].timestamp;
-			mPointsList[mNumUsedPoints].mWind = events[i].wind;
-			mPointsList[mNumUsedPoints].mPressure = events[i].pressure;
-			mPointsList[mNumUsedPoints].mStormType = events[i].stormType;
-			mPointsList[mNumUsedPoints].mCategory = events[i].category;
+			mPointsList[mNumUsedPoints].mTimeStamp = (float)events[j].timestamp;
+			mPointsList[mNumUsedPoints].mWind = events[j].wind;
+			mPointsList[mNumUsedPoints].mPressure = events[j].pressure;
+			mPointsList[mNumUsedPoints].mStormType = events[j].stormType;
+			mPointsList[mNumUsedPoints].mCategory = events[j].category;
+
+			CI_LOG_I("Hurricane Time: " << mPointsList[mNumUsedPoints].mTimeStamp);
 
 			mNumUsedPoints++;
 			numHurricanePoints++;
