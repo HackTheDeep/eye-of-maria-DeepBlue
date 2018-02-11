@@ -23,9 +23,11 @@ public:
 	TimelineManager();
 	~TimelineManager();
 
-	void update();
+	void setup();
 
-	float setNormProgress(float progress) { mProgress = progress; }
+	void update(double deltaTime);
+
+	void setNormProgress(float progress) { mProgress = progress; }
 	float getNormProgress() const { return mProgress; }
 	float getAbsProgress() const { return glm::mix(mStartTime, mEndTime, mProgress); }
 
@@ -40,7 +42,7 @@ public:
 protected:
 
 	ci::Anim<float> mSpeedMult = 1.0f;
-	float mSpeed = 1.0f;
+	float mSecondsPerPlaythrough = 30.0f;
 	float mProgress = 0.0f;
 
 	float mStartTime = 0;

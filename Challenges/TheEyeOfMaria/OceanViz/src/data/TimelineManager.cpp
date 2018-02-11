@@ -1,6 +1,7 @@
 #include "TimelineManager.h"
 
 #include "cinder/Log.h"
+#include "data/OceanSettings.h"
 
 using namespace ci;
 using namespace ci::app;
@@ -15,8 +16,13 @@ TimelineManager::TimelineManager()
 TimelineManager::~TimelineManager() {
 }
 
-void TimelineManager::update() {
-	mProgress = fmodf(mProgress + mSpeedMult * mSpeed, 1.0f);
+void TimelineManager::setup() {
+	//OceanSettings::getInstance()->getParams()->addParam("Speed", &mSpeed).group("Timeline");
+}
+
+void TimelineManager::update(double deltaTime) {
+	float deltaProgress = mSpeedMult * deltaTime / mSecondsPerPlaythrough;
+	mProgress = fmodf(mProgress + deltaProgress, 1.0f);
 }
 
 void TimelineManager::animateSpeedTo(float speed) {

@@ -11,22 +11,17 @@ namespace amnh {
 
 typedef std::shared_ptr<class TimelineView> TimelineViewRef;
 
-class TimelineView : public bluecadet::views::TouchView {
+class TimelineView : public bluecadet::views::BaseView {
 
 public:
 	TimelineView();
 	~TimelineView();
 
 	void setup();
-	void update(double deltaTime) override;
+	void update(const double deltaTime) override;
 
 protected:
-
-	//void handleTouchBegan(const bluecadet::touch::TouchEvent & event) override;
-	void handleTouchMoved(const bluecadet::touch::TouchEvent & event) override;
-	//void handleTouchEnded(const bluecadet::touch::TouchEvent & event) override;
-
-	bluecadet::views::StrokedRectViewRef mTrack = nullptr;
+	bluecadet::views::TouchViewRef mTrack= nullptr;
 	bluecadet::views::BaseViewRef mProgress = nullptr;
 };
 }
