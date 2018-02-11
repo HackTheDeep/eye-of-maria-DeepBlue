@@ -46,7 +46,8 @@ protected:
 	//POVRef              mPov = nullptr;
 	UiControllerRef		mUiController = nullptr;
 
-	bool				bEnableDepthTest;
+	bool				bEnableDepthTest = true;
+	void				toggleDepthTest() { bEnableDepthTest = !bEnableDepthTest; };
 
 	//camera and mouse manipulation
 	//ci::vec2			mLastMouse;
