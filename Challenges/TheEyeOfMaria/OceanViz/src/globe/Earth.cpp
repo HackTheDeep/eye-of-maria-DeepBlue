@@ -32,10 +32,6 @@ void Earth::setup(){
 	mTexNormal = gl::Texture2d::create(loadImage(getAssetPath("earth/earthNormal.png")), fmt);
 	mTexMask = gl::Texture2d::create(loadImage(getAssetPath("earth/earthMask.png")), fmt);
 
-	//mTexDiffuse = gl::Texture2d::create(loadImage(loadResource(RES_EARTHDIFFUSE)), fmt);
-	//mTexNormal = gl::Texture2d::create(loadImage(loadResource(RES_EARTHNORMAL)), fmt);
-	//mTexMask = gl::Texture2d::create(loadImage(loadResource(RES_EARTHMASK)), fmt);
-
 	// Create the Earth mesh with a custom shader.
 	auto earthShader = gl::GlslProg::create(loadAsset("earth/earth.vert"), loadAsset("earth/earth.frag"));
 	earthShader->uniform("texDiffuse", 0);
@@ -43,30 +39,22 @@ void Earth::setup(){
 	earthShader->uniform("texMask", 2);
 	mEarth = gl::Batch::create(geom::Sphere().radius(mRadius).subdivisions(120), earthShader);
 
-
-	DataPointController::getInstance()->setup();
-
 }
 
 
 void Earth::update()
 {
 	mEarth->getGlslProg()->uniform( "lightDir", mLightDir );
-	DataPointController::getInstance()->update();
-	
 }
 
 void Earth::draw()
 {
 	gl::ScopedFaceCulling	cull( true, GL_BACK );
-	gl::ScopedDepth			depth(true);
-
 	gl::ScopedTextureBind	tex0( mTexDiffuse, 0 );
 	gl::ScopedTextureBind	tex1( mTexNormal, 1 );
 	gl::ScopedTextureBind	tex2( mTexMask, 2 );
 
 	mEarth->draw();
 
-	DataPointController::getInstance()->draw();
 }
 

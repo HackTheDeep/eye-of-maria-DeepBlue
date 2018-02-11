@@ -20,20 +20,26 @@ MainController::~MainController() {
 
 void MainController::setup() {
 
+	//create earth model
 	mEarth.setup();
+
+	//setup the data points
+	DataPointController::getInstance()->setup();
 	
 }
 
 void MainController::update() {
 
 	mEarth.update();
-
+	DataPointController::getInstance()->update();
 }
 
 void MainController::draw() {
 
 
+	gl::ScopedDepth	depth(true);
 	mEarth.draw();
+	DataPointController::getInstance()->draw();
 
 }
 

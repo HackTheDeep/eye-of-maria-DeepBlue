@@ -84,7 +84,6 @@ void OceanVizApp::setup() {
 	auto params = OceanSettings::getInstance()->getParams();
 	params->setSize(ivec2(400, 500));
 
-
 	// Create the camera controller.
 	mPov = make_shared<POV>(this, ci::vec3(0.0f, 0.0f, 1000.0f), ci::vec3(0.0f, 0.0f, 0.0f));
 
