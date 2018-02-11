@@ -29,14 +29,15 @@ namespace amnh {
 		~DataManager();
 
 		// Functions
-		void							parseDrifterData();
-		void							parseDrifterDirectoryData();
-//		void							parseHurricanData();
-//		void							parseBuoyData();
+		void									parseDrifterData();
+		void									parseDrifterDirectoryData();
+//		void									parseHurricanData();
+//		void									parseBuoyData();
 
-		std::time_t						getMinTimestamp() { return mMinTimeStamp; }
-		std::time_t						getMaxTimestamp() { return mMaxTimeStamp; }
-		std::string						getDateStringFromTimestamp(time_t timestamp);
+		std::map<std::string, DrifterModel>		getAllDrifters() { return mDrifterMap; }
+		std::time_t								getMinTimestamp() { return mMinTimeStamp; }
+		std::time_t								getMaxTimestamp() { return mMaxTimeStamp; }
+		std::string								getDateStringFromTimestamp(time_t timestamp);
 	protected:
 		// Functions
 		// Reads next line and returns array of tokens split on delimeter 
