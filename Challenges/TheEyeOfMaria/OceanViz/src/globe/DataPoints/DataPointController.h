@@ -59,6 +59,11 @@ namespace amnh {
 		void loadShader();
 		void replaceBatchShader();
 
+
+		void toggleDrifters();
+		void toggleFloats();
+		void toggleHurricane();
+
 	protected:
 
 		std::vector<DataPoint>	mPointsList;
@@ -85,6 +90,9 @@ namespace amnh {
 		float minHurWindSpeed, maxHurWindSpeed;
 		float minHurPressure, maxHurPressure;
 
+		bool bShowHurricanePts = true;
+		bool bShowFloatPts = true;
+		bool bShowDrifterPts = true;
 
 
 

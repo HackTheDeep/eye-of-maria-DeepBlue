@@ -41,8 +41,8 @@ void DataPointController::setup() {
 	particleLayout.append(geom::Attrib::POSITION, 3, sizeof(DataPoint), offsetof(DataPoint, mPos));
 	particleLayout.append(geom::Attrib::COLOR, 4, sizeof(DataPoint), offsetof(DataPoint, mColor));
 	particleLayout.append(geom::Attrib::CUSTOM_0, 1, sizeof(DataPoint), offsetof(DataPoint, mRadius));
-	//particleLayout.append(geom::Attrib::CUSTOM_1, 1, sizeof(DataPoint), offsetof(DataPoint, bShow));
 	particleLayout.append(geom::Attrib::CUSTOM_1, 1, sizeof(DataPoint), offsetof(DataPoint, mTimeStamp));
+	particleLayout.append(geom::Attrib::CUSTOM_2, 1, sizeof(DataPoint), offsetof(DataPoint, bShow));
 
 	// Create mesh by pairing our particle layout with our particle Vbo.
 	// A VboMesh is an array of layout + vbo pairs
@@ -54,11 +54,9 @@ void DataPointController::setup() {
 
 	//create the batch
 	mPointsBatch = gl::Batch::create(mesh, mPointsShader, { { geom::CUSTOM_0, "iPointRadius" },
-															{ geom::CUSTOM_1, "iTimeStamp" } });
+															{ geom::CUSTOM_1, "iTimeStamp" },
+															{ geom::CUSTOM_2, "iShowPoint" } });
 
-
-	//CI_LOG_I("Min TimeStamp: " << DataManager::getInstance()->getMinTimestamp() << "Max TimeStamp: " << DataManager::getInstance()->getMaxTimestamp());
-	
 }
 
 void DataPointController::addDrifterData() {
@@ -180,7 +178,7 @@ vec3 DataPointController::getPolarFromLatLong(float lat, float lon) {
 	float phi = glm::radians(180 + lon);
 
 	//set the radius a little bitter than the earth radius
-	float radius = 330.0f;
+	float radius = 851.0f;
 
 	return vec3(sin(theta) * sin(phi), cos(theta), sin(theta) * cos(phi)) * vec3(radius);
 }
@@ -268,6 +266,29 @@ void DataPointController::reMapHurricaneColors(HurricaneColor colorType) {
 	}
 
 
+}
+
+void DataPointController::toggleDrifters() {
+	bShowDrifterPts = !bShowDrifterPts;
+	for (int i = driftersStartIndex; i < driftersStartIndex + mNumDrifterPts; i++) {
+		mPointsList[i].bShow = bShowDrifterPts;
+	}
+
+}
+
+void DataPointController::toggleFloats() {
+	bShowFloatPts = !bShowFloatPts;
+	for (int i = floaterStartIndex; i < floaterStartIndex + mNumFloatPts; i++) {
+		mPointsList[i].bShow = bShowFloatPts;
+	}
+
+}
+
+void DataPointController::toggleHurricane() {
+	bShowHurricanePts = !bShowHurricanePts;
+	for (int i = hurricaneStartIndex; i < hurricaneStartIndex + mNumHurricanePts; i++) {
+		mPointsList[i].bShow = bShowHurricanePts;
+	}
 }
 
 void DataPointController::draw() {

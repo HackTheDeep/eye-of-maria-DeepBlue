@@ -44,7 +44,7 @@ void MainController::setup(bluecadet::views::BaseViewRef rootView) {
 	//mPov = make_shared<POV>(ci::vec3(0.0f, 0.0f, 1000.0f), ci::vec3(0.0f, 0.0f, 0.0f));
 
 	mCamera.setPerspective(60.0f, getWindowAspectRatio(), 0.1f, 20000.0f);
-	mCamera.lookAt(vec3(0, 0, 800.0f), vec3(0));
+	mCamera.lookAt(vec3(0, 0, 2000.0f), vec3(0));
 
 	mArcballSphere = Sphere(vec3(0), 800.0f);
 
@@ -68,6 +68,20 @@ void MainController::setup(bluecadet::views::BaseViewRef rootView) {
 	params->addButton("Toggle Depth Test", [=] {
 		toggleDepthTest();
 	});
+
+	params->addSeparator("");
+
+	params->addButton("Toggle Hurricane Data", [=] {
+		DataPointController::getInstance()->toggleHurricane();
+	});
+	params->addButton("Toggle Drifter Data", [=] {
+		DataPointController::getInstance()->toggleDrifters();
+	});
+	params->addButton("Toggle Float Data", [=] {
+		DataPointController::getInstance()->toggleFloats();
+	});
+
+	params->addSeparator("");
 
 	params->addButton("Hurricane Color: Pressure", [=]{ 
 		DataPointController::getInstance()->reMapHurricaneColors(DataPointController::HurricaneColor::PRESSURE);
@@ -97,7 +111,7 @@ void MainController::update() {
 void MainController::draw() {
 	gl::ScopedMatrices scopedMatrices;
 
-	if( bEnableDepthTest ) gl::ScopedDepth depth(true);
+	gl::ScopedDepth depth(bEnableDepthTest);
 
 	//mPov->applyMatrix();
 
@@ -115,7 +129,7 @@ inline void MainController::invertMouseCoords(ci::app::MouseEvent & event) {
 
 void MainController::handleMouseWheel(ci::app::MouseEvent event) {
 	//mPov->adjustDist(event.getWheelIncrement() * -5.0f);
-	mCamera.setEyePoint(mCamera.getEyePoint() + vec3(0, 0, event.getWheelIncrement() * -5.0f));
+	mCamera.setEyePoint(mCamera.getEyePoint() + vec3(0, 0, event.getWheelIncrement() * -10.0f));
 }
 
 void MainController::handleMouseDown(ci::app::MouseEvent event) {
