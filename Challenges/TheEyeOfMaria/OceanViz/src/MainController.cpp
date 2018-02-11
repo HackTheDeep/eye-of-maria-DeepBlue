@@ -64,7 +64,7 @@ void MainController::setup(bluecadet::views::BaseViewRef rootView) {
 	DataPointController::getInstance()->setupLines();
 
 	//default color mapping
-	DataPointController::getInstance()->reMapHurricaneColors(DataPointController::HurricaneColor::WIND);
+	DataPointController::getInstance()->reMapHurricaneColors(DataPointController::HurricaneColor::CATEGORY);
 	DataPointController::getInstance()->reMapDrifterColors(DataPointController::DrifterColor::QUALITY);
 	DataPointController::getInstance()->reMapFloaterColors(DataPointController::FloaterColor::PRESSURE);
 
