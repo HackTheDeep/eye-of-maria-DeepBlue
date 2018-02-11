@@ -4,6 +4,7 @@
 #include "cinder/gl/gl.h"
 
 #include "bluecadet/views/BaseView.h"
+#include "TimelineView.h"
 
 namespace amnh {
 
@@ -16,5 +17,8 @@ public:
 	~UiController();
 
 	void setup();
+
+protected:
+	TimelineViewRef mTimelineView = nullptr;
 };
 }

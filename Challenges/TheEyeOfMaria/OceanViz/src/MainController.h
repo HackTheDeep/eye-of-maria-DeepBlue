@@ -7,19 +7,28 @@
 #include "bluecadet/views/BaseView.h"
 #include "ui/UiController.h"
 
+#include "data/OceanSettings.h"
+#include "globe/Earth.h"
+
 namespace amnh {
 
 typedef std::shared_ptr<class MainController> MainControllerRef;
 
-class MainController : public bluecadet::views::BaseView {
+class MainController {
 
 public:
 	MainController();
 	~MainController();
 
 	void setup();
+	void update();
+	void draw() ;
 
 protected:
-	UiControllerRef mUiController = nullptr;
+
+
+	Earth             mEarth;
+
+
 };
 }

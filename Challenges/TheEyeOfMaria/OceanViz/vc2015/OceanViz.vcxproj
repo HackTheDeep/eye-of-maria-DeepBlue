@@ -87,7 +87,7 @@
     <Link>
       <AdditionalDependencies>cinder.lib;OpenGL32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>"..\..\..\..\Cinder\lib\msw\$(PlatformTarget)";"..\..\..\..\Cinder\lib\msw\$(PlatformTarget)\$(Configuration)\$(PlatformToolset)"</AdditionalLibraryDirectories>
-      <GenerateDebugInformation>false</GenerateDebugInformation>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
       <GenerateMapFile>true</GenerateMapFile>
       <SubSystem>Windows</SubSystem>
       <OptimizeReferences>true</OptimizeReferences>
@@ -105,6 +105,10 @@
     <ClCompile Include="..\src\data\DataManager.cpp" />
     <ClCompile Include="..\src\data\models\DrifterModel.cpp" />
     <ClCompile Include="..\src\data\OceanSettings.cpp" />
+    <ClCompile Include="..\src\globe\DataPoints\DataPoint.cpp" />
+    <ClCompile Include="..\src\globe\DataPoints\DataPointController.cpp" />
+    <ClCompile Include="..\src\globe\Earth.cpp" />
+    <ClCompile Include="..\src\globe\POV.cpp" />
     <ClCompile Include="..\src\data\TimelineManager.cpp" />
     <ClCompile Include="..\src\MainController.cpp" />
     <ClCompile Include="..\src\OceanVizApp.cpp" />
@@ -197,6 +201,10 @@
     <ClInclude Include="..\src\data\DataManager.h" />
     <ClInclude Include="..\src\data\models\DrifterModel.h" />
     <ClInclude Include="..\src\data\OceanSettings.h" />
+    <ClInclude Include="..\src\globe\DataPoints\DataPoint.h" />
+    <ClInclude Include="..\src\globe\DataPoints\DataPointController.h" />
+    <ClInclude Include="..\src\globe\Earth.h" />
+    <ClInclude Include="..\src\globe\POV.h" />
     <ClInclude Include="..\src\data\TimelineManager.h" />
     <ClInclude Include="..\src\MainController.h" />
     <ClInclude Include="..\src\ui\TimelineView.h" />

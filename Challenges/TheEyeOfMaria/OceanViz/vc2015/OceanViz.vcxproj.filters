@@ -94,6 +94,9 @@
     <Filter Include="Source Files\globe">
       <UniqueIdentifier>{37c3dd97-d227-4923-9d8c-79d4018ae09f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\globe\DataPoints">
+      <UniqueIdentifier>{b7c7af0d-3255-493f-a0ed-6eff8f4007e7}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Source Files\data\models">
       <UniqueIdentifier>{bec007f4-58bc-4f9e-9f36-87f7f8223515}</UniqueIdentifier>
     </Filter>
@@ -354,6 +357,18 @@
     <ClCompile Include="..\src\data\OceanSettings.cpp">
       <Filter>Source Files\data</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\globe\Earth.cpp">
+      <Filter>Source Files\globe</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\globe\POV.cpp">
+      <Filter>Source Files\globe</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\globe\DataPoints\DataPoint.cpp">
+      <Filter>Source Files\globe\DataPoints</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\globe\DataPoints\DataPointController.cpp">
+      <Filter>Source Files\globe\DataPoints</Filter>
+    </ClCompile>
     <ClCompile Include="..\src\ui\UiController.cpp">
       <Filter>Source Files\ui</Filter>
     </ClCompile>
@@ -379,6 +394,18 @@
     </ClInclude>
     <ClInclude Include="..\src\data\OceanSettings.h">
       <Filter>Source Files\data</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\globe\Earth.h">
+      <Filter>Source Files\globe</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\globe\POV.h">
+      <Filter>Source Files\globe</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\globe\DataPoints\DataPoint.h">
+      <Filter>Source Files\globe\DataPoints</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\globe\DataPoints\DataPointController.h">
+      <Filter>Source Files\globe\DataPoints</Filter>
     </ClInclude>
     <ClInclude Include="..\src\ui\UiController.h">
       <Filter>Source Files\ui</Filter>

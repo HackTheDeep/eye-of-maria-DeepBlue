@@ -1,6 +1,7 @@
 #include "MainController.h"
 
 #include "cinder/Log.h"
+#include "data/OceanSettings.h"
 
 using namespace ci;
 using namespace ci::app;
@@ -18,11 +19,22 @@ MainController::~MainController() {
 }
 
 void MainController::setup() {
-	setSize(ScreenLayout::getInstance()->getAppSize());
-	mUiController = make_shared<UiController>();
-	addChild(mUiController);
 
-	mUiController->setup();
+	mEarth.setup();
+	
+}
+
+void MainController::update() {
+
+	mEarth.update();
+
+}
+
+void MainController::draw() {
+
+
+	mEarth.draw();
+
 }
 
 }
