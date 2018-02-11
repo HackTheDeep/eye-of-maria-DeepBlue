@@ -119,7 +119,7 @@ void DataPointController::addHurricaneData() {
 		//go through sample events of hurricane
 		for(int j = 0; j < events.size(); j++){
 
-			mPointsList[mNumUsedPoints].setup(getPolarFromLatLong(events[i].latitude, events[i].longitude));
+			mPointsList[mNumUsedPoints].setup(getPolarFromLatLong(events[j].latitude, events[j].longitude));
 			mPointsList[mNumUsedPoints].setType(DataPoint::DataType::HURRICANE);
 			mPointsList[mNumUsedPoints].mTimeStamp = events[i].timestamp;
 			mPointsList[mNumUsedPoints].mWind = events[i].wind;
