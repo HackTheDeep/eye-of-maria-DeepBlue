@@ -25,7 +25,7 @@ void DataPointController::setup() {
 		//setup all the placeholder points
 		DataPoint p;
 		vec3 pos = vec3(0.0f);
-		p.setup(i, pos);
+		p.setup(pos);
 		p.mColor = ColorA::gray(0.0f, 0.0f);
 		mPointsList.push_back(p);
 
@@ -74,12 +74,81 @@ void DataPointController::setup() {
 
 }
 
-void DataPointController::addDataPoint( DataPoint::DataType type ) {
+void DataPointController::addDrifterData() {
 
+	//get drifter data
+	auto drifterMap = DataManager::getInstance()->getAllDrifters();
 
+	CI_LOG_I("Adding Drifter Data...");
+
+	//iterate through each drifter
+	map<string, DrifterModel>::iterator it;
+	for (it = drifterMap.begin(); it != drifterMap.end(); it++){
+	
+		//go through each drifter model and get all the data points
+		vector<DrifterModel::SampleEvent> events = it->second.getAllSampleEvents();
+
+		for (int i = 0; i < events.size(); i++) {
+
+			mPointsList[mNumUsedPoints].setup(getPolarFromLatLong( events[i].latitude, events[i].longitude ));
+			mPointsList[mNumUsedPoints].setType(DataPoint::DataType::DRIFTER);
+			mPointsList[mNumUsedPoints].mTimeStamp = events[i].time;
+			mPointsList[mNumUsedPoints].mQualityIndex = events[i].qaulityIndex;
+
+			mNumUsedPoints++;
+		}
+	}
+
+	CI_LOG_I(mNumUsedPoints << " Drifter Points Added");
 
 }
 
+void DataPointController::addHurricaneData() {
+
+	//get drifter data
+	auto hurricanes = DataManager::getInstance()->getAllHurricaneModels();
+
+	CI_LOG_I("Adding Hurricane Data...");
+
+	int numHurricanePoints;
+
+	//go through hurricanes
+	for (int i = 0; i < hurricanes.size(); i++) {
+
+		auto events = hurricanes[i].getAllSampleEvents();
+		//go through sample events of hurricane
+		for(int j = 0; j < events.size(); j++){
+
+			mPointsList[mNumUsedPoints].setup(getPolarFromLatLong(events[i].latitude, events[i].longitude));
+			mPointsList[mNumUsedPoints].setType(DataPoint::DataType::HURRICANE);
+			mPointsList[mNumUsedPoints].mTimeStamp = events[i].timestamp;
+			mPointsList[mNumUsedPoints].mWind = events[i].wind;
+			mPointsList[mNumUsedPoints].mPressure = events[i].pressure;
+			mPointsList[mNumUsedPoints].mStormType = events[i].stormType;
+			mPointsList[mNumUsedPoints].mCategory = events[i].category;
+
+			mNumUsedPoints++;
+			numHurricanePoints++;
+		}
+	}
+
+	CI_LOG_I(numHurricanePoints << " Hurricane Points Added");
+
+}
+
+void DataPointController::addFloaterData() {
+
+}
+
+vec3 DataPointController::getPolarFromLatLong(float lat, float lon) {
+	float theta = glm::radians(90 - lat);
+	float phi = glm::radians(180 + lon);
+
+	//set the radius a little bitter than the earth radius
+	float radius = 330.0f;
+
+	return vec3(sin(theta) * sin(phi), cos(theta), sin(theta) * cos(phi)) * vec3(radius);
+}
 
 void DataPointController::loadShader() {
 	try {

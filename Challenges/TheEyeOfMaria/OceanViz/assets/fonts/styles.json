@@ -9,12 +9,18 @@
 		"color": "#ffffff",
 		"leadingOffset": 0,
 		"label": {
-			"fontSize": 14,
+			"fontSize": 12,
 			"small": {
-				"fontSize": 12
+				"fontSize": 12,
+				"highlighted": {
+					"color": "#80B4FF"
+				}
 			},
 			"large": {
-				"fontSize": 20
+				"fontSize": 14,
+				"highlighted": {
+					"color": "#80B4FF"
+				}
 			}
 		}
 	}

@@ -33,6 +33,7 @@ protected:
 
 	bluecadet::views::TextViewRef mCurrentTimeLabel = nullptr;
 	bluecadet::views::TextViewRef mCurrentTime = nullptr;
+	bluecadet::views::TextViewRef mSpeed = nullptr;
 
 	bluecadet::views::TextViewRef mStartTime = nullptr;
 	bluecadet::views::TextViewRef mEndTime = nullptr;
