@@ -14,11 +14,6 @@ namespace amnh {
 			mSampleEvents.end(),
 			[](const SampleEvent& lhs, const SampleEvent& rhs){ return lhs.timestamp < rhs.timestamp; }
 		);
-	
-		for (int i = 0; i < mSampleEvents.size(); i++) {
-			CI_LOG_I(mSampleEvents.at(i).timestamp);
-		}
-
 	}
 
 
