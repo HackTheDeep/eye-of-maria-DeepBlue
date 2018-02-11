@@ -30,7 +30,6 @@ namespace amnh {
 		for (auto & hurricane : mHurricaneModels) {
 			for (auto & event : hurricane.getAllSampleEvents()) {
 				event.normalizedTime = getNormalizedTime(event.timestamp);
-				CI_LOG_I(event.normalizedTime);
 			}
 		}
 		for (auto & floater : mFloatMap) {
