@@ -39,11 +39,6 @@ void OceanVizApp::prepareSettings(ci::app::App::Settings* settings) {
 	settings->setHighDensityDisplayEnabled(true);
 
 	SettingsManager::getInstance()->setup(settings, ci::app::getAssetPath("settings.json"), [=](SettingsManager * manager) {
-		// Optional: Override json defaults at runtime
-		manager->mFullscreen = false;
-		manager->mWindowSize = ivec2(1280, 720);
-		manager->mDisplaySize = manager->mWindowSize; // set display to app size to prevent zooming
-		//manager->mMinimizeParams = true;
 	});
 }
 
