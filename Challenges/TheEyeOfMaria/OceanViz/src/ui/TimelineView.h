@@ -8,11 +8,13 @@
 #include "bluecadet/views/TextView.h"
 #include "bluecadet/views/TouchView.h"
 
+#include "ui/ImageButton.h"
+
 namespace amnh {
 
 typedef std::shared_ptr<class TimelineView> TimelineViewRef;
 
-class TimelineView : public bluecadet::views::BaseView {
+class TimelineView : public bluecadet::views::TouchView {
 
 public:
 	TimelineView();
@@ -38,6 +40,10 @@ protected:
 	bluecadet::views::TextViewRef mStartTime = nullptr;
 	bluecadet::views::TextViewRef mEndTime = nullptr;
 
+	ImageButtonRef mSlower = nullptr;
+	ImageButtonRef mFaster = nullptr;
+	ImageButtonRef mPlay = nullptr;
+	ImageButtonRef mPause = nullptr;
 
 };
 }

@@ -19,10 +19,11 @@ namespace amnh {
 		parseDrifterDirectoryData();
 		parseDrifterData();
 		parseHurricanData();
+		parseFloatData();
 	};
 
-//		setFieldFromJsonIfExists(&mVideosPreload, "videos.preload");
-//		setFieldFromJsonIfExists(&mVideosAssetDir, "videos.assetDir");
+	//		setFieldFromJsonIfExists(&mVideosPreload, "videos.preload");
+	//		setFieldFromJsonIfExists(&mVideosAssetDir, "videos.assetDir");
 
 
 	void DataManager::parseDrifterData() {
@@ -39,16 +40,16 @@ namespace amnh {
 				if (it != mDrifterMap.end()) {
 					// Parse some data
 					string dateString = getDrifterDateString(results[mDrifter_YearIndex], results[mDrifter_MonthIndex], results[mDrifter_DayIndex]);
-					auto timeStamp = dateStringToTimestamp(dateString);
-					if (timeStamp > mMaxTimeStamp) { mMaxTimeStamp = timeStamp; }
-					if (timeStamp < mMinTimeStamp) { mMinTimeStamp = timeStamp; }
+					auto timestamp = dateStringToTimestamp(dateString);
+					if (timestamp > mMaxTimeStamp) { mMaxTimeStamp = timestamp; }
+					if (timestamp < mMinTimeStamp) { mMinTimeStamp = timestamp; }
 
 					// Create new model struct and populate properties
 					DrifterModel::SampleEvent drifterEvent;
 					drifterEvent.latitude = std::stof(results[mDrifter_LatIndex]);
 					drifterEvent.longitude = std::stof(results[mDrifter_LongIndex]);
 					drifterEvent.qaulityIndex = std::stof(results[mDrifter_QualIndexIndex]);
-					drifterEvent.time = timeStamp;
+					drifterEvent.time = timestamp;
 					it->second.addSampleEvent(drifterEvent);
 				}
 			}
@@ -95,6 +96,9 @@ namespace amnh {
 			if (didReadFirstLine && results.size() > 7) {
 				string dateString = getHurricaneDateString(results[mHurricane_DateIndex], results[mHurricane_TimeIndex]);
 				auto timestamp = dateStringToTimestamp(dateString);
+				if (timestamp > mMaxTimeStamp) { mMaxTimeStamp = timestamp; }
+				if (timestamp < mMinTimeStamp) { mMinTimeStamp = timestamp; }
+
 				std::string  latString = results[mHurricane_LatIndex].substr(0, results[mHurricane_LatIndex].length() - 2); //Trim special Chars
 				std::string  longString = results[mHurricane_LongIndex].substr(0, results[mHurricane_LongIndex].length() - 2); //Trim sepcial Chars
 				std::string  windString = results[mHurricane_WindIndex].substr(0, results[mHurricane_WindIndex].find(" ")); //Trim mph
@@ -108,7 +112,7 @@ namespace amnh {
 				hurricaneEvent.wind = stof(windString);
 				hurricaneEvent.stormType = results[mHurricane_StormTypeIndex];
 				hurricane.addSampleEvent(hurricaneEvent);
-				
+
 			}
 			didReadFirstLine = true;
 		}
@@ -116,6 +120,65 @@ namespace amnh {
 		CI_LOG_I("Done parsing HURRICANES:");
 		CI_LOG_I(mHurricaneModels.size());
 		CI_LOG_I("");
+	}
+
+	void DataManager::parseFloatData() {
+		fs::path filePath = getAssetPath("data/floats.json");
+
+		try {
+			fs::path filePath = getAssetPath("data/floats.json");
+			if (fs::exists(filePath)) {
+				DataSourceRef floatSource = loadFile(filePath);
+				ci::JsonTree floatTree = (JsonTree)floatSource;
+				if (floatTree.hasChild("features")) {
+					JsonTree array_o_floats = floatTree.getChild("features");
+					CI_LOG_I(array_o_floats.getNumChildren());
+					for (int i = 0; i < array_o_floats.getNumChildren(); i++) {
+						if (array_o_floats[i].hasChild("properties") && array_o_floats[i].hasChild("geometry")) {
+							string id = array_o_floats[i].getValueForKey<std::string>("properties.platform_number");
+							float psal = array_o_floats[i].getValueForKey<float>("properties.psal");
+							float pres = array_o_floats[i].getValueForKey<float>("properties.pres");
+							float temp = array_o_floats[i].getValueForKey<float>("properties.temp");
+							string ymd = array_o_floats[i].getValueForKey<std::string>("properties.ymd");
+							string dateString = getFloatDateString(ymd);
+							auto timestamp = dateStringToTimestamp(dateString);
+							if (timestamp > mMaxTimeStamp) { mMaxTimeStamp = timestamp; }
+							if (timestamp < mMinTimeStamp) { mMinTimeStamp = timestamp; }
+
+							JsonTree coordinates = array_o_floats[i].getChild("geometry").getChild("coordinates");
+							float latitude = coordinates.getValueAtIndex<float>(0);
+							float longitude = coordinates.getValueAtIndex<float>(1);
+
+							FloatModel::SampleEvent floatEvent = FloatModel::SampleEvent();
+							floatEvent.timestamp = timestamp;
+							floatEvent.latitude = latitude;
+							floatEvent.longitude = longitude;
+							floatEvent.pressure = pres;
+							floatEvent.psal = psal;
+							floatEvent.temp = temp;
+
+							std::map<string, FloatModel> ::iterator it = mFloatMap.find(id);
+							if (it != mFloatMap.end()) {
+								it->second.addSampleEvent(floatEvent);
+							}
+							else {
+								FloatModel floatModel = FloatModel();
+								floatModel.setId(id);
+								floatModel.addSampleEvent(floatEvent);
+								mFloatMap[id] = floatModel;
+							}
+						}
+					}
+				}
+			}
+		}
+		catch (std::exception& e) {
+			CI_LOG_EXCEPTION("Sites.json data could not be loaded", e);
+		}
+		CI_LOG_I("Done parsing FLOATS:");
+		CI_LOG_I(mFloatMap.size());
+		CI_LOG_I("");
+
 
 	}
 
@@ -201,6 +264,19 @@ namespace amnh {
 		std::string hurricaneTime = time.substr(0, time.find(" "));
 		std::string timeString_hour = time.substr(0, 2);
 		std::string timeString_minutes = time.substr(3, 2);
+		string timeString = timeString_year + "." + timeString_month + "." + timeString_day + " " + timeString_hour + ":" + timeString_minutes + ":" + timeString_seconds;
+		return timeString;
+	}
+
+	std::string DataManager::getFloatDateString(std::string date) {
+		std::string timeString_seconds = "00"; // Hardcoded because floats don't report time
+		std::string timeString_minutes = "00"; // Hardcoded because floats don't report time
+		std::string timeString_hour = "00"; // Hardcoded because floats don't report time
+
+		std::string timeString_year = date.substr(0, 4); 
+		std::string timeString_month = date.substr(4, 2);
+		std::string timeString_day = date.substr(6, 2);
+
 		string timeString = timeString_year + "." + timeString_month + "." + timeString_day + " " + timeString_hour + ":" + timeString_minutes + ":" + timeString_seconds;
 		return timeString;
 	}

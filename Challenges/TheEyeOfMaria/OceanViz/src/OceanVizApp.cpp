@@ -54,7 +54,7 @@ void OceanVizApp::setup() {
 
 void OceanVizApp::lateSetup() {
 	auto params = OceanSettings::getInstance()->getParams();
-	params->setSize(ivec2(400, 500));
+	params->setSize(ivec2(400, 300));
 	params->setPosition(vec2(20, getWindowHeight() * getWindow()->getContentScale() - params->getHeight() - 20));
 }
 
@@ -70,14 +70,13 @@ void OceanVizApp::draw() {
 }
 
 void OceanVizApp::keyDown(KeyEvent event) {
-
-	//just play through slides manually for now
 	switch (event.getCode()) {
 
 		case KeyEvent::KEY_RSHIFT:
 
 			DataPointController::getInstance()->loadShader();
 			DataPointController::getInstance()->replaceBatchShader();
+			mMainController->getEarth().loadShader();
 
 			break;
 

@@ -3,6 +3,8 @@
 #include "cinder/Log.h"
 
 #include "bluecadet/text/StyleManager.h"
+#include "bluecadet/touch/TouchManager.h"
+#include "bluecadet/utils/ImageManager.h"
 
 #include "data/OceanSettings.h"
 #include "data/DataManager.h"
@@ -14,6 +16,7 @@ using namespace std;
 using namespace bluecadet::core;
 using namespace bluecadet::text;
 using namespace bluecadet::views;
+using namespace bluecadet::utils;
 
 namespace amnh {
 
@@ -25,6 +28,7 @@ MainController::~MainController() {
 
 void MainController::setup(bluecadet::views::BaseViewRef rootView) {
 	StyleManager::getInstance()->setup(getAssetPath("fonts/styles.json"));
+	ImageManager::getInstance()->loadAllFromDir(getAssetPath("ui"));
 
 	// Front load data
 	bool parseData = true;
@@ -45,6 +49,7 @@ void MainController::setup(bluecadet::views::BaseViewRef rootView) {
 	mArcballSphere = Sphere(vec3(0), 800.0f);
 
 	mArcball = Arcball(&mCamera, mArcballSphere);
+	mArcball.setQuat(glm::angleAxis(1.89068f, vec3(0.277f, -0.950f, -0.145f)));
 
 	//create earth model
 	mEarth.setup();
@@ -61,9 +66,11 @@ void MainController::setup(bluecadet::views::BaseViewRef rootView) {
 	params->addParam("Enable Depth Test", &bEnableDepthTest );
 
 	//wire up signals
-	getWindow()->getSignalMouseDown().connect(bind(&MainController::handleMouseDown, this, std::placeholders::_1));
-	getWindow()->getSignalMouseDrag().connect(bind(&MainController::handleMouseDrag, this, std::placeholders::_1));
+	getWindow()->getSignalMouseDown().connect(100, bind(&MainController::handleMouseDown, this, std::placeholders::_1));
+	getWindow()->getSignalMouseDrag().connect(100, bind(&MainController::handleMouseDrag, this, std::placeholders::_1));
 	getWindow()->getSignalMouseWheel().connect(bind(&MainController::handleMouseWheel, this, std::placeholders::_1));
+
+	//OceanSettings::getInstance()->getParams()->addParam<quat>("Cam Rot", [&] (quat q) { mArcball.setQuat(q); }, [&] { return mArcball.getQuat(); });
 }
 
 void MainController::update() {
@@ -98,11 +105,17 @@ void MainController::handleMouseWheel(ci::app::MouseEvent event) {
 }
 
 void MainController::handleMouseDown(ci::app::MouseEvent event) {
+	if (bluecadet::touch::TouchManager::getInstance()->getNumTouchedViews() > 0) {
+		return;
+	}
 	invertMouseCoords(event);
 	mArcball.mouseDown(event);
 }
 
 void MainController::handleMouseDrag(ci::app::MouseEvent event) {
+	if (bluecadet::touch::TouchManager::getInstance()->getNumTouchedViews() > 0) {
+		return;
+	}
 	invertMouseCoords(event);
 	mArcball.mouseDrag(event);
 	/*static bool firstMouseMove = true;

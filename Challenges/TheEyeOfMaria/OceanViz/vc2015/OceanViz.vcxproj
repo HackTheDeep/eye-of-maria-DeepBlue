@@ -104,6 +104,7 @@
   <ItemGroup>
     <ClCompile Include="..\src\data\DataManager.cpp" />
     <ClCompile Include="..\src\data\models\DrifterModel.cpp" />
+    <ClCompile Include="..\src\data\models\FloatModel.cpp" />
     <ClCompile Include="..\src\data\models\HurricaneModel.cpp" />
     <ClCompile Include="..\src\data\OceanSettings.cpp" />
     <ClCompile Include="..\src\globe\DataPoints\DataPoint.cpp" />
@@ -152,6 +153,7 @@
     <ClCompile Include="..\blocks\BluecadetViews\src\bluecadet\touch\drivers\TuioDriver.cpp" />
     <ClCompile Include="..\..\..\..\Cinder\blocks\OSC\src\cinder\osc\Osc.cpp" />
     <ClCompile Include="..\..\..\..\Cinder\blocks\TUIO\src\cinder\tuio\Tuio.cpp" />
+    <ClCompile Include="..\src\ui\ImageButton.cpp" />
     <ClCompile Include="..\src\ui\TimelineView.cpp" />
     <ClCompile Include="..\src\ui\UiController.cpp" />
   </ItemGroup>
@@ -201,6 +203,7 @@
     <ClInclude Include="..\..\..\..\Cinder\blocks\TUIO\src\cinder\tuio\Tuio.h" />
     <ClInclude Include="..\src\data\DataManager.h" />
     <ClInclude Include="..\src\data\models\DrifterModel.h" />
+    <ClInclude Include="..\src\data\models\FloatModel.h" />
     <ClInclude Include="..\src\data\models\HurricaneModel.h" />
     <ClInclude Include="..\src\data\OceanSettings.h" />
     <ClInclude Include="..\src\globe\DataPoints\DataPoint.h" />
@@ -209,6 +212,7 @@
     <ClInclude Include="..\src\globe\POV.h" />
     <ClInclude Include="..\src\data\TimelineManager.h" />
     <ClInclude Include="..\src\MainController.h" />
+    <ClInclude Include="..\src\ui\ImageButton.h" />
     <ClInclude Include="..\src\ui\TimelineView.h" />
     <ClInclude Include="..\src\ui\UiController.h" />
   </ItemGroup>
