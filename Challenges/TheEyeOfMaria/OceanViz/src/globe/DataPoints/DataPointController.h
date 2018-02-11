@@ -53,8 +53,21 @@ namespace amnh {
 			CATEGORY
 		};
 
+		enum class DrifterColor {
+			QUALITY
+		};
+
+		enum class FloaterColor {
+			PRESSURE,
+			TEMP,
+			SALINITY
+		};
+
 
 		void reMapHurricaneColors(HurricaneColor colorType);
+		void reMapDrifterColors(DrifterColor colorType);
+		void reMapFloaterColors(FloaterColor colorType);
+
 
 		void loadShader();
 		void replaceBatchShader();
@@ -89,6 +102,12 @@ namespace amnh {
 		//HURRICANE
 		float minHurWindSpeed, maxHurWindSpeed;
 		float minHurPressure, maxHurPressure;
+
+		float minFloatSalinity, maxFloatSalinity;
+		float minFloatTemp, maxFloatTemp;
+		float minFloatPressure, maxFloatPressure;
+
+		float minDrifterQuality, maxDrifterQuality;
 
 		bool bShowHurricanePts = true;
 		bool bShowFloatPts = true;

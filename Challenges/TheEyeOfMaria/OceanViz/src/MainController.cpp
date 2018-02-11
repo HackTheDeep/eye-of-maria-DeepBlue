@@ -61,7 +61,11 @@ void MainController::setup(bluecadet::views::BaseViewRef rootView) {
 	DataPointController::getInstance()->addHurricaneData();
 	DataPointController::getInstance()->addFloaterData();
 
+	//default color mapping
 	DataPointController::getInstance()->reMapHurricaneColors(DataPointController::HurricaneColor::WIND);
+	DataPointController::getInstance()->reMapDrifterColors(DataPointController::DrifterColor::QUALITY);
+	DataPointController::getInstance()->reMapFloaterColors(DataPointController::FloaterColor::PRESSURE);
+
 
 	OceanSettings::getInstance()->initParams();
 	auto params = OceanSettings::getInstance()->getParams();
@@ -88,6 +92,24 @@ void MainController::setup(bluecadet::views::BaseViewRef rootView) {
 	params->addButton("Category Color", [=] {
 		DataPointController::getInstance()->reMapHurricaneColors(DataPointController::HurricaneColor::CATEGORY);
 	}, "group=Hurricane");
+
+	params->addSeparator("");
+
+	params->addButton("Drifter Color: Quality Index", [=] {
+		DataPointController::getInstance()->reMapDrifterColors(DataPointController::DrifterColor::QUALITY);
+	});
+
+	params->addSeparator("");
+
+	params->addButton("Floater Color: Pressure", [=] {
+		DataPointController::getInstance()->reMapFloaterColors(DataPointController::FloaterColor::PRESSURE);
+	});
+	params->addButton("Floater Color: Temperature", [=] {
+		DataPointController::getInstance()->reMapFloaterColors(DataPointController::FloaterColor::TEMP);
+	});
+	params->addButton("Floater Color: Salinity", [=] {
+		DataPointController::getInstance()->reMapFloaterColors(DataPointController::FloaterColor::SALINITY);
+	});
 
 	//wire up signals
 	getWindow()->getSignalMouseDown().connect(100, bind(&MainController::handleMouseDown, this, std::placeholders::_1));

@@ -13,7 +13,7 @@ namespace amnh {
 			float			normalizedTime;
 			float			latitude;
 			float			longitude;
-			float			qaulityIndex;
+			float			qualityIndex;
 		};
 
 		DrifterModel();
