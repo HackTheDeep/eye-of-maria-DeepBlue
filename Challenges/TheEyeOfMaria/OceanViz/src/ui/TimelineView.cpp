@@ -26,7 +26,12 @@ TimelineView::~TimelineView() {
 void TimelineView::setup() {
 	setSize(vec2(350, 115));
 
-	TimelineManager::getInstance()->setup();
+	auto timelineManager = TimelineManager::getInstance();
+	auto data = DataManager::getInstance();
+
+	timelineManager->setup();
+	timelineManager->setStartTime(data->getMinTimestamp());
+	timelineManager->setEndTime(data->getMaxTimestamp());
 
 	auto bg = make_shared<StrokedRectView>();
 	bg->setStrokeColor(Color::white());
@@ -66,13 +71,13 @@ void TimelineView::setup() {
 
 	// start/end times
 	mStartTime = make_shared<TextView>();
-	mStartTime->setText(to_string(DataManager::getInstance()->getMinTimestamp()), "label.small");
+	mStartTime->setText(data->getDateStringFromTimestamp(data->getMinTimestamp()), "label.small");
 	mStartTime->setPosition(mTrack->getPosition() + vec2(0, mTrack->getHeight() + timeMargin));
 	addChild(mStartTime);
 
 	mEndTime = make_shared<TextView>();
 	mEndTime->setTextAlign(bluecadet::text::TextAlign::Right);
-	mEndTime->setText(to_string(DataManager::getInstance()->getMaxTimestamp()), "label.small");
+	mEndTime->setText(data->getDateStringFromTimestamp(DataManager::getInstance()->getMaxTimestamp()), "label.small");
 	mEndTime->setPosition(mTrack->getPosition() + mTrack->getSize() + vec2(-mEndTime->getWidth(), timeMargin));
 	addChild(mEndTime);
 
@@ -95,12 +100,19 @@ void TimelineView::setup() {
 }
 
 void TimelineView::update(double deltaTime) {
+	auto timelineManager = TimelineManager::getInstance();
+	auto data = DataManager::getInstance();
+
 	if (mTrack->getNumTouches() == 0) {
 		// update progress if not dragging
-		TimelineManager::getInstance()->update(deltaTime);
-		float progress = TimelineManager::getInstance()->getNormProgress();
+		timelineManager->update(deltaTime);
+		float progress = timelineManager->getNormProgress();
 		mProgress->setScale(vec2(progress, 1.0f));
 	}
+
+	// update time
+	mCurrentTime->setText(data->getDateStringFromTimestamp(timelineManager->getAbsProgress()), "label.small");
+	mCurrentTime->setPosition(vec2(mTrack->getBounds().getUpperRight().x - mCurrentTime->getWidth(), mCurrentTime->getPosition()().y));
 }
 
 void TimelineView::play() {
