@@ -6,6 +6,7 @@
 #include "bluecadet/views/TouchView.h"
 
 #include "data/OceanSettings.h"
+#include "data/DataManager.h"
 
 using namespace ci;
 using namespace ci::app;
@@ -43,6 +44,10 @@ void OceanVizApp::setup() {
 	// Optional: configure your root view
 	getRootView()->setBackgroundColor(Color::gray(0.5f));
 
+	// Front load data
+	DataManager::getInstance()->parseDrifterDirectoryData();
+	DataManager::getInstance()->parseDrifterData();
+
 	// Sample content
 	auto button = make_shared<TouchView>();
 	button->setPosition(vec2(400, 300));
@@ -50,6 +55,8 @@ void OceanVizApp::setup() {
 	button->setBackgroundColor(Color(1, 0, 0));
 	button->getSignalTapped().connect([=](bluecadet::touch::TouchEvent e) { CI_LOG_I("Button tapped"); });
 	getRootView()->addChild(button);
+
+
 }
 
 void OceanVizApp::update() {

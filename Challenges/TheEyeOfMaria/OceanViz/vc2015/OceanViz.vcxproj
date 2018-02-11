@@ -1,3 +1,4 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|x64">
@@ -101,6 +102,8 @@
   <ItemGroup />
   <ItemGroup />
   <ItemGroup>
+    <ClCompile Include="..\src\data\DataManager.cpp" />
+    <ClCompile Include="..\src\data\models\DrifterModel.cpp" />
     <ClCompile Include="..\src\data\OceanSettings.cpp" />
     <ClCompile Include="..\src\OceanVizApp.cpp" />
     <ClCompile Include="..\blocks\BluecadetText\src\bluecadet\text\FontManager.cpp" />
@@ -187,6 +190,8 @@
     <ClInclude Include="..\blocks\BluecadetViews\src\bluecadet\touch\drivers\TuioDriver.h" />
     <ClInclude Include="..\..\..\..\Cinder\blocks\OSC\src\cinder\osc\Osc.h" />
     <ClInclude Include="..\..\..\..\Cinder\blocks\TUIO\src\cinder\tuio\Tuio.h" />
+    <ClInclude Include="..\src\data\DataManager.h" />
+    <ClInclude Include="..\src\data\models\DrifterModel.h" />
     <ClInclude Include="..\src\data\OceanSettings.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
