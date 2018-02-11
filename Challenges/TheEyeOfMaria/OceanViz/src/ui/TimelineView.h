@@ -20,6 +20,12 @@ public:
 	void setup();
 	void update(const double deltaTime) override;
 
+	void play();
+	void pause();
+	void togglePause();
+	void faster();
+	void slower();
+
 protected:
 	bluecadet::views::TouchViewRef mTrack= nullptr;
 	bluecadet::views::BaseViewRef mProgress = nullptr;

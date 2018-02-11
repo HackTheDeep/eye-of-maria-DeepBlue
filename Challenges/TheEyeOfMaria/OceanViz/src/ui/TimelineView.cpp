@@ -62,10 +62,10 @@ void TimelineView::setup() {
 
 	// params
 	auto params = OceanSettings::getInstance()->getParams();
-	auto timelineManager = TimelineManager::getInstance();
-	params->addParam<bool>("Play", [=](bool v) { timelineManager->setPaused(!v); }, [=] { return !timelineManager->isPaused(); }).group("Timeline");
-	params->addButton("Faster", [=] { if (timelineManager->getSpeed() < 8.0f) timelineManager->animateSpeedTo(timelineManager->getSpeed() * 2.0f); });
-	params->addButton("Slower", [=] { if (timelineManager->getSpeed() > 0.125f) timelineManager->animateSpeedTo(timelineManager->getSpeed() * 0.5f); });
+	params->addButton("Play", [=] { play(); });
+	params->addButton("Pause", [=] { pause(); });
+	params->addButton("Faster", [=] { faster(); });
+	params->addButton("Slower", [=] { slower(); });
 }
 
 void TimelineView::update(double deltaTime) {
@@ -74,6 +74,32 @@ void TimelineView::update(double deltaTime) {
 		TimelineManager::getInstance()->update(deltaTime);
 		float progress = TimelineManager::getInstance()->getNormProgress();
 		mProgress->setScale(vec2(progress, 1.0f));
+	}
+}
+
+void TimelineView::play() {
+	TimelineManager::getInstance()->setPaused(false);
+}
+
+void TimelineView::pause() {
+	TimelineManager::getInstance()->setPaused(true);
+}
+
+void TimelineView::togglePause() {
+	TimelineManager::getInstance()->setPaused(!TimelineManager::getInstance()->isPaused());
+}
+
+void TimelineView::faster() {
+	auto timelineManager = TimelineManager::getInstance();
+	if (timelineManager->getSpeed() < 8.0f) {
+		timelineManager->animateSpeedTo(timelineManager->getSpeed() * 2.0f);
+	}
+}
+
+void TimelineView::slower() {
+	auto timelineManager = TimelineManager::getInstance();
+	if (timelineManager->getSpeed() > 1.0f / 8.0f) {
+		timelineManager->animateSpeedTo(timelineManager->getSpeed() / 2.0f);
 	}
 }
 
