@@ -36,7 +36,14 @@ namespace amnh {
 
 	protected:
 		// Functions
+		// Reads next line and returns array of tokens split on delimeter 
 		std::vector<std::string>		getNextLineAndSplitIntoTokens(std::istream& str, const char delimeter);
+
+		// Format - YEAR.MONTH.DAY HOUR:MINUTE:SECONDS (1970.01.01 00:00:00)
+		unsigned long					dateStringToTimestamp (std::string datetime = "1970.01.01 00:00:00");
+
+		// Converts drifter's unique day format (2017, 8, 27.0.024) to a date string formated for our utility function dateStringToTimestamp
+		std::string						getDrifterDateString(std::string year, std::string month, std::string day);
 
 		// Model Vectors
 //		std::vector<HurricaneModelRef> mHurricaneModels;
@@ -45,16 +52,6 @@ namespace amnh {
 //		std::map<std::string, DrifterDirectoryModelRef> mDrifterDirectoryModels;
 		std::map<std::string, DrifterModel> mDrifterMap;
 
-
-		// Hurricane Properties (hardcoded)
-		int mHurricane_DateIndex = 0;
-		int mHurricane_TimeIndex = 1;
-		int mHurricane_LatIndex = 2;
-		int mHurricane_LongIndex = 3;
-		int mHurricane_WindIndex = 4;
-		int mHurricane_PressureIndex = 5;
-		int mHurricane_StormTypeIndex = 6;
-		int mHurricane_CategoryIndex = 7;
 
 		// Drifter Properties (hardcoded)
 		int mDrifter_IdIndex = 0;
@@ -84,6 +81,20 @@ namespace amnh {
 		int mDirectory_DropOffDateYearIndex = 15;
 		int mDirectory_DeathCodeIndex = 16;
 
+
+//		Old Hardcoded Index properties. To be Deleted if we don't implement their data models
+/*
+		// Hurricane Properties (hardcoded)
+		int mHurricane_DateIndex = 0;
+		int mHurricane_TimeIndex = 1;
+		int mHurricane_LatIndex = 2;
+		int mHurricane_LongIndex = 3;
+		int mHurricane_WindIndex = 4;
+		int mHurricane_PressureIndex = 5;
+		int mHurricane_StormTypeIndex = 6;
+		int mHurricane_CategoryIndex = 7;
+
+
 		// Buoy Properites
 		int mBuoy_IdIndex = 0;
 		int mBuoy_MonthIndex = 1;
@@ -92,7 +103,8 @@ namespace amnh {
 		int mBuoy_MinuteIndex = 4;
 		int mBuoy_SecondIndex = 5;
 		int mBuoy_LatIndex = 6;
-		int mBuoy_LongIndex = 7;
+		int mBuoy_LongIndex = 7; 		
+*/
 
 	};
 }

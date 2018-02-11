@@ -28,9 +28,14 @@ namespace amnh {
 				std::map<string, DrifterModel>::iterator it = mDrifterMap.find(id);
 				if (it != mDrifterMap.end()) {
 					DrifterModel::SampleEvent drifterEvent;
+
+					string dateString = getDrifterDateString(results[mDrifter_YearIndex], results[mDrifter_MonthIndex], results[mDrifter_DayIndex]);
+					auto timeStamp = dateStringToTimestamp(dateString);
+
 					drifterEvent.latitude = results[mDrifter_LatIndex];
 					drifterEvent.longitude = results[mDrifter_LongIndex];
 					drifterEvent.qaulityIndex = results[mDrifter_QualIndexIndex];
+					drifterEvent.time = timeStamp;
 					it->second.addSampleEvent(drifterEvent);
 				}
 			}
@@ -51,27 +56,6 @@ namespace amnh {
 				DrifterModel drifter = DrifterModel();
 				drifter.setId(results[mDirectory_IdIndex]);
 				mDrifterMap[drifter.getId()] = drifter;
-
-				/*				DrifterDirectoryModelRef model = make_shared<DrifterDirectoryModel>();
-				model->setId(results[mDirectory_IdIndex]);
-				model->setWmo(results[mDirectory_WmoIndex]);
-				model->setExp(results[mDirectory_ExpIndex]);
-				model->setFirstDateDay(results[mDirectory_FirstDateDayIndex]);
-				model->setFirstDateMonth(results[mDirectory_FirstDateMonthIndex]);
-				model->setFirstDateYear(results[mDirectory_FirstDateYearIndex]);
-				model->setFirstLat(results[mDirectory_FirstLatIndex]);
-				model->setFirstLong(results[mDirectory_FirstLongIndex]);
-				model->setEndDateDay(results[mDirectory_EndDateDayIndex]);
-				model->setEndDateMonth(results[mDirectory_EndDateMonthIndex]);
-				model->setEndDateYear(results[mDirectory_EndDateYearIndex]);
-				model->setEndLat(results[mDirectory_EndLatIndex]);
-				model->setEndLong(results[mDirectory_EndLongIndex]);
-				model->setDropOffDateDay(results[mDirectory_DropOffDateDayIndex]);
-				model->setDropOffDateMonth(results[mDirectory_DropOffDateMonthIndex]);
-				model->setDropOffDateYear(results[mDirectory_DropOffDateMonthIndex]);
-				model->setDeathCode(results[mDirectory_DeathCodeIndex]);
-
-				mDrifterDirectoryModels[model->getId()] = model;*/
 			}
 			didReadFirstLine = true;
 		}
@@ -80,12 +64,12 @@ namespace amnh {
 		CI_LOG_I("Done parsing DRIFTER DIRECTORY:");
 		CI_LOG_I(mDrifterMap.size());
 		CI_LOG_I("");
-
-
 	}
 
 
-	// Utility Functions
+	/////////////////////////////////////
+	//	Utility Functions
+	//
 	std::vector<std::string> DataManager::getNextLineAndSplitIntoTokens(std::istream& str, const char delimeter)
 	{
 
@@ -110,5 +94,49 @@ namespace amnh {
 		}
 		return result;
 	}
+
+	
+	unsigned long DataManager::dateStringToTimestamp(std::string datetime) {
+		if (datetime.length()<19) { 
+			std::cout << "invalid string - cant convert to timestamp"; 
+			return -1;
+		}
+
+		struct tm tm;
+		tm.tm_year = atoi(datetime.substr(0, 4).c_str()) - 1900;
+		tm.tm_mon = atoi(datetime.substr(5, 2).c_str()) - 1;
+		tm.tm_mday = atoi(datetime.substr(8, 2).c_str());
+		tm.tm_hour = atoi(datetime.substr(11, 2).c_str());
+		tm.tm_min = atoi(datetime.substr(14, 2).c_str());
+		tm.tm_sec = atoi(datetime.substr(17, 2).c_str());
+
+		char buff[80];
+		strftime(buff, 80, "%Y.%m.%d %H:%M:%S", &tm);
+		return mktime(&tm);
+	}
+
+	string DataManager::getDrifterDateString(std::string year, std::string month, std::string day) {
+		float monthFloat = std::stof(month);
+		string timeString_month = (monthFloat >= 10) ? to_string(int(monthFloat)) : "0" + to_string(int(monthFloat));
+		float dayFloat = std::stof(day);
+		string timeString_day = to_string(int(dayFloat));
+		timeString_day = (dayFloat > 10) ? timeString_day : "0" + timeString_day;
+		float dayDecimal = dayFloat - int(dayFloat);
+		float hourFloat = dayDecimal * 24;
+		string timeString_hour = to_string(int(hourFloat));
+		timeString_hour = (hourFloat >= 10) ? timeString_hour : "0" + timeString_hour;
+		float minutesDecimal = hourFloat - int(hourFloat);
+		float minutesFloat = minutesDecimal * 60;
+		string timeString_minutes = to_string(int(minutesFloat));
+		timeString_minutes = (minutesFloat >= 10) ? timeString_minutes : "0" + timeString_minutes;
+		float secondsDecimal = minutesFloat - int(minutesFloat);
+		float secondsFloat = secondsDecimal * 60;
+		string timeString_seconds = to_string(int(secondsFloat));
+		timeString_seconds = (secondsFloat >= 10) ? timeString_seconds : "0" + timeString_seconds;
+
+		string timeString = year + "." + timeString_month + "." + timeString_day + " " + timeString_hour + ":" + timeString_minutes + ":" + timeString_seconds;
+		return timeString;
+	}
+
 
 }
