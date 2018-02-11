@@ -45,7 +45,6 @@ void OceanVizApp::prepareSettings(ci::app::App::Settings* settings) {
 
 void OceanVizApp::setup() {
 	BaseApp::setup();
-
 	// Configure params
 	auto params = OceanSettings::getInstance()->getParams();
 	params->setSize(ivec2(400, 500));

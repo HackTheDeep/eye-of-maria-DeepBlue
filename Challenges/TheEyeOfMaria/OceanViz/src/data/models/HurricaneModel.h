@@ -5,18 +5,21 @@
 #include "cinder/Json.h"
 
 namespace amnh {
-
-	struct DrifterModel {
+	struct HurricaneModel {
 	public:
 		struct SampleEvent {
-			std::time_t		time;
+			time_t			timestamp;
 			float			latitude;
 			float			longitude;
-			float			qaulityIndex;
+			float			wind;
+			float			pressure;
+			std::string		stormType;
+			std::string		category;
+
 		};
 
-		DrifterModel();
-		~DrifterModel();
+		HurricaneModel();
+		~HurricaneModel();
 
 		// Functions
 		void							addSampleEvent(SampleEvent sample) { mSampleEvents.push_back(sample); }
@@ -25,11 +28,14 @@ namespace amnh {
 		void							setId(std::string id) { mId = id; };
 		std::string						getId() { return mId; };
 
+
 	protected:
 		// Functions
 
 		// Properties
-		std::string						mId;
-		std::vector<SampleEvent>		mSampleEvents;
+		std::string					mId;
+		std::vector<SampleEvent>	mSampleEvents;
+
+
 	};
 }

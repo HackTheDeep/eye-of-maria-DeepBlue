@@ -14,6 +14,7 @@
 #include "cinder/Easing.h"
 
 #include "DataPoint.h"
+#include "data/DataManager.h"
 
 namespace amnh {
 
@@ -36,6 +37,7 @@ namespace amnh {
 		void setup();
 		void update();
 		void draw();
+		void addDataPoint(DataPoint::DataType type);
 
 		void loadShader();
 		void replaceBatchShader();
@@ -47,6 +49,8 @@ namespace amnh {
 		ci::gl::VboRef		mPointsVbo;
 		ci::gl::BatchRef	mPointsBatch;
 		ci::gl::GlslProgRef	mPointsShader;
+
+		int		mNumUsedPoints;
 
 	};
 }

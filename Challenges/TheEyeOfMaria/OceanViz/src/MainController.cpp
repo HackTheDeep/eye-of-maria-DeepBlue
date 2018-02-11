@@ -29,8 +29,7 @@ void MainController::setup(bluecadet::views::BaseViewRef rootView) {
 	// Front load data
 	bool parseData = true;
 	if (parseData) {
-		DataManager::getInstance()->parseDrifterDirectoryData();
-		DataManager::getInstance()->parseDrifterData();
+		DataManager::getInstance()->setup();
 	}
 
 	mUiController = make_shared<UiController>();
