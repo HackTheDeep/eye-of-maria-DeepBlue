@@ -45,6 +45,7 @@ void MainController::setup(bluecadet::views::BaseViewRef rootView) {
 	mArcballSphere = Sphere(vec3(0), 800.0f);
 
 	mArcball = Arcball(&mCamera, mArcballSphere);
+	mArcball.setQuat(glm::angleAxis(1.89068f, vec3(0.277f, -0.950f, -0.145f)));
 
 	//create earth model
 	mEarth.setup();
@@ -61,6 +62,8 @@ void MainController::setup(bluecadet::views::BaseViewRef rootView) {
 	getWindow()->getSignalMouseDown().connect(bind(&MainController::handleMouseDown, this, std::placeholders::_1));
 	getWindow()->getSignalMouseDrag().connect(bind(&MainController::handleMouseDrag, this, std::placeholders::_1));
 	getWindow()->getSignalMouseWheel().connect(bind(&MainController::handleMouseWheel, this, std::placeholders::_1));
+
+	OceanSettings::getInstance()->getParams()->addParam<quat>("Quat", [&] (quat q) { mArcball.setQuat(q); }, [&] { return mArcball.getQuat(); });
 }
 
 void MainController::update() {
