@@ -47,6 +47,7 @@ protected:
 	UiControllerRef		mUiController = nullptr;
 
 	bool				bEnableDepthTest;
+	void				toggleDepthTest() { bEnableDepthTest = !bEnableDepthTest; };
 
 	//camera and mouse manipulation
 	//ci::vec2			mLastMouse;

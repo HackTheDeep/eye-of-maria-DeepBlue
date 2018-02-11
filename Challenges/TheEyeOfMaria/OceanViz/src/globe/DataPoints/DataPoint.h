@@ -44,7 +44,7 @@ public:
 	float		mWind;
 	float		mPressure;
 	std::string	mStormType;
-	std::string	mCategory;
+	int			mCategory;
 
 	//for floats
 	float mPSalinity;

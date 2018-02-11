@@ -65,13 +65,18 @@ void MainController::setup(bluecadet::views::BaseViewRef rootView) {
 	DataPointController::getInstance()->reMapHurricaneColors(DataPointController::HurricaneColor::WIND);
 	
 	auto params = OceanSettings::getInstance()->getParams();
-	params->addParam("Enable Depth Test", &bEnableDepthTest );
+	params->addButton("Toggle Depth Test", [=] {
+		toggleDepthTest();
+	});
 
 	params->addButton("Hurricane Color: Pressure", [=]{ 
 		DataPointController::getInstance()->reMapHurricaneColors(DataPointController::HurricaneColor::PRESSURE);
 	});
 	params->addButton("Hurricane Color: Wind", [=] { 
 		DataPointController::getInstance()->reMapHurricaneColors(DataPointController::HurricaneColor::WIND);
+	});
+	params->addButton("Hurricane Color: Category", [=] {
+		DataPointController::getInstance()->reMapHurricaneColors(DataPointController::HurricaneColor::CATEGORY);
 	});
 
 	//wire up signals

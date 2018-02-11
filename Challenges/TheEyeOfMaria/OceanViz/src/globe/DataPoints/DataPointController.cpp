@@ -223,17 +223,24 @@ void DataPointController::reMapHurricaneColors(HurricaneColor colorType) {
 
 	switch (colorType) {
 	case HurricaneColor::WIND:
-		startCol = ColorA(1.0f, 1.0f, 0.0f, 1.0f);
-		endCol = ColorA(1.0f, 0.0f, 0.0f, 1.0f);
+		startCol = ColorA(1.0f, 1.0f, 0.0f, 1.0f);	//yellow
+		endCol = ColorA(1.0f, 0.0f, 1.0f, 1.0f);	//magenta
 		startVal = minHurWindSpeed;
 		endVal = maxHurWindSpeed;
 		CI_LOG_I("Mapping Hurricane colors to Wind");
 		break;
 	case HurricaneColor::PRESSURE:
-		startCol = ColorA(0.0f, 0.0f, 1.0f, 1.0f);
-		endCol = ColorA(1.0f, 1.0f, 1.0f, 1.0f);
+		startCol = ColorA(0.0f, 0.0f, 1.0f, 1.0f);	//blue
+		endCol = ColorA(0.0f, 1.0f, 1.0f, 1.0f);	//cyan
 		startVal = minHurPressure;
 		endVal = maxHurPressure;
+		CI_LOG_I("Mapping Hurricane colors to Pressure");
+		break;
+	case HurricaneColor::CATEGORY:
+		startCol = ColorA(1.0f, 1.0f, 1.0f, 1.0f);	//white
+		endCol = ColorA(1.0f, 0.0f, 0.0f, 1.0f);	//red
+		startVal = 0.0f;
+		endVal = 5.0f;
 		CI_LOG_I("Mapping Hurricane colors to Pressure");
 		break;
 	default:
@@ -249,7 +256,9 @@ void DataPointController::reMapHurricaneColors(HurricaneColor colorType) {
 		case HurricaneColor::WIND:
 			val = mPointsList[i].mWind;
 			break;
-
+		case HurricaneColor::CATEGORY:
+			val = (float)mPointsList[i].mCategory;
+			break;
 		default:
 			break;
 		}
