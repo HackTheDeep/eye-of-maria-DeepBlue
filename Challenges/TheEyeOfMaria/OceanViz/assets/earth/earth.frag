@@ -29,7 +29,7 @@ void main()
 
 	
 	vec3 ppNormal			= normalize( vertNormal + normalSample );
-	float ppDiffuse			= abs( dot( ppNormal, lightDir ) ) * 1.1;
+	float ppDiffuse			= abs( dot( ppNormal, lightDir ) );
 	float ppFresnel			= pow( ( 1.0 - ppDiffuse ), 3.0 );
 	float ppSpecular		= pow( ppDiffuse, 10.0 );
 	float ppSpecularBright	= pow( ppDiffuse, 120.0 );

@@ -3,6 +3,8 @@
 #include "cinder/Camera.h"
 #include "cinder/app/App.h"
 
+typedef std::shared_ptr<class POV> POVRef;
+
 class POV {
 public:
 	POV() {}

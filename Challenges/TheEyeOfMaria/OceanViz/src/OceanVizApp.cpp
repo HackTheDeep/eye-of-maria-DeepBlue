@@ -5,11 +5,10 @@
 #include "bluecadet/core/BaseApp.h"
 #include "bluecadet/views/TouchView.h"
 
-#include "data/OceanSettings.h"
-#include "globe/Earth.h"
 #include "globe/POV.h"
 
-
+#include "MainController.h"
+#include "globe/DataPoints/DataPointController.h"
 
 using namespace ci;
 using namespace ci::app;
@@ -32,15 +31,21 @@ public:
 
 	void mouseMove(MouseEvent event);
 	void mouseWheel(MouseEvent event);
+	void keyDown(KeyEvent event) override;
 
 public:
 
-	POV               mPov;
-	Earth             mEarth;
-
-
+	//camera and mouse manipulation
+	POVRef              mPov;
 	vec2              mLastMouse;
 	vec2              mCurrentMouse;
+
+	void lateSetup() override;
+
+protected:
+
+	MainControllerRef mMainController;
+	UiControllerRef mUiController = nullptr;
 
 };
 
@@ -72,28 +77,53 @@ void OceanVizApp::setup() {
 	//button->getSignalTapped().connect([=](bluecadet::touch::TouchEvent e) { CI_LOG_I("Button tapped"); });
 	//getRootView()->addChild(button);
 
+	getRootView()->setBackgroundColor(Color::gray(0));
+
+	mUiController = make_shared<UiController>();
+	mUiController->setup();
+	getRootView()->addChild(mUiController);
+
 	// Create the camera controller.
-	mPov = POV(this, ci::vec3(0.0f, 0.0f, 1000.0f), ci::vec3(0.0f, 0.0f, 0.0f));
+
+	mPov = make_shared<POV>(this, ci::vec3(0.0f, 0.0f, 1000.0f), ci::vec3(0.0f, 0.0f, 0.0f));
+
+
+	mMainController = make_shared<MainController>();
+	mMainController->setup();
+	
+	// do lightweight setup here
+}
+
+void OceanVizApp::lateSetup() {
+	BaseApp::lateSetup();
+
+	// do heavy lifting setup here
+
+
+
 
 }
 
 void OceanVizApp::update() {
 	BaseApp::update();
 
-	mPov.update();
-	mEarth.update();
+	if(mPov != nullptr) mPov->update();
+	
+	mMainController->update();
+
 }
 
 void OceanVizApp::draw() {
 	BaseApp::draw();
 
-	mEarth.draw();
+	mMainController->draw();
+
 }
 
 
 void OceanVizApp::mouseWheel(MouseEvent event)
 {
-	mPov.adjustDist(event.getWheelIncrement() * -5.0f);
+	mPov->adjustDist(event.getWheelIncrement() * -5.0f);
 }
 
 void OceanVizApp::mouseMove(MouseEvent event)
@@ -110,7 +140,25 @@ void OceanVizApp::mouseMove(MouseEvent event)
 
 	mCurrentMouse = event.getPos();
 
-	mPov.adjustAngle((mLastMouse.x - mCurrentMouse.x) * 0.01f, mCurrentMouse.y - (getWindowHeight() * 0.5f));
+	mPov->adjustAngle((mLastMouse.x - mCurrentMouse.x) * 0.01f, mCurrentMouse.y - (getWindowHeight() * 0.5f));
+}
+
+void OceanVizApp::keyDown(KeyEvent event) {
+
+	//just play through slides manually for now
+	switch (event.getCode()) {
+
+	case KeyEvent::KEY_RSHIFT:
+
+		DataPointController::getInstance()->loadShader();
+		DataPointController::getInstance()->replaceBatchShader();
+
+		break;
+
+	default:
+		BaseApp::keyDown(event);
+	}
+
 }
 
 // Make sure to pass a reference to prepareSettings to configure the app correctly. MSAA and other render options are optional.

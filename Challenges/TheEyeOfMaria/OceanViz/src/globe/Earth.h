@@ -2,11 +2,25 @@
 
 #include "cinder/Vector.h"
 #include "cinder/gl/Texture.h"
+#include "cinder/app/App.h"
+#include "cinder/app/RendererGl.h"
+#include "cinder/gl/gl.h"
+#include "cinder/Log.h"
+#include "cinder/gl/VboMesh.h"
+#include "cinder/Perlin.h"
+#include "cinder/Rand.h"
+#include "cinder/CinderGlm.h"
+#include "cinder/CinderMath.h"
+#include "cinder/Easing.h"
+
+#include "DataPoints/DataPoint.h"
+#include "DataPoints/DataPointController.h"
 
 class Earth {
 public:
 	Earth();
 
+	void setup();
 	void update();
 	void draw();
 
@@ -23,6 +37,5 @@ public:
 
 	ci::gl::BatchRef     mEarth;
 	
-	std::vector<vec3>	mPoints;
 
 };
