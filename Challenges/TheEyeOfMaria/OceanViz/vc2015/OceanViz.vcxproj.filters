@@ -360,9 +360,6 @@
     <ClCompile Include="..\src\globe\Earth.cpp">
       <Filter>Source Files\globe</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\globe\POV.cpp">
-      <Filter>Source Files\globe</Filter>
-    </ClCompile>
     <ClCompile Include="..\src\globe\DataPoints\DataPoint.cpp">
       <Filter>Source Files\globe\DataPoints</Filter>
     </ClCompile>
@@ -405,9 +402,6 @@
       <Filter>Source Files\data</Filter>
     </ClInclude>
     <ClInclude Include="..\src\globe\Earth.h">
-      <Filter>Source Files\globe</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\globe\POV.h">
       <Filter>Source Files\globe</Filter>
     </ClInclude>
     <ClInclude Include="..\src\globe\DataPoints\DataPoint.h">

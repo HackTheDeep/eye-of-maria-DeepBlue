@@ -13,7 +13,6 @@
 
 #include "data/OceanSettings.h"
 #include "globe/Earth.h"
-#include "globe/POV.h"
 
 namespace amnh {
 
@@ -40,10 +39,8 @@ protected:
 
 	ci::Arcball			mArcball;
 	ci::CameraPersp		mCamera;
-	ci::Sphere			mArcballSphere;
 
 	Earth				mEarth;
-	//POVRef              mPov = nullptr;
 	UiControllerRef		mUiController = nullptr;
 
 	bool				bEnableDepthTest = true;

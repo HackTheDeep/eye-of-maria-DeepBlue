@@ -40,19 +40,18 @@ void MainController::setup(bluecadet::views::BaseViewRef rootView) {
 	mUiController->setup();
 	rootView->addChild(mUiController);
 
-	// Create the camera controller.
-	//mPov = make_shared<POV>(ci::vec3(0.0f, 0.0f, 1000.0f), ci::vec3(0.0f, 0.0f, 0.0f));
+	//create earth model
+	mEarth.setup();
 
+	//set up cam
 	mCamera.setPerspective(60.0f, getWindowAspectRatio(), 0.1f, 20000.0f);
 	mCamera.lookAt(vec3(0, 0, 2000.0f), vec3(0));
 
-	mArcballSphere = Sphere(vec3(0), 850.0f);
-
-	mArcball = Arcball(&mCamera, mArcballSphere);
+	// ensure sphere is large enough to cover app
+	auto sphere = Sphere(mEarth.getSphere().getCenter(), mEarth.getSphere().getRadius() * 3.0f);
+	mArcball = Arcball(&mCamera, sphere);
 	mArcball.setQuat(glm::angleAxis(1.89068f, vec3(0.277f, -0.950f, -0.145f)));
 
-	//create earth model
-	mEarth.setup();
 
 	//setup the points placeholders and VBO
 	DataPointController::getInstance()->setup();
@@ -91,15 +90,14 @@ void MainController::setup(bluecadet::views::BaseViewRef rootView) {
 	}, "group=Hurricane");
 
 	//wire up signals
-	getWindow()->getSignalMouseDown().connect(-100, bind(&MainController::handleMouseDown, this, std::placeholders::_1));
-	getWindow()->getSignalMouseDrag().connect(-100, bind(&MainController::handleMouseDrag, this, std::placeholders::_1));
+	getWindow()->getSignalMouseDown().connect(100, bind(&MainController::handleMouseDown, this, std::placeholders::_1));
+	getWindow()->getSignalMouseDrag().connect(100, bind(&MainController::handleMouseDrag, this, std::placeholders::_1));
 	getWindow()->getSignalMouseWheel().connect(bind(&MainController::handleMouseWheel, this, std::placeholders::_1));
 
 	//OceanSettings::getInstance()->getParams()->addParam<quat>("Cam Rot", [&] (quat q) { mArcball.setQuat(q); }, [&] { return mArcball.getQuat(); });
 }
 
 void MainController::update() {
-	//mPov->update();
 	mCamera.setAspectRatio(getWindowAspectRatio());
 	mEarth.update();
 	DataPointController::getInstance()->update();
@@ -109,8 +107,6 @@ void MainController::draw() {
 	gl::ScopedMatrices scopedMatrices;
 
 	gl::ScopedDepth depth(bEnableDepthTest);
-
-	//mPov->applyMatrix();
 
 	gl::setMatrices(mCamera);
 	gl::rotate(mArcball.getQuat());
@@ -125,15 +121,14 @@ inline void MainController::invertMouseCoords(ci::app::MouseEvent & event) {
 }
 
 void MainController::handleMouseWheel(ci::app::MouseEvent event) {
-	//mPov->adjustDist(event.getWheelIncrement() * -5.0f);
-	mCamera.setEyePoint(mCamera.getEyePoint() + vec3(0, 0, event.getWheelIncrement() * -10.0f));
+	mCamera.setEyePoint(mCamera.getEyePoint() + vec3(0, 0, event.getWheelIncrement() * -15.0f));
 }
 
 void MainController::handleMouseDown(ci::app::MouseEvent event) {
 	if (bluecadet::touch::TouchManager::getInstance()->getNumTouchedViews() > 0) {
 		return;
 	}
-	//invertMouseCoords(event);
+	invertMouseCoords(event); // arcball sphere radius is larger than cam dist, so we're technically dragging the far side of the sphere
 	mArcball.mouseDown(event);
 }
 
@@ -141,20 +136,8 @@ void MainController::handleMouseDrag(ci::app::MouseEvent event) {
 	if (bluecadet::touch::TouchManager::getInstance()->getNumTouchedViews() > 0) {
 		return;
 	}
-	//invertMouseCoords(event);
+	invertMouseCoords(event); // arcball sphere radius is larger than cam dist, so we're technically dragging the far side of the sphere
 	mArcball.mouseDrag(event);
-	/*static bool firstMouseMove = true;
-
-	if (!firstMouseMove) {
-		mLastMouse = mCurrentMouse;
-	} else {
-		mLastMouse = event.getPos();
-		firstMouseMove = false;
-	}
-
-	mCurrentMouse = event.getPos();
-
-	mPov->adjustAngle((mLastMouse.x - mCurrentMouse.x) * 0.01f, mCurrentMouse.y - (getWindowHeight() * 0.5f));*/
 }
 
 }

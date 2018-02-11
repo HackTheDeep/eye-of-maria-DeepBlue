@@ -26,6 +26,8 @@ public:
 
 	void loadShader();
 
+	inline const ci::Sphere & getSphere() const { return mEarthSphere; }
+
 public:
 
 	float mRadius;
@@ -37,6 +39,8 @@ public:
 	ci::gl::Texture2dRef mTexNormal;
 	ci::gl::Texture2dRef mTexMask;
 
+	ci::Sphere			 mEarthSphere;
+	ci::geom::Sphere	 mEarthSphereGeom;
 	ci::gl::BatchRef     mEarth;
 	
 
