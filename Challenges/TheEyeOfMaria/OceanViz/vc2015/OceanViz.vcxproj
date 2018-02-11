@@ -45,7 +45,7 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>..\include;"..\..\..\..\Cinder\include";..\blocks\BluecadetText\src;..\blocks\BluecadetUtils\src;..\blocks\BluecadetViews\src;..\..\..\..\Cinder\blocks\OSC\src;..\..\..\..\Cinder\blocks\TUIO\src</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\include;..\..\..\..\Cinder\include;..\blocks\BluecadetText\src;..\blocks\BluecadetUtils\src;..\blocks\BluecadetViews\src;..\..\..\..\Cinder\blocks\OSC\src;..\..\..\..\Cinder\blocks\TUIO\src;..\src</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_WIN32_WINNT=0x0601;_WINDOWS;NOMINMAX;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
@@ -102,6 +102,8 @@
   <ItemGroup />
   <ItemGroup>
     <ClCompile Include="..\src\data\OceanSettings.cpp" />
+    <ClCompile Include="..\src\data\TimelineManager.cpp" />
+    <ClCompile Include="..\src\MainController.cpp" />
     <ClCompile Include="..\src\OceanVizApp.cpp" />
     <ClCompile Include="..\blocks\BluecadetText\src\bluecadet\text\FontManager.cpp" />
     <ClCompile Include="..\blocks\BluecadetText\src\bluecadet\text\StyledTextLayout.cpp" />
@@ -142,6 +144,8 @@
     <ClCompile Include="..\blocks\BluecadetViews\src\bluecadet\touch\drivers\TuioDriver.cpp" />
     <ClCompile Include="..\..\..\..\Cinder\blocks\OSC\src\cinder\osc\Osc.cpp" />
     <ClCompile Include="..\..\..\..\Cinder\blocks\TUIO\src\cinder\tuio\Tuio.cpp" />
+    <ClCompile Include="..\src\ui\TimelineView.cpp" />
+    <ClCompile Include="..\src\ui\UiController.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\include\Resources.h" />
@@ -188,6 +192,10 @@
     <ClInclude Include="..\..\..\..\Cinder\blocks\OSC\src\cinder\osc\Osc.h" />
     <ClInclude Include="..\..\..\..\Cinder\blocks\TUIO\src\cinder\tuio\Tuio.h" />
     <ClInclude Include="..\src\data\OceanSettings.h" />
+    <ClInclude Include="..\src\data\TimelineManager.h" />
+    <ClInclude Include="..\src\MainController.h" />
+    <ClInclude Include="..\src\ui\TimelineView.h" />
+    <ClInclude Include="..\src\ui\UiController.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets" />
