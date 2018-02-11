@@ -6,6 +6,10 @@
 #include "bluecadet/views/TouchView.h"
 
 #include "data/OceanSettings.h"
+#include "globe/Earth.h"
+#include "globe/POV.h"
+
+
 
 using namespace ci;
 using namespace ci::app;
@@ -17,12 +21,27 @@ using namespace bluecadet::touch;
 
 using namespace amnh;
 
+
+
 class OceanVizApp : public BaseApp {
 public:
 	static void prepareSettings(ci::app::App::Settings* settings);
 	void setup() override;
 	void update() override;
 	void draw() override;
+
+	void mouseMove(MouseEvent event);
+	void mouseWheel(MouseEvent event);
+
+public:
+
+	POV               mPov;
+	Earth             mEarth;
+
+
+	vec2              mLastMouse;
+	vec2              mCurrentMouse;
+
 };
 
 void OceanVizApp::prepareSettings(ci::app::App::Settings* settings) {
@@ -35,29 +54,63 @@ void OceanVizApp::prepareSettings(ci::app::App::Settings* settings) {
 		manager->mFullscreen = false;
 		manager->mWindowSize = ivec2(1280, 720);
 	});
+
+
 }
 
 void OceanVizApp::setup() {
 	BaseApp::setup();
 
 	// Optional: configure your root view
-	getRootView()->setBackgroundColor(Color::gray(0.5f));
+	getRootView()->setBackgroundColor(Color::gray(0.0f));
 
 	// Sample content
-	auto button = make_shared<TouchView>();
-	button->setPosition(vec2(400, 300));
-	button->setSize(vec2(200, 100));
-	button->setBackgroundColor(Color(1, 0, 0));
-	button->getSignalTapped().connect([=](bluecadet::touch::TouchEvent e) { CI_LOG_I("Button tapped"); });
-	getRootView()->addChild(button);
+	//auto button = make_shared<TouchView>();
+	//button->setPosition(vec2(400, 300));
+	//button->setSize(vec2(200, 100));
+	//button->setBackgroundColor(Color(1, 0, 0));
+	//button->getSignalTapped().connect([=](bluecadet::touch::TouchEvent e) { CI_LOG_I("Button tapped"); });
+	//getRootView()->addChild(button);
+
+	// Create the camera controller.
+	mPov = POV(this, ci::vec3(0.0f, 0.0f, 1000.0f), ci::vec3(0.0f, 0.0f, 0.0f));
+
 }
 
 void OceanVizApp::update() {
 	BaseApp::update();
+
+	mPov.update();
+	mEarth.update();
 }
 
 void OceanVizApp::draw() {
 	BaseApp::draw();
+
+	mEarth.draw();
+}
+
+
+void OceanVizApp::mouseWheel(MouseEvent event)
+{
+	mPov.adjustDist(event.getWheelIncrement() * -5.0f);
+}
+
+void OceanVizApp::mouseMove(MouseEvent event)
+{
+	static bool firstMouseMove = true;
+
+	if (!firstMouseMove) {
+		mLastMouse = mCurrentMouse;
+	}
+	else {
+		mLastMouse = event.getPos();
+		firstMouseMove = false;
+	}
+
+	mCurrentMouse = event.getPos();
+
+	mPov.adjustAngle((mLastMouse.x - mCurrentMouse.x) * 0.01f, mCurrentMouse.y - (getWindowHeight() * 0.5f));
 }
 
 // Make sure to pass a reference to prepareSettings to configure the app correctly. MSAA and other render options are optional.

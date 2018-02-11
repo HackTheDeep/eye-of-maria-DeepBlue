@@ -370,9 +370,6 @@
     <ClInclude Include="..\src\globe\POV.h">
       <Filter>Source Files\globe</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\globe\Resources.h">
-      <Filter>Source Files\globe</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Resources.rc">

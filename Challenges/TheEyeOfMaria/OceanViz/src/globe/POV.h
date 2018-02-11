@@ -30,4 +30,5 @@ private:
 	float            mAspectRatio;
 	float            mFOV;
 
+
 };

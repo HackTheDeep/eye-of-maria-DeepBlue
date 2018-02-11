@@ -23,5 +23,6 @@ public:
 
 	ci::gl::BatchRef     mEarth;
 	
+	std::vector<vec3>	mPoints;
 
 };

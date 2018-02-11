@@ -12,7 +12,6 @@
 #include "cinder/Rand.h"
 
 #include "Earth.h"
-#include "Resources.h"
 
 using namespace ci;
 using namespace ci::app;
@@ -24,16 +23,34 @@ Earth::Earth()
 
 	// Load the textures for the Earth.
 	auto fmt = gl::Texture2d::Format().wrap( GL_REPEAT ).mipmap().minFilter( GL_LINEAR_MIPMAP_LINEAR );
-	mTexDiffuse = gl::Texture2d::create( loadImage( loadResource( RES_EARTHDIFFUSE ) ), fmt );
-	mTexNormal = gl::Texture2d::create( loadImage( loadResource( RES_EARTHNORMAL ) ), fmt );
-	mTexMask = gl::Texture2d::create( loadImage( loadResource( RES_EARTHMASK ) ), fmt );
+	mTexDiffuse = gl::Texture2d::create( loadImage( getAssetPath("earthDiffuse.png" ) ), fmt );
+	mTexNormal = gl::Texture2d::create( loadImage(getAssetPath("earthNormal.png" ) ), fmt );
+	mTexMask = gl::Texture2d::create( loadImage(getAssetPath("earthMask.png" ) ), fmt );
+
+	//mTexDiffuse = gl::Texture2d::create(loadImage(loadResource(RES_EARTHDIFFUSE)), fmt);
+	//mTexNormal = gl::Texture2d::create(loadImage(loadResource(RES_EARTHNORMAL)), fmt);
+	//mTexMask = gl::Texture2d::create(loadImage(loadResource(RES_EARTHMASK)), fmt);
 
 	// Create the Earth mesh with a custom shader.
-	auto earthShader = gl::GlslProg::create( loadResource( RES_PASSTHRU_VERT ), loadResource( RES_EARTH_FRAG ) );
+	auto earthShader = gl::GlslProg::create(loadAsset("earth.vert"), loadAsset("earth.frag"));
 	earthShader->uniform( "texDiffuse", 0 );
 	earthShader->uniform( "texNormal", 1 );
 	earthShader->uniform( "texMask", 2 );
 	mEarth = gl::Batch::create( geom::Sphere().radius( mRadius ).subdivisions( 120 ), earthShader );
+
+
+	for (int i = 0; i < 10; i++) {
+
+		float lat;
+		float lon;
+
+		float theta = glm::radians(90 - lat);
+		float phi = glm::radians(180 + lon);
+
+		vec3 p = vec3(sin(theta) * sin(phi), cos(theta), sin(theta) * cos(phi));
+
+		mPoints.push_back(p);
+	}
 
 
 }
@@ -53,3 +70,4 @@ void Earth::draw()
 
 	mEarth->draw();
 }
+
