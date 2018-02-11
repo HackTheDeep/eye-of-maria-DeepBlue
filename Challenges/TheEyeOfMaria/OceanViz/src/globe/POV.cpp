@@ -11,8 +11,8 @@ POV::POV( ci::app::App *aApp, ci::vec3 aEye, ci::vec3 aCenter )
 
 	mAngle = 0.0f;
 	mAngleDest = 0.0f;
-	mDist = 1000.0f;
-	mDistDest = 500.0f;
+	mDist = 800.0f;
+	mDistDest = 800.0f;
 }
 
 void POV::update()

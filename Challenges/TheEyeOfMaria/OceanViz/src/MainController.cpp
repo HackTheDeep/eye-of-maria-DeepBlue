@@ -1,6 +1,7 @@
 #include "MainController.h"
 
 #include "cinder/Log.h"
+#include "data/OceanSettings.h"
 
 using namespace ci;
 using namespace ci::app;

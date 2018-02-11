@@ -1,3 +1,4 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <Filter Include="Source Files">
@@ -95,6 +96,9 @@
     </Filter>
     <Filter Include="Source Files\globe\DataPoints">
       <UniqueIdentifier>{b7c7af0d-3255-493f-a0ed-6eff8f4007e7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\data\models">
+      <UniqueIdentifier>{bec007f4-58bc-4f9e-9f36-87f7f8223515}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -377,6 +381,12 @@
     <ClCompile Include="..\src\ui\TimelineView.cpp">
       <Filter>Source Files\ui</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\data\DataManager.cpp">
+      <Filter>Source Files\data</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\data\models\DrifterModel.cpp">
+      <Filter>Source Files\data\models</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\include\Resources.h">
@@ -408,6 +418,12 @@
     </ClInclude>
     <ClInclude Include="..\src\ui\TimelineView.h">
       <Filter>Source Files\ui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\data\DataManager.h">
+      <Filter>Source Files\data</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\data\models\DrifterModel.h">
+      <Filter>Source Files\data\models</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

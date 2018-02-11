@@ -4,11 +4,13 @@
 
 #include "bluecadet/core/BaseApp.h"
 #include "bluecadet/views/TouchView.h"
+#include "bluecadet/text/StyleManager.h"
 
 #include "globe/POV.h"
 
 #include "MainController.h"
 #include "globe/DataPoints/DataPointController.h"
+#include "data/DataManager.h"
 
 using namespace ci;
 using namespace ci::app;
@@ -16,6 +18,7 @@ using namespace std;
 
 using namespace bluecadet::core;
 using namespace bluecadet::views;
+using namespace bluecadet::text;
 using namespace bluecadet::touch;
 
 using namespace amnh;
@@ -55,9 +58,6 @@ void OceanVizApp::prepareSettings(ci::app::App::Settings* settings) {
 	settings->setHighDensityDisplayEnabled(true);
 
 	SettingsManager::getInstance()->setup(settings, ci::app::getAssetPath("settings.json"), [=](SettingsManager * manager) {
-		// Optional: Override json defaults at runtime
-		manager->mFullscreen = false;
-		manager->mWindowSize = ivec2(1280, 720);
 	});
 
 
@@ -69,36 +69,36 @@ void OceanVizApp::setup() {
 	// Optional: configure your root view
 	getRootView()->setBackgroundColor(Color::gray(0.0f));
 
-	// Sample content
-	//auto button = make_shared<TouchView>();
-	//button->setPosition(vec2(400, 300));
-	//button->setSize(vec2(200, 100));
-	//button->setBackgroundColor(Color(1, 0, 0));
-	//button->getSignalTapped().connect([=](bluecadet::touch::TouchEvent e) { CI_LOG_I("Button tapped"); });
-	//getRootView()->addChild(button);
 
-	getRootView()->setBackgroundColor(Color::gray(0));
+	// Front load data
+	bool parseData = true;
+	if (parseData) {
+		DataManager::getInstance()->parseDrifterDirectoryData();
+		DataManager::getInstance()->parseDrifterData();
+	}
 
 	mUiController = make_shared<UiController>();
 	mUiController->setup();
 	getRootView()->addChild(mUiController);
 
-	// Create the camera controller.
+	auto params = OceanSettings::getInstance()->getParams();
+	params->setSize(ivec2(400, 500));
 
+
+	// Create the camera controller.
 	mPov = make_shared<POV>(this, ci::vec3(0.0f, 0.0f, 1000.0f), ci::vec3(0.0f, 0.0f, 0.0f));
 
-
+	//Main Controller not in BC Views hierarchy
 	mMainController = make_shared<MainController>();
 	mMainController->setup();
 	
-	// do lightweight setup here
+	StyleManager::getInstance()->setup(getAssetPath("fonts/styles.json"));
 }
 
 void OceanVizApp::lateSetup() {
 	BaseApp::lateSetup();
 
 	// do heavy lifting setup here
-
 
 
 
@@ -114,10 +114,11 @@ void OceanVizApp::update() {
 }
 
 void OceanVizApp::draw() {
+	
 	BaseApp::draw();
 
 	mMainController->draw();
-
+	
 }
 
 
@@ -162,4 +163,4 @@ void OceanVizApp::keyDown(KeyEvent event) {
 }
 
 // Make sure to pass a reference to prepareSettings to configure the app correctly. MSAA and other render options are optional.
-CINDER_APP(OceanVizApp, RendererGl(RendererGl::Options().msaa(1)), OceanVizApp::prepareSettings);
+CINDER_APP(OceanVizApp, RendererGl(RendererGl::Options().msaa(2)), OceanVizApp::prepareSettings);
