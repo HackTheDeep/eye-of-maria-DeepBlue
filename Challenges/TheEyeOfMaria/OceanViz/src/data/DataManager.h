@@ -36,7 +36,7 @@ namespace amnh {
 
 		std::time_t						getMinTimestamp() { return mMinTimeStamp; }
 		std::time_t						getMaxTimestamp() { return mMaxTimeStamp; }
-
+		std::string						getDateStringFromTimestamp(time_t timestamp);
 	protected:
 		// Functions
 		// Reads next line and returns array of tokens split on delimeter 

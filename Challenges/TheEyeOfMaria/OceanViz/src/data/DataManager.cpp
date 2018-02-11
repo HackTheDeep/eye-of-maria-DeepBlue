@@ -34,6 +34,7 @@ namespace amnh {
 					// Parse some data
 					string dateString = getDrifterDateString(results[mDrifter_YearIndex], results[mDrifter_MonthIndex], results[mDrifter_DayIndex]);
 					auto timeStamp = dateStringToTimestamp(dateString);
+					getDateStringFromTimestamp(timeStamp);
 					if (timeStamp > mMaxTimeStamp) { mMaxTimeStamp = timeStamp; }
 					if (timeStamp < mMinTimeStamp) { mMinTimeStamp = timeStamp; }
 
@@ -144,6 +145,16 @@ namespace amnh {
 		string timeString = year + "." + timeString_month + "." + timeString_day + " " + timeString_hour + ":" + timeString_minutes + ":" + timeString_seconds;
 		return timeString;
 	}
+
+	std::string DataManager::getDateStringFromTimestamp(time_t timestamp) {
+		std::tm * ptm = std::localtime(&timestamp);
+		char buffer[32];
+		// Format: Mo, 15.06.2009 20:20:00
+		auto dateString = std::strftime(buffer, 32, "%a, %d.%m.%Y %H:%M:%S", timestamp);
+		auto returnString = to_string(dateString);
+		return to_string(dateString);
+	}
+
 
 
 }
