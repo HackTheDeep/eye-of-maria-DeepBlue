@@ -3,6 +3,7 @@
 #include "cinder/Log.h"
 
 #include "bluecadet/text/StyleManager.h"
+#include "bluecadet/touch/TouchManager.h"
 
 #include "data/OceanSettings.h"
 #include "data/DataManager.h"
@@ -59,8 +60,8 @@ void MainController::setup(bluecadet::views::BaseViewRef rootView) {
 
 	
 	//wire up signals
-	getWindow()->getSignalMouseDown().connect(bind(&MainController::handleMouseDown, this, std::placeholders::_1));
-	getWindow()->getSignalMouseDrag().connect(bind(&MainController::handleMouseDrag, this, std::placeholders::_1));
+	getWindow()->getSignalMouseDown().connect(100, bind(&MainController::handleMouseDown, this, std::placeholders::_1));
+	getWindow()->getSignalMouseDrag().connect(100, bind(&MainController::handleMouseDrag, this, std::placeholders::_1));
 	getWindow()->getSignalMouseWheel().connect(bind(&MainController::handleMouseWheel, this, std::placeholders::_1));
 
 	OceanSettings::getInstance()->getParams()->addParam<quat>("Quat", [&] (quat q) { mArcball.setQuat(q); }, [&] { return mArcball.getQuat(); });
@@ -97,11 +98,17 @@ void MainController::handleMouseWheel(ci::app::MouseEvent event) {
 }
 
 void MainController::handleMouseDown(ci::app::MouseEvent event) {
+	if (bluecadet::touch::TouchManager::getInstance()->getNumTouchedViews() > 0) {
+		return;
+	}
 	invertMouseCoords(event);
 	mArcball.mouseDown(event);
 }
 
 void MainController::handleMouseDrag(ci::app::MouseEvent event) {
+	if (bluecadet::touch::TouchManager::getInstance()->getNumTouchedViews() > 0) {
+		return;
+	}
 	invertMouseCoords(event);
 	mArcball.mouseDrag(event);
 	/*static bool firstMouseMove = true;
