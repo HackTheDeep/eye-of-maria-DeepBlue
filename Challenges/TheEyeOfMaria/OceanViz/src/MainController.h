@@ -30,9 +30,11 @@ public:
 	void draw() ;
 
 protected:
-	void handleMouseDown(const ci::app::MouseEvent & event);
-	void handleMouseDrag(const ci::app::MouseEvent & event);
-	void handleMouseWheel(const ci::app::MouseEvent & event);
+	inline void invertMouseCoords(ci::app::MouseEvent & event);
+
+	void handleMouseDown(ci::app::MouseEvent event);
+	void handleMouseDrag(ci::app::MouseEvent event);
+	void handleMouseWheel(ci::app::MouseEvent event);
 
 	ci::Arcball			mArcball;
 	ci::CameraPersp		mCamera;
