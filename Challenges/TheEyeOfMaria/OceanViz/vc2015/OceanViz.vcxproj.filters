@@ -350,6 +350,12 @@
     <ClCompile Include="..\src\data\OceanSettings.cpp">
       <Filter>Source Files\data</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\globe\Earth.cpp">
+      <Filter>Source Files\globe</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\globe\POV.cpp">
+      <Filter>Source Files\globe</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\include\Resources.h">
@@ -357,6 +363,15 @@
     </ClInclude>
     <ClInclude Include="..\src\data\OceanSettings.h">
       <Filter>Source Files\data</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\globe\Earth.h">
+      <Filter>Source Files\globe</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\globe\POV.h">
+      <Filter>Source Files\globe</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\globe\Resources.h">
+      <Filter>Source Files\globe</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
