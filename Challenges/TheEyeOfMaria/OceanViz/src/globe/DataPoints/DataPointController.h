@@ -15,6 +15,8 @@
 
 #include "DataPoint.h"
 #include "data/DataManager.h"
+#include "data/models/DrifterModel.h"
+#include "data/models/HurricaneModel.h"
 
 namespace amnh {
 
@@ -37,7 +39,11 @@ namespace amnh {
 		void setup();
 		void update();
 		void draw();
-		void addDataPoint(DataPoint::DataType type);
+
+		void addDrifterData();
+		void addHurricaneData();
+		void addFloaterData();
+
 
 		void loadShader();
 		void replaceBatchShader();
@@ -51,6 +57,8 @@ namespace amnh {
 		ci::gl::GlslProgRef	mPointsShader;
 
 		int		mNumUsedPoints;
+
+		ci::vec3 getPolarFromLatLong( float lat, float lon );
 
 	};
 }

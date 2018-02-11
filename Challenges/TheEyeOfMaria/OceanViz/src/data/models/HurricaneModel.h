@@ -15,7 +15,6 @@ namespace amnh {
 			float			pressure;
 			std::string		stormType;
 			std::string		category;
-
 		};
 
 		HurricaneModel();
