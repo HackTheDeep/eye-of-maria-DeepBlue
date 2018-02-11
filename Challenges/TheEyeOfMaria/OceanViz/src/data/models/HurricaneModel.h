@@ -1,10 +1,11 @@
+#pragma once
 #include "cinder/app/App.h"
 #include "cinder/app/RendererGl.h"
 #include "cinder/gl/gl.h"
 #include "cinder/Json.h"
 
 namespace amnh {
-	class HurricaneModel {
+	struct HurricaneModel {
 	public:
 		struct SampleEvent {
 			time_t			timestamp;
