@@ -173,30 +173,79 @@ void DataPointController::addFloaterData() {
 		//go through each drifter model and get all the data points
 		vector<FloatModel::SampleEvent> events = floater.second.getAllSampleEvents();
 
-		for (const auto & event : events) {
+		int numLineSegments = 0;
 
-			mPointsList[mNumUsedPoints].setup(getPolarFromLatLong(event.latitude, event.longitude));
+		for (int i = 0; i < events.size(); i++) {
+
+			mPointsList[mNumUsedPoints].setup(getPolarFromLatLong(events[i].latitude, events[i].longitude));
 			mPointsList[mNumUsedPoints].setType(DataPoint::DataType::FLOAT);
-			mPointsList[mNumUsedPoints].mTimeStamp = event.normalizedTime;
-			mPointsList[mNumUsedPoints].mTemp = event.temp;
-			mPointsList[mNumUsedPoints].mPSalinity = event.psal;
-			mPointsList[mNumUsedPoints].mPressure = event.pressure;
+			mPointsList[mNumUsedPoints].mTimeStamp = events[i].normalizedTime;
+			mPointsList[mNumUsedPoints].mTemp = events[i].temp;
+			mPointsList[mNumUsedPoints].mPSalinity = events[i].psal;
+			mPointsList[mNumUsedPoints].mPressure = events[i].pressure;
 
-			if (event.temp > maxFloatTemp) maxFloatTemp = event.temp;
-			if (event.temp < minFloatTemp) minFloatTemp = event.temp;
+			if (events[i].temp > maxFloatTemp) maxFloatTemp = events[i].temp;
+			if (events[i].temp < minFloatTemp) minFloatTemp = events[i].temp;
 			
-			if (event.psal > maxFloatSalinity) maxFloatSalinity = event.psal;
-			if (event.psal < minFloatSalinity) minFloatSalinity = event.psal;
+			if (events[i].psal > maxFloatSalinity) maxFloatSalinity = events[i].psal;
+			if (events[i].psal < minFloatSalinity) minFloatSalinity = events[i].psal;
 
-			if (event.pressure > maxFloatPressure) maxFloatPressure = event.pressure;
-			if (event.pressure < minFloatPressure) minFloatPressure = event.pressure;
+			if (events[i].pressure > maxFloatPressure) maxFloatPressure = events[i].pressure;
+			if (events[i].pressure < minFloatPressure) minFloatPressure = events[i].pressure;
+
+			//setup the lines
+			if (i > 0) {
+
+				linePoints.push_back( mPointsList[mNumUsedPoints-1].mPos );
+				linePoints.push_back( mPointsList[mNumUsedPoints  ].mPos );
+				numLineSegments ++;
+
+
+			}
 
 			mNumUsedPoints++;
 			mNumFloatPts++;
+
+		}
+
+		//add colors for each line from white to red
+		for (int i = 0; i < numLineSegments; i++) {
+			
+			float pct = i/(float)numLineSegments;
+
+			ColorA start = ColorA(1.0f, 1.0f, 1.0f, 1.0f);
+			ColorA end = ColorA(1.0f, 0.0f, 0.0f, 1.0f);
+
+			lineColors.push_back( start.lerp(pct, end) );
+			lineColors.push_back( start.lerp(pct, end) );
+
 		}
 	}
 
 	CI_LOG_I(mNumFloatPts << " Floater Points Added");
+
+}
+
+void DataPointController::setupLines() {
+
+	CI_LOG_I("Number of Lines Points: " << linePoints.size());
+
+
+	//prepare layout of vertex attributes
+	gl::VboMesh::Layout layout;
+	layout.usage(GL_STATIC_DRAW).attrib(geom::Attrib::POSITION, 3);
+	layout.usage(GL_STATIC_DRAW).attrib(geom::Attrib::COLOR, 4);
+
+	//create the mesh in gl_lines mode (i.e. every successive pair of points is a line)
+	mLinesMesh = gl::VboMesh::create((uint32_t)linePoints.size(), GL_LINES, { layout });
+	mLinesMesh->bufferAttrib(geom::Attrib::POSITION, linePoints);
+	mLinesMesh->bufferAttrib(geom::Attrib::COLOR, lineColors);
+
+	//get stock shader
+	mLinesShader = gl::getStockShader(gl::ShaderDef().color());
+
+	//create the batch
+	mLinesBatch = gl::Batch::create(mLinesMesh, mLinesShader );
 
 }
 
@@ -421,6 +470,8 @@ void DataPointController::toggleHurricane() {
 
 void DataPointController::draw() {
 
+	drawLines();
+
 	mPointsShader->uniform("uViewScale", 1.0f);
 	mPointsShader->uniform("uTrailDuration", OceanSettings::getInstance()->mTrailDuration);
 	mPointsShader->uniform("uTrailFadePower", OceanSettings::getInstance()->mTrailFadePower);
@@ -428,6 +479,15 @@ void DataPointController::draw() {
 	gl::ScopedBlendAdditive scopedBlend;
 	mPointsShader->uniform("uPlayhead", t);
 	mPointsBatch->draw();
+}
+
+void DataPointController::drawLines() {
+
+	if (bShowFloatPts) {
+		gl::color(ColorA::gray(1.0f, 1.0f ));
+		mLinesBatch->draw();
+	}
+
 }
 
 }
