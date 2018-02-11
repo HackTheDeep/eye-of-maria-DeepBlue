@@ -62,6 +62,8 @@ void MainController::setup(bluecadet::views::BaseViewRef rootView) {
 	DataPointController::getInstance()->addHurricaneData();
 	DataPointController::getInstance()->addFloaterData();
 
+	DataPointController::getInstance()->setupLines();
+
 	//default color mapping
 	DataPointController::getInstance()->reMapHurricaneColors(DataPointController::HurricaneColor::WIND);
 	DataPointController::getInstance()->reMapDrifterColors(DataPointController::DrifterColor::QUALITY);
@@ -139,6 +141,7 @@ void MainController::draw() {
 
 	mEarth.draw();
 
+	DataPointController::getInstance()->drawLines();
 	DataPointController::getInstance()->draw();
 }
 

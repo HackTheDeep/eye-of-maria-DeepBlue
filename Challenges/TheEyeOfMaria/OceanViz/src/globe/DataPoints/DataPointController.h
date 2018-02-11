@@ -42,6 +42,9 @@ namespace amnh {
 		void update();
 		void draw();
 
+		void setupLines();
+		void drawLines();
+
 		void addDrifterData();
 		void addHurricaneData();
 		void addFloaterData();
@@ -113,8 +116,13 @@ namespace amnh {
 		bool bShowFloatPts = true;
 		bool bShowDrifterPts = true;
 
+		//line drawing
+		ci::gl::VboMeshRef	mLinesMesh;
+		ci::gl::BatchRef	mLinesBatch;
+		ci::gl::GlslProgRef	mLinesShader;
 
-
+		std::vector<ci::vec3>	linePoints;
+		std::vector<ci::ColorA> lineColors;
 
 	};
 }
