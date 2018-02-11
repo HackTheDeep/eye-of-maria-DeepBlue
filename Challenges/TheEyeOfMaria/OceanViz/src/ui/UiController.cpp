@@ -20,8 +20,8 @@ UiController::~UiController() {
 }
 
 void amnh::UiController::setup() {
-	setSize(ScreenLayout::getInstance()->getAppSize());
-	setBackgroundColor(Color(1, 0, 0));
+
+
 }
 
 }
