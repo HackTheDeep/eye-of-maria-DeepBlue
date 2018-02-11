@@ -7,7 +7,11 @@ using namespace ci::app;
 using namespace std;
 
 namespace amnh {
-	DataManager::DataManager() {}
+	DataManager::DataManager() {
+		mMinTimeStamp = time(0);
+		mMaxTimeStamp = -1;
+
+	}
 
 	DataManager::~DataManager() {}
 
@@ -27,11 +31,14 @@ namespace amnh {
 
 				std::map<string, DrifterModel>::iterator it = mDrifterMap.find(id);
 				if (it != mDrifterMap.end()) {
-					DrifterModel::SampleEvent drifterEvent;
-
+					// Parse some data
 					string dateString = getDrifterDateString(results[mDrifter_YearIndex], results[mDrifter_MonthIndex], results[mDrifter_DayIndex]);
 					auto timeStamp = dateStringToTimestamp(dateString);
+					if (timeStamp > mMaxTimeStamp) { mMaxTimeStamp = timeStamp; }
+					if (timeStamp < mMinTimeStamp) { mMinTimeStamp = timeStamp; }
 
+					// Create new model struct and populate properties
+					DrifterModel::SampleEvent drifterEvent;
 					drifterEvent.latitude = std::stof(results[mDrifter_LatIndex]);
 					drifterEvent.longitude = std::stof(results[mDrifter_LongIndex]);
 					drifterEvent.qaulityIndex = std::stof(results[mDrifter_QualIndexIndex]);

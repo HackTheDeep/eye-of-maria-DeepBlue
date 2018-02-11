@@ -34,6 +34,9 @@ namespace amnh {
 //		void							parseHurricanData();
 //		void							parseBuoyData();
 
+		std::time_t						getMinTimestamp() { return mMinTimeStamp; }
+		std::time_t						getMaxTimestamp() { return mMaxTimeStamp; }
+
 	protected:
 		// Functions
 		// Reads next line and returns array of tokens split on delimeter 
@@ -45,14 +48,18 @@ namespace amnh {
 		// Converts drifter's unique day format (2017, 8, 27.0.024) to a date string formated for our utility function dateStringToTimestamp
 		std::string						getDrifterDateString(std::string year, std::string month, std::string day);
 
+
+		// Properties
+		std::time_t						mMinTimeStamp;
+		std::time_t						mMaxTimeStamp;
+
+
 		// Model Vectors
-//		std::vector<HurricaneModelRef> mHurricaneModels;
-//		std::vector<DrifterModel> mDrifterModels;
-//		std::vector<BuoyModelRef> mBuoyModels;
-//		std::map<std::string, DrifterDirectoryModelRef> mDrifterDirectoryModels;
 		std::map<std::string, DrifterModel> mDrifterMap;
 
-
+		/***********************/
+		// HARDCODED PROPERTIES//
+		/***********************/
 		// Drifter Properties (hardcoded)
 		int mDrifter_IdIndex = 0;
 		int mDrifter_MonthIndex = 1;

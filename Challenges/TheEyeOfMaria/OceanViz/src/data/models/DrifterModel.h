@@ -41,12 +41,5 @@ namespace amnh {
 		// Properties
 		std::string						mId;
 		std::vector<SampleEvent>		mSampleEvents;
-		/*		std::string						mMonth;
-		std::string						mDay;
-		std::string						mYear;
-		std::string						mLat;
-		std::string						mLong;
-		std::string						mQualityIndex;*/
-
 	};
 }
