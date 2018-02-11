@@ -5,6 +5,7 @@
 
 #include "bluecadet/views/BaseView.h"
 #include "TimelineView.h"
+#include "DisplayPallet.h"
 
 namespace amnh {
 
@@ -20,5 +21,6 @@ public:
 
 protected:
 	TimelineViewRef mTimelineView = nullptr;
+	DisplayPalletRef mDisplayPallet = nullptr;
 };
 }

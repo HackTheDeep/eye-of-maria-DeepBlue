@@ -390,6 +390,9 @@
     <ClCompile Include="..\src\data\models\HurricaneModel.cpp">
       <Filter>Source Files\data\models</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\ui\DisplayPallet.cpp">
+      <Filter>Source Files\ui</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\include\Resources.h">
@@ -430,6 +433,9 @@
     </ClInclude>
     <ClInclude Include="..\src\data\models\HurricaneModel.h">
       <Filter>Source Files\data\models</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\ui\DisplayPallet.h">
+      <Filter>Source Files\ui</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

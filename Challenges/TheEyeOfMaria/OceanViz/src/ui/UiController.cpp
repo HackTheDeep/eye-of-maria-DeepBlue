@@ -23,8 +23,13 @@ void amnh::UiController::setup() {
 	mTimelineView = make_shared<TimelineView>();
 	mTimelineView->setPosition(vec2(50, 40));
 	mTimelineView->setup();
-	addChild(mTimelineView);
 
+	mDisplayPallet = make_shared<DisplayPallet>();
+	mDisplayPallet->setPosition(vec2(50, mTimelineView->getPosition().value().y + mTimelineView->getHeight() + 20));
+	mDisplayPallet->setup();
+
+	addChild(mTimelineView);
+	addChild(mDisplayPallet);
 
 }
 
