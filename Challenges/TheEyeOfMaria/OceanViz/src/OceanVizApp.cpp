@@ -28,7 +28,7 @@ public:
 void OceanVizApp::prepareSettings(ci::app::App::Settings* settings) {
 	SettingsManager::setInstance(OceanSettings::getInstance());
 
-	//settings->setHighDensityDisplayEnabled(true);
+	settings->setHighDensityDisplayEnabled(true);
 
 	SettingsManager::getInstance()->setup(settings, ci::app::getAssetPath("settings.json"), [=](SettingsManager * manager) {
 		// Optional: Override json defaults at runtime
