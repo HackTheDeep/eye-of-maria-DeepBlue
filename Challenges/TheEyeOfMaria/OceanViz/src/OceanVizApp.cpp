@@ -4,6 +4,7 @@
 
 #include "bluecadet/core/BaseApp.h"
 #include "bluecadet/views/TouchView.h"
+#include "bluecadet/text/StyleManager.h"
 
 #include "data/OceanSettings.h"
 #include "MainController.h"
@@ -15,6 +16,7 @@ using namespace std;
 
 using namespace bluecadet::core;
 using namespace bluecadet::views;
+using namespace bluecadet::text;
 using namespace bluecadet::touch;
 
 using namespace amnh;
@@ -48,7 +50,7 @@ void OceanVizApp::prepareSettings(ci::app::App::Settings* settings) {
 void OceanVizApp::setup() {
 	BaseApp::setup();
 
-	// do lightweight setup here
+	StyleManager::getInstance()->setup(getAssetPath("fonts/styles.json"));
 }
 
 void OceanVizApp::lateSetup() {
@@ -57,7 +59,7 @@ void OceanVizApp::lateSetup() {
 	// do heavy lifting setup here
 
 	// Front load data
-	bool parseData = false;
+	bool parseData = true;
 	if (parseData) {
 		DataManager::getInstance()->parseDrifterDirectoryData();
 		DataManager::getInstance()->parseDrifterData();
@@ -79,4 +81,4 @@ void OceanVizApp::draw() {
 }
 
 // Make sure to pass a reference to prepareSettings to configure the app correctly. MSAA and other render options are optional.
-CINDER_APP(OceanVizApp, RendererGl(RendererGl::Options().msaa(1)), OceanVizApp::prepareSettings);
+CINDER_APP(OceanVizApp, RendererGl(RendererGl::Options().msaa(2)), OceanVizApp::prepareSettings);

@@ -5,6 +5,7 @@
 
 #include "bluecadet/views/BaseView.h"
 #include "bluecadet/views/StrokedRectView.h"
+#include "bluecadet/views/TextView.h"
 #include "bluecadet/views/TouchView.h"
 
 namespace amnh {
@@ -29,5 +30,13 @@ public:
 protected:
 	bluecadet::views::TouchViewRef mTrack= nullptr;
 	bluecadet::views::BaseViewRef mProgress = nullptr;
+
+	bluecadet::views::TextViewRef mCurrentTimeLabel = nullptr;
+	bluecadet::views::TextViewRef mCurrentTime = nullptr;
+
+	bluecadet::views::TextViewRef mStartTime = nullptr;
+	bluecadet::views::TextViewRef mEndTime = nullptr;
+
+
 };
 }

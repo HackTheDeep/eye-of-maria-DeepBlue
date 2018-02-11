@@ -6,6 +6,7 @@
 
 #include "data/OceanSettings.h"
 #include "data/TimelineManager.h"
+#include "data/DataManager.h"
 
 using namespace ci;
 using namespace ci::app;
@@ -49,6 +50,31 @@ void TimelineView::setup() {
 	trackBg->setStrokeWidth(1);
 	trackBg->setSize(mTrack->getSize());
 	mTrack->addChild(trackBg);
+
+	// current time
+	const float timeMargin = 5.0f;
+	mCurrentTimeLabel = make_shared<TextView>();
+	mCurrentTimeLabel->setText("Current:", "label.large");
+	mCurrentTimeLabel->setPosition(mTrack->getPosition() + vec2(0, -mCurrentTimeLabel->getHeight() - timeMargin));
+	addChild(mCurrentTimeLabel);
+
+	mCurrentTime = make_shared<TextView>();
+	mCurrentTime->setText("<time>", "label.large");
+	mCurrentTime->setPosition(mTrack->getPosition() + vec2(mTrack->getWidth() - mCurrentTime->getWidth(), -mCurrentTime->getHeight() - timeMargin));
+	mCurrentTime->setTextAlign(bluecadet::text::TextAlign::Right);
+	addChild(mCurrentTime);
+
+	// start/end times
+	mStartTime = make_shared<TextView>();
+	mStartTime->setText(to_string(DataManager::getInstance()->getMinTimestamp()), "label.small");
+	mStartTime->setPosition(mTrack->getPosition() + vec2(0, mTrack->getHeight() + timeMargin));
+	addChild(mStartTime);
+
+	mEndTime = make_shared<TextView>();
+	mEndTime->setTextAlign(bluecadet::text::TextAlign::Right);
+	mEndTime->setText(to_string(DataManager::getInstance()->getMaxTimestamp()), "label.small");
+	mEndTime->setPosition(mTrack->getPosition() + mTrack->getSize() + vec2(-mEndTime->getWidth(), timeMargin));
+	addChild(mEndTime);
 
 	mTrack->getSignalTouchMoved().connect([=] (const bluecadet::touch::TouchEvent & event) {
 		vec2 posInTrack = mTrack->convertGlobalToLocal(event.globalPosition);
