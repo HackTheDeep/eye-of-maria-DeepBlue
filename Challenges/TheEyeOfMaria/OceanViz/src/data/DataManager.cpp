@@ -191,9 +191,19 @@ namespace amnh {
 		catch (std::exception& e) {
 			CI_LOG_EXCEPTION("Sites.json data could not be loaded", e);
 		}
+
+
 		CI_LOG_I("Done parsing FLOATS:");
 		CI_LOG_I(mFloatMap.size());
 		CI_LOG_I("");
+
+		map<string, FloatModel>::iterator it;
+
+		for (it = mFloatMap.begin(); it != mFloatMap.end(); it++)
+		{
+			it->second.sortEvents();
+		}
+
 
 
 	}
