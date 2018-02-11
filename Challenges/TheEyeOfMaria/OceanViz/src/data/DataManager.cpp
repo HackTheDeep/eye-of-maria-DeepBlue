@@ -96,7 +96,7 @@ namespace amnh {
 				string dateString = getHurricaneDateString(results[mHurricane_DateIndex], results[mHurricane_TimeIndex]);
 				auto timestamp = dateStringToTimestamp(dateString);
 				std::string  latString = results[mHurricane_LatIndex].substr(0, results[mHurricane_LatIndex].length() - 2); //Trim special Chars
-				std::string  longString = results[mHurricane_LatIndex].substr(0, results[mHurricane_LatIndex].length() - 2); //Trim sepcial Chars
+				std::string  longString = results[mHurricane_LatIndex].substr(0, results[mHurricane_LongIndex].length() - 2); //Trim sepcial Chars
 				std::string  windString = results[mHurricane_WindIndex].substr(0, results[mHurricane_WindIndex].find(" ")); //Trim mph
 				std::string  pressureString = results[mHurricane_PressureIndex].substr(0, results[mHurricane_PressureIndex].find(" ")); //Trim mb
 
