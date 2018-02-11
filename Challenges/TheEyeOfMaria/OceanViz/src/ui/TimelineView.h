@@ -18,8 +18,14 @@ public:
 	~TimelineView();
 
 	void setup();
+	void update(double deltaTime) override;
 
 protected:
+
+	//void handleTouchBegan(const bluecadet::touch::TouchEvent & event) override;
+	void handleTouchMoved(const bluecadet::touch::TouchEvent & event) override;
+	//void handleTouchEnded(const bluecadet::touch::TouchEvent & event) override;
+
 	bluecadet::views::StrokedRectViewRef mTrack = nullptr;
 	bluecadet::views::BaseViewRef mProgress = nullptr;
 };
