@@ -66,6 +66,7 @@ void OceanVizApp::setup() {
 	if (parseData) {
 		DataManager::getInstance()->parseDrifterDirectoryData();
 		DataManager::getInstance()->parseDrifterData();
+		DataManager::getInstance()->parseHurricanData();
 	}
 
 	mUiController = make_shared<UiController>();
