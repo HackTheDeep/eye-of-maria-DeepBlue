@@ -27,6 +27,9 @@ TimelineView::~TimelineView() {
 
 void TimelineView::setup() {
 	setSize(vec2(350, 115));
+	setDragEnabled(true);
+	getSignalTouchBegan().connect([=](...) { setTint(Color::gray(0.8f)); });
+	getSignalTouchEnded().connect([=](...) { setTint(Color::gray(1.0f)); });
 
 	auto timelineManager = TimelineManager::getInstance();
 	auto data = DataManager::getInstance();

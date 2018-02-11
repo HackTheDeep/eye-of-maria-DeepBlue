@@ -14,7 +14,7 @@ namespace amnh {
 
 typedef std::shared_ptr<class TimelineView> TimelineViewRef;
 
-class TimelineView : public bluecadet::views::BaseView {
+class TimelineView : public bluecadet::views::TouchView {
 
 public:
 	TimelineView();
