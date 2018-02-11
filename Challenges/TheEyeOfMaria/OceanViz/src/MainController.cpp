@@ -19,13 +19,22 @@ MainController::~MainController() {
 }
 
 void MainController::setup() {
-	setSize(ScreenLayout::getInstance()->getAppSize());
-	mUiController = make_shared<UiController>();
-	mUiController->setup();
-	addChild(mUiController);
 
-	auto params = OceanSettings::getInstance()->getParams();
-	params->setSize(ivec2(400, 500));
+	mEarth.setup();
+	
+}
+
+void MainController::update() {
+
+	mEarth.update();
+
+}
+
+void MainController::draw() {
+
+
+	mEarth.draw();
+
 }
 
 }
