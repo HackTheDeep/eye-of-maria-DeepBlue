@@ -15,6 +15,12 @@ namespace amnh {
 
 	DataManager::~DataManager() {}
 
+	void DataManager::setup() {
+		parseDrifterDirectoryData();
+		parseDrifterData();
+		parseHurricanData();
+	};
+
 //		setFieldFromJsonIfExists(&mVideosPreload, "videos.preload");
 //		setFieldFromJsonIfExists(&mVideosAssetDir, "videos.assetDir");
 

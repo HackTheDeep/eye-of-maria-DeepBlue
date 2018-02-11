@@ -27,11 +27,8 @@ namespace amnh {
 
 		DataManager();
 		~DataManager();
-
+		void setup();
 		// Functions
-		void									parseDrifterData();
-		void									parseDrifterDirectoryData();
-		void									parseHurricanData();
 
 		std::vector<HurricaneModel>				getAllHurricaneModels() { return mHurricaneModels; }
 		std::map<std::string, DrifterModel>		getAllDrifters() { return mDrifterMap; }
@@ -40,6 +37,10 @@ namespace amnh {
 		std::string								getDateStringFromTimestamp(time_t timestamp);
 	protected:
 		// Functions
+		void									parseDrifterData();
+		void									parseDrifterDirectoryData();
+		void									parseHurricanData();
+
 		// Reads next line and returns array of tokens split on delimeter 
 		std::vector<std::string>		getNextLineAndSplitIntoTokens(std::istream& str, const char delimeter);
 
