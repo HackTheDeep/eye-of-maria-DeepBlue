@@ -1,0 +1,21 @@
+{
+	"styles": {
+		"fontFamily": "Arial",
+		"fontStyle": "normal",
+		"fontWeight": 400,
+		"fontSize": 12,
+		"textAlign": "left",
+		"textTransform": "none",
+		"color": "#ffffff",
+		"leadingOffset": 0,
+		"label": {
+			"fontSize": 14,
+			"small": {
+				"fontSize": 12
+			},
+			"large": {
+				"fontSize": 20
+			}
+		}
+	}
+}
