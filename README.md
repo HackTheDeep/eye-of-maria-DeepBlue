@@ -4,14 +4,14 @@ This project is team [DeepBlue](https://github.com/bluecadet)'s contribution to 
 
 The main challenged we tackled is [The Eye of Maria](https://github.com/amnh/HackTheDeep/wiki/The-Eye-of-Maria). Our primary goal was to build the foundation for an app that could read and render the geo data provided in real time and provide an interactive interface to explore connections and facilitate research by eliminating the need to export visualizations offline. The secondary goal was to provide an accessible experience that's more approachable than some of the scientific tools currently used for the job.
 
-Resources:
+In addition to the main challenge, the [Prototypes](Prototypes/) folder is a WIP snapshot of early prototypes for both [The Eye of Maria](https://github.com/amnh/HackTheDeep/wiki/The-Eye-of-Maria) and [Iron out the Kinks](https://github.com/amnh/HackTheDeep/wiki/Iron-Out-the-Kinks).
+
+## Resources:
 
 - [Final Demo Day Presentation](https://docs.google.com/presentation/d/1cXQmsw2hc7fWxYTbLMAVyDIg0_QEhp9qamNKOXF6oEA/edit?usp=sharing)
 - [Screen recording on YouTube](https://youtu.be/0n6vodXpv6w)
 
 [![Screenshot of the Eye of Maria Prototype](Documentation/eyeofmaria_screenshot.jpg)](https://youtu.be/0n6vodXpv6w)
-
-In addition to the main challenge, the [Prototypes](Prototypes/) folder is a WIP snapshot of early prototypes for both [The Eye of Maria](https://github.com/amnh/HackTheDeep/wiki/The-Eye-of-Maria) and [Iron out the Kinks](https://github.com/amnh/HackTheDeep/wiki/Iron-Out-the-Kinks).
 
 ## Team
 
