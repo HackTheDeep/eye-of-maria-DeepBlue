@@ -23,10 +23,10 @@ namespace amnh {
 		mIsLoading = true;
 
 		mLoaderThread = make_shared<thread>([=] {
-			parseDrifterDirectoryData(getAssetPath("data/directory.dat"));
+			/*parseDrifterDirectoryData(getAssetPath("data/directory.dat"));
 			parseDrifterData(getAssetPath("data/drifer_data.dat"));
 			parseHurricaneData(getAssetPath("data/storm_track_statistics.csv"));
-			parseFloaterData(getAssetPath("data/floats.json"));
+			parseFloaterData(getAssetPath("data/floats.json"));*/
 			parseDrfiterJson(getAssetPath("data/Drifters1800.json"));
 
 			// get min/max timestamps
