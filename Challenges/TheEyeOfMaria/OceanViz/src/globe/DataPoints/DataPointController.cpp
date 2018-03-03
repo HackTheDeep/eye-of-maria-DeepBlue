@@ -22,7 +22,8 @@ void DataPointController::setup() {
 	mNumUsedPoints = 0;
 
 
-	int numPoints = 101000;
+	//int numPoints = 101000;
+	const int numPoints = 4000000; // the max num of points we can display
 	for (int i = 0; i < numPoints; i++) {
 		//setup all the placeholder points
 		DataPoint p;
@@ -136,7 +137,7 @@ void DataPointController::addHurricaneData() {
 			if (event.pressure > maxHurPressure) maxHurPressure = event.pressure;
 			if (event.pressure < minHurPressure) minHurPressure = event.pressure;
 			
-			CI_LOG_I("Hurricane wind: " << mPointsList[mNumUsedPoints].mWind);
+			//CI_LOG_I("Hurricane wind: " << mPointsList[mNumUsedPoints].mWind);
 
 			mNumUsedPoints++;
 			mNumHurricanePts++;
@@ -379,7 +380,7 @@ void DataPointController::reMapDrifterColors(DrifterColor colorType) {
 			break;
 		}
 
-		float pct = clamp(lmap(val, startVal, endVal, 0.0f, 1.0f), 0.0f, 1.0f);
+		float pct = (startVal == endVal) ? 0.5f : clamp(lmap(val, startVal, endVal, 0.0f, 1.0f), 0.0f, 1.0f);
 		mPointsList[i].mColor = startCol.lerp(pct, endCol);
 	}
 

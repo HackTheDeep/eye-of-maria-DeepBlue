@@ -8,8 +8,8 @@ using namespace std;
 
 namespace amnh {
 	DataManager::DataManager() {
-		mMinTimeStamp = time(0);
-		mMaxTimeStamp = -1;
+		mMinTimeStamp = std::numeric_limits<time_t>::max() - 1;
+		mMaxTimeStamp = std::numeric_limits<time_t>::min();
 
 	}
 
@@ -25,9 +25,29 @@ namespace amnh {
 		mLoaderThread = make_shared<thread>([=] {
 			//parseDrifterDirectoryData(getAssetPath("data/directory.dat"));
 			//parseDrifterData(getAssetPath("data/drifer_data.dat"));
-			parseHurricaneData(getAssetPath("data/storm_track_statistics.csv"));
+			//parseHurricaneData(getAssetPath("data/storm_track_statistics.csv"));
 			//parseFloaterData(getAssetPath("data/floats.json"));
 			parseDrfiterJson(getAssetPath("data/Drifters1800.json"));
+
+			// get min/max timestamps
+			for (auto & drifter : mDrifterMap) {
+				for (auto & event : drifter.second.getAllSampleEvents()) {
+					if (event.timestamp > mMaxTimeStamp) { mMaxTimeStamp = event.timestamp;	}
+					if (event.timestamp < mMinTimeStamp) { mMinTimeStamp = event.timestamp; }
+				}
+			}
+			for (auto & hurricane : mHurricaneModels) {
+				for (auto & event : hurricane.getAllSampleEvents()) {
+					if (event.timestamp > mMaxTimeStamp) { mMaxTimeStamp = event.timestamp; }
+					if (event.timestamp < mMinTimeStamp) { mMinTimeStamp = event.timestamp; }
+				}
+			}
+			for (auto & floater : mFloatMap) {
+				for (auto & event : floater.second.getAllSampleEvents()) {
+					if (event.timestamp > mMaxTimeStamp) { mMaxTimeStamp = event.timestamp; }
+					if (event.timestamp < mMinTimeStamp) { mMinTimeStamp = event.timestamp; }
+				}
+			}
 
 			// normalize timestamps
 			for (auto & drifter : mDrifterMap) {
@@ -82,10 +102,8 @@ namespace amnh {
 				std::map<string, DrifterModel>::iterator it = mDrifterMap.find(id);
 				if (it != mDrifterMap.end()) {
 					// Parse some data
-					string dateString = getDrifterDateString(results[mDrifter_YearIndex], results[mDrifter_MonthIndex], results[mDrifter_DayIndex]);
-					auto timestamp = dateStringToTimestamp(dateString);
-					if (timestamp > mMaxTimeStamp) { mMaxTimeStamp = timestamp; }
-					if (timestamp < mMinTimeStamp) { mMinTimeStamp = timestamp; }
+					const string dateString = getDrifterDateString(results[mDrifter_YearIndex], results[mDrifter_MonthIndex], results[mDrifter_DayIndex]);
+					const auto timestamp = dateStringToTimestamp(dateString);
 
 					// Create new model struct and populate properties
 					DrifterModel::SampleEvent drifterEvent;
@@ -123,7 +141,9 @@ namespace amnh {
 
 			const time_t startTime = 1235995200; // 2009-03-02 12:00:00 (TODO: make this a parameter)
 
-			for (int i = 0; i < min<int>(times.getNumChildren(), 64); i++) {
+			int numSkipped = 0;
+
+			for (int i = 0; i < times.getNumChildren(); i++) {
 				const string id = path.filename().string() + "_" + to_string(i);
 				DrifterModel drifter(id);
 				auto & events = drifter.getAllSampleEvents();
@@ -141,8 +161,6 @@ namespace amnh {
 					auto itDepth = dDepths.begin();
 
 					for (int j = 0; j < dTimes.getNumChildren(); j++) {
-
-
 						DrifterModel::SampleEvent drifterEvent;
 						drifterEvent.timestamp = itTime->getValue<time_t>();
 						drifterEvent.latitude = itLat->getValue<float>();
@@ -154,7 +172,7 @@ namespace amnh {
 						itLon++;
 						itDepth++;
 
-						if (drifterEvent.timestamp == 0) {
+						if (drifterEvent.timestamp <= 0) {
 							// skip invalid data
 							continue;
 						}
@@ -171,7 +189,7 @@ namespace amnh {
 				}
 			}
 
-			CI_LOG_I("...Drifter data generated");
+			CI_LOG_I("...Drifter data generated (skipped " + to_string(numSkipped) + " invalid events)");
 
 		} catch (exception e) {
 			CI_LOG_EXCEPTION("Can't load drifter json at '" + path.string() + "'", e);
@@ -193,8 +211,6 @@ namespace amnh {
 			if (didReadFirstLine && results.size() > 7) {
 				string dateString = getHurricaneDateString(results[mHurricane_DateIndex], results[mHurricane_TimeIndex]);
 				auto timestamp = dateStringToTimestamp(dateString);
-				if (timestamp > mMaxTimeStamp) { mMaxTimeStamp = timestamp; }
-				if (timestamp < mMinTimeStamp) { mMinTimeStamp = timestamp; }
 
 				std::string  latString = results[mHurricane_LatIndex].substr(0, results[mHurricane_LatIndex].length() - 2); //Trim special Chars
 				std::string  longString = results[mHurricane_LongIndex].substr(0, results[mHurricane_LongIndex].length() - 2); //Trim sepcial Chars
@@ -237,8 +253,6 @@ namespace amnh {
 							string ymd = array_o_floats[i].getValueForKey<std::string>("properties.ymd");
 							string dateString = getFloatDateString(ymd);
 							auto timestamp = dateStringToTimestamp(dateString);
-							if (timestamp > mMaxTimeStamp) { mMaxTimeStamp = timestamp; }
-							if (timestamp < mMinTimeStamp) { mMinTimeStamp = timestamp; }
 
 							JsonTree coordinates = array_o_floats[i].getChild("geometry").getChild("coordinates");
 							float latitude = coordinates.getValueAtIndex<float>(1);
@@ -389,6 +403,9 @@ namespace amnh {
 
 	std::string DataManager::getDateStringFromTimestamp(time_t timestamp) {
 		std::tm * ptm = std::localtime(&timestamp);
+		if (!ptm) {
+			return "<unknown date>";
+		}
 		string year = to_string(1900 + ptm->tm_year);
 		string month = (ptm->tm_mon >= 10) ? to_string(ptm->tm_mon + 1) : "0" + to_string(ptm->tm_mon + 1);
 		string day = (ptm->tm_mday >= 10) ? to_string(ptm->tm_mday) : "0" + to_string(ptm->tm_mday);

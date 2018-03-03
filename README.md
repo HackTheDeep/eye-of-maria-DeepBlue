@@ -41,9 +41,21 @@ git submodule update --init --recursive
 
 ## Parsing new Data
 
-```bash
-pip install netCDF4
-```
+1. Install NET CDF4 to parse .NC files:
+  ```bash
+  pip install netCDF4
+  ```
+2. Convert NC file to JSON
+  ```bash
+  cd Challenges/TheEyeOfMaria/OceanViz/assets/data
+  python tnc_to_json.py Drifters1800.nc Drifters1800.json
+  ```
+  You can optionally pass limit for # of drifters to parse:
+  ```bash
+  python tnc_to_json.py Drifters1800.nc Drifters1800.json 64
+  ```
+
+
 
 ## Challenge Report
 

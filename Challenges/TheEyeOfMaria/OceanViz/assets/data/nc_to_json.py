@@ -23,16 +23,21 @@ print 'Reading NC from {}...\n'.format(inputFileName)
 
 ncfile = netCDF4.Dataset(inputFileName, 'r')
 
-times = ncfile.variables['time'][:].tolist()
-lats = ncfile.variables['lat'][:].tolist()
-lons = ncfile.variables['lon'][:].tolist()
-depths = ncfile.variables['z'][:].tolist()
+times = ncfile.variables['time'][:]
+lats = ncfile.variables['lat'][:]
+lons = ncfile.variables['lon'][:]
+depths = ncfile.variables['z'][:]
 
 if maxCount != -1:
     times = times[:maxCount]
     lats = lats[:maxCount]
     lons = lons[:maxCount]
     depths = depths[:maxCount]
+
+# remove nan and inf values
+for values in [times, lats, lons, depths]:
+    values[numpy.where(numpy.isnan(values))] = 0
+    values[numpy.where(numpy.isinf(values))] = 0
 
 # drifters = []
 #
@@ -43,8 +48,8 @@ with open(outputFileName, 'w') as outfile:
     print '\nWriting JSON to {}...'.format(outputFileName)
     # json.dump({'type': 'DrifterCollection', 'drifters': drifters}, outfile)
     json.dump({'type': 'DrifterCollection', 'drifters': {
-        'times': times,
-        'lats': lats,
-        'lons': lons,
-        'depths': depths
+        'times': times.tolist(),
+        'lats': lats.tolist(),
+        'lons': lons.tolist(),
+        'depths': depths.tolist()
     }}, outfile)
