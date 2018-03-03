@@ -23,7 +23,7 @@ void DataPointController::setup() {
 
 
 	//int numPoints = 101000;
-	const int numPoints = 4000000; // the max num of points we can display
+	const int numPoints = 400000; // the max num of points we can display
 	for (int i = 0; i < numPoints; i++) {
 		//setup all the placeholder points
 		DataPoint p;
@@ -380,7 +380,7 @@ void DataPointController::reMapDrifterColors(DrifterColor colorType) {
 			break;
 		}
 
-		float pct = (startVal == endVal) ? 0.5f : clamp(lmap(val, startVal, endVal, 0.0f, 1.0f), 0.0f, 1.0f);
+		float pct = (startVal == endVal) ? 1.0f : clamp(lmap(val, startVal, endVal, 0.0f, 1.0f), 0.0f, 1.0f);
 		mPointsList[i].mColor = startCol.lerp(pct, endCol);
 	}
 
