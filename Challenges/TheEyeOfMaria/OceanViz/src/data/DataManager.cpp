@@ -23,10 +23,10 @@ namespace amnh {
 		mIsLoading = true;
 
 		mLoaderThread = make_shared<thread>([=] {
-			parseDrifterDirectoryData(getAssetPath("data/directory.dat"));
-			parseDrifterData(getAssetPath("data/drifer_data.dat"));
+			//parseDrifterDirectoryData(getAssetPath("data/directory.dat"));
+			//parseDrifterData(getAssetPath("data/drifer_data.dat"));
 			parseHurricaneData(getAssetPath("data/storm_track_statistics.csv"));
-			parseFloaterData(getAssetPath("data/floats.json"));
+			//parseFloaterData(getAssetPath("data/floats.json"));
 			parseDrfiterJson(getAssetPath("data/Drifters1800.json"));
 
 			// normalize timestamps
@@ -110,12 +110,68 @@ namespace amnh {
 				throw ci::Exception("Can't find file '" + path.string() + "'");
 			}
 
+			CI_LOG_I("Loading drifter json at '" + path.string() + "'");
+
 			const JsonTree json(source);
 
 			const JsonTree & times = json.getChild("drifters.times");
 			const JsonTree & lats = json.getChild("drifters.lats");
 			const JsonTree & lons = json.getChild("drifters.lons");
 			const JsonTree & depths = json.getChild("drifters.depths");
+
+			CI_LOG_I("Generating " + to_string(times.getNumChildren()) + " drifters with " + to_string(times.getChildren().front().getNumChildren()) + " events each...");
+
+			const time_t startTime = 1235995200; // 2009-03-02 12:00:00 (TODO: make this a parameter)
+
+			for (int i = 0; i < min<int>(times.getNumChildren(), 64); i++) {
+				const string id = path.filename().string() + "_" + to_string(i);
+				DrifterModel drifter(id);
+				auto & events = drifter.getAllSampleEvents();
+
+				const JsonTree & dTimes = times[i];
+				const JsonTree & dLats = lats[i];
+				const JsonTree & dLons = lons[i];
+				const JsonTree & dDepths = depths[i];
+
+				try {
+
+					auto itTime = dTimes.begin();
+					auto itLat = dLats.begin();
+					auto itLon = dLons.begin();
+					auto itDepth = dDepths.begin();
+
+					for (int j = 0; j < dTimes.getNumChildren(); j++) {
+
+
+						DrifterModel::SampleEvent drifterEvent;
+						drifterEvent.timestamp = itTime->getValue<time_t>();
+						drifterEvent.latitude = itLat->getValue<float>();
+						drifterEvent.longitude = itLon->getValue<float>();
+						drifterEvent.depth = itDepth->getValue<float>();
+
+						itTime++;
+						itLat++;
+						itLon++;
+						itDepth++;
+
+						if (drifterEvent.timestamp == 0) {
+							// skip invalid data
+							continue;
+						}
+
+						drifterEvent.timestamp += startTime;
+
+						events.push_back(drifterEvent);
+					}
+
+					mDrifterMap[id] = drifter;
+
+				} catch (exception e) {
+					CI_LOG_EXCEPTION("Could not parse drifter value", e);
+				}
+			}
+
+			CI_LOG_I("...Drifter data generated");
 
 		} catch (exception e) {
 			CI_LOG_EXCEPTION("Can't load drifter json at '" + path.string() + "'", e);

@@ -14,13 +14,15 @@ namespace amnh {
 			float			latitude = 0;
 			float			longitude = 0;
 			float			qualityIndex = 0;
+			float			depth = 0;
 		};
 
-		DrifterModel();
+		DrifterModel(std::string id = "") : mId(id) {};
 		~DrifterModel();
 
 		// Functions
-		inline void							addSampleEvent(SampleEvent sample) { mSampleEvents.push_back(sample); }
+		inline void							addSampleEvent(const SampleEvent & sample) { mSampleEvents.push_back(sample); }
+		inline const std::vector<SampleEvent> &	getAllSampleEventsConst() const { return mSampleEvents; };
 		inline std::vector<SampleEvent> &	getAllSampleEvents() { return mSampleEvents; };
 
 		void							setId(std::string id) { mId = id; };

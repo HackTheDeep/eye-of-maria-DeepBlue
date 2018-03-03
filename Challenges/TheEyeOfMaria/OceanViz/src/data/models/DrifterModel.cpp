@@ -6,6 +6,5 @@ using namespace ci::app;
 using namespace std;
 
 namespace amnh {
-	DrifterModel::DrifterModel() {}
 	DrifterModel::~DrifterModel() {}
 }

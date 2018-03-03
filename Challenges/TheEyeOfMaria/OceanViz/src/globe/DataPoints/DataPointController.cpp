@@ -64,7 +64,7 @@ void DataPointController::setup() {
 void DataPointController::addDrifterData() {
 
 	//get drifter data
-	auto drifterMap = DataManager::getInstance()->getAllDrifters();
+	const auto & drifterMap = DataManager::getInstance()->getAllDrifters();
 
 	CI_LOG_I("Adding Drifter Data...");
 
@@ -75,10 +75,10 @@ void DataPointController::addDrifterData() {
 	maxDrifterQuality = -1;
 
 	//iterate through each drifter
-	for (auto & drifter : drifterMap){
+	for (const auto & drifter : drifterMap){
 	
 		//go through each drifter model and get all the data points
-		vector<DrifterModel::SampleEvent> events = drifter.second.getAllSampleEvents();
+		const auto & events = drifter.second.getAllSampleEventsConst();
 
 		for (const auto & event : events) {
 

@@ -33,12 +33,12 @@ namespace amnh {
 		// Functions
 		void									setup();
 
-		std::vector<HurricaneModel>				getAllHurricaneModels() { return mHurricaneModels; }
-		std::map<std::string, DrifterModel>		getAllDrifters() { return mDrifterMap; }
-		std::map<std::string, FloatModel>		getAllFloats () { return mFloatMap; }
-		std::time_t								getMinTimestamp() { return mMinTimeStamp; }
-		std::time_t								getMaxTimestamp() { return mMaxTimeStamp; }
-		std::string								getDateStringFromTimestamp(time_t timestamp);
+		const std::vector<HurricaneModel> &			getAllHurricaneModels() { return mHurricaneModels; }
+		const std::map<std::string, DrifterModel> &	getAllDrifters() { return mDrifterMap; }
+		const std::map<std::string, FloatModel>	&	getAllFloats () { return mFloatMap; }
+		std::time_t									getMinTimestamp() { return mMinTimeStamp; }
+		std::time_t									getMaxTimestamp() { return mMaxTimeStamp; }
+		std::string									getDateStringFromTimestamp(time_t timestamp);
 
 		inline float							getNormalizedTime(float absoluteTimestamp);
 

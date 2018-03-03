@@ -11,10 +11,13 @@ if len(sys.argv) < 2:
     print '\t\toutputs to myfile.json\n'
     print '\tnc_to_json.py <input.nc> <output.json>\n'
     print '\t\toutputs to output.json\n'
+    print '\tnc_to_json.py <input.nc> <output.json> <max-count>\n'
+    print '\t\toutputs the first <max-count> entries to output.json\n'
     sys.exit()
 
 inputFileName = str(sys.argv[1])
 outputFileName = str(sys.argv[2]) if len(sys.argv) >= 3 else inputFileName.replace('.nc', '.json')
+maxCount = int(sys.argv[3]) if len(sys.argv) >= 4 else -1
 
 print 'Reading NC from {}...\n'.format(inputFileName)
 
@@ -24,6 +27,12 @@ times = ncfile.variables['time'][:].tolist()
 lats = ncfile.variables['lat'][:].tolist()
 lons = ncfile.variables['lon'][:].tolist()
 depths = ncfile.variables['z'][:].tolist()
+
+if maxCount != -1:
+    times = times[:maxCount]
+    lats = lats[:maxCount]
+    lons = lons[:maxCount]
+    depths = depths[:maxCount]
 
 # drifters = []
 #
