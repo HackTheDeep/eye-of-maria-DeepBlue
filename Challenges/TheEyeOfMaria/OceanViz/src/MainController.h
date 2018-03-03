@@ -31,12 +31,15 @@ public:
 	Earth & getEarth() { return mEarth; }
 
 protected:
+	void finishSetup(); // called once data is loaded
+
 	inline void invertMouseCoords(ci::app::MouseEvent & event);
 
 	void handleMouseDown(ci::app::MouseEvent event);
 	void handleMouseDrag(ci::app::MouseEvent event);
 	void handleMouseWheel(ci::app::MouseEvent event);
 
+	bluecadet::views::BaseViewRef mRootView;
 	ci::Arcball			mArcball;
 	ci::CameraPersp		mCamera;
 

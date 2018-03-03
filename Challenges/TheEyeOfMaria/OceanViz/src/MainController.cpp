@@ -27,18 +27,55 @@ MainController::~MainController() {
 }
 
 void MainController::setup(bluecadet::views::BaseViewRef rootView) {
+	mRootView = rootView;
+
 	StyleManager::getInstance()->setup(getAssetPath("fonts/styles.json"));
 	ImageManager::getInstance()->loadAllFromDir(getAssetPath("ui"));
+	
+	DataManager::getInstance()->setup();
+}
 
-	// Front load data
-	bool parseData = true;
-	if (parseData) {
-		DataManager::getInstance()->setup();
+void MainController::update() {
+	if (DataManager::getInstance()->isLoading()) {
+		OceanSettings::getInstance()->getParams()->hide();
+		return;
 	}
 
+	if (!mUiController) {
+		finishSetup();
+		OceanSettings::getInstance()->getParams()->show();
+	}
+
+	mCamera.setAspectRatio(getWindowAspectRatio());
+	mEarth.update();
+	DataPointController::getInstance()->update();
+}
+
+void MainController::draw() {
+	if (DataManager::getInstance()->isLoading()) {
+		static Font font("Arial", 64);
+		static ColorA color(1, 1, 1, 1);
+		color.a = 0.75f + 0.25f * sin((float)getElapsedSeconds());
+		gl::drawStringCentered("LOADING", getWindowCenter() - vec2(0, font.getSize() * 0.5f), color, font);
+		return;
+	}
+
+	gl::ScopedMatrices scopedMatrices;
+
+	gl::ScopedDepth depth(bEnableDepthTest);
+
+	gl::setMatrices(mCamera);
+	gl::rotate(mArcball.getQuat());
+
+	mEarth.draw();
+
+	DataPointController::getInstance()->draw();
+}
+
+void MainController::finishSetup() {
 	mUiController = make_shared<UiController>();
 	mUiController->setup();
-	rootView->addChild(mUiController);
+	mRootView->addChild(mUiController);
 
 	//create earth model
 	mEarth.setup();
@@ -84,7 +121,7 @@ void MainController::setup(bluecadet::views::BaseViewRef rootView) {
 		DataPointController::getInstance()->toggleFloats();
 	}, "group=Layers");
 
-	params->addButton("Pressure Color", [=]{
+	params->addButton("Pressure Color", [=] {
 		DataPointController::getInstance()->reMapHurricaneColors(DataPointController::HurricaneColor::PRESSURE);
 	}, "group=Hurricane");
 	params->addButton("Wind Color", [=] {
@@ -119,25 +156,6 @@ void MainController::setup(bluecadet::views::BaseViewRef rootView) {
 	getWindow()->getSignalMouseWheel().connect(bind(&MainController::handleMouseWheel, this, std::placeholders::_1));
 
 	//OceanSettings::getInstance()->getParams()->addParam<quat>("Cam Rot", [&] (quat q) { mArcball.setQuat(q); }, [&] { return mArcball.getQuat(); });
-}
-
-void MainController::update() {
-	mCamera.setAspectRatio(getWindowAspectRatio());
-	mEarth.update();
-	DataPointController::getInstance()->update();
-}
-
-void MainController::draw() {
-	gl::ScopedMatrices scopedMatrices;
-
-	gl::ScopedDepth depth(bEnableDepthTest);
-
-	gl::setMatrices(mCamera);
-	gl::rotate(mArcball.getQuat());
-
-	mEarth.draw();
-
-	DataPointController::getInstance()->draw();
 }
 
 inline void MainController::invertMouseCoords(ci::app::MouseEvent & event) {

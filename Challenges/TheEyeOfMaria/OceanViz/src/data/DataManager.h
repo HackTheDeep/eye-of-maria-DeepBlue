@@ -29,8 +29,9 @@ namespace amnh {
 
 		DataManager();
 		~DataManager();
-		void setup();
+
 		// Functions
+		void									setup();
 
 		std::vector<HurricaneModel>				getAllHurricaneModels() { return mHurricaneModels; }
 		std::map<std::string, DrifterModel>		getAllDrifters() { return mDrifterMap; }
@@ -41,13 +42,15 @@ namespace amnh {
 
 		inline float							getNormalizedTime(float absoluteTimestamp);
 
+		inline std::atomic_bool &				isLoading() { return mIsLoading; }
+
 	protected:
 		// Functions
-		void									parseDrfiterJson(const ci::fs::path & jsonPath);
-		void									parseDrifterData();
-		void									parseDrifterDirectoryData();
-		void									parseHurricanData();
-		void									parseFloatData();
+		void									parseDrfiterJson(const ci::fs::path & path, double startTime = 0);
+		void									parseDrifterData(const ci::fs::path & path);
+		void									parseDrifterDirectoryData(const ci::fs::path & path);
+		void									parseHurricaneData(const ci::fs::path & path);
+		void									parseFloaterData(const ci::fs::path & path);
 
 		// Reads next line and returns array of tokens split on delimeter 
 		std::vector<std::string>		getNextLineAndSplitIntoTokens(std::istream& str, const char delimeter);
@@ -65,6 +68,8 @@ namespace amnh {
 		std::time_t						mMinTimeStamp;
 		std::time_t						mMaxTimeStamp;
 
+		std::atomic_bool				mIsLoading = true;
+		std::shared_ptr<std::thread>	mLoaderThread = nullptr;
 
 		// Model Vectors
 		std::vector<HurricaneModel>			mHurricaneModels;

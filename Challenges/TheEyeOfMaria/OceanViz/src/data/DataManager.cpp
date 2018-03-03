@@ -13,45 +13,66 @@ namespace amnh {
 
 	}
 
-	DataManager::~DataManager() {}
-
-	void DataManager::setup() {
-		parseDrifterDirectoryData();
-		parseDrifterData();
-		parseHurricanData();
-		parseFloatData();
-
-		// normalize timestamps
-		for (auto & drifter : mDrifterMap) {
-			for (auto & event : drifter.second.getAllSampleEvents()) {
-				event.normalizedTime = getNormalizedTime(event.timestamp);
-			}
+	DataManager::~DataManager() {
+		if (mLoaderThread) {
+			mLoaderThread->join();
 		}
-		for (auto & hurricane : mHurricaneModels) {
-			for (auto & event : hurricane.getAllSampleEvents()) {
-				event.normalizedTime = getNormalizedTime(event.timestamp);
-			}
-		}
-		for (auto & floater : mFloatMap) {
-			for (auto & event : floater.second.getAllSampleEvents()) {
-				event.normalizedTime = getNormalizedTime(event.timestamp);
-			}
-		}
-
-	};
-
-	//		setFieldFromJsonIfExists(&mVideosPreload, "videos.preload");
-	//		setFieldFromJsonIfExists(&mVideosAssetDir, "videos.assetDir");
-
-
-	void DataManager::parseDrfiterJson(const ci::fs::path & jsonPath) {
-
 	}
 
-	void DataManager::parseDrifterData() {
-		std::string fileName = "../assets/data/drifer_data.dat";
+	void DataManager::setup() {
+		mIsLoading = true;
+
+		mLoaderThread = make_shared<thread>([=] {
+			parseDrifterDirectoryData(getAssetPath("data/directory.dat"));
+			parseDrifterData(getAssetPath("data/drifer_data.dat"));
+			parseHurricaneData(getAssetPath("data/storm_track_statistics.csv"));
+			parseFloaterData(getAssetPath("data/floats.json"));
+			parseDrfiterJson(getAssetPath("data/Drifters1800.json"));
+
+			// normalize timestamps
+			for (auto & drifter : mDrifterMap) {
+				for (auto & event : drifter.second.getAllSampleEvents()) {
+					event.normalizedTime = getNormalizedTime(event.timestamp);
+				}
+			}
+			for (auto & hurricane : mHurricaneModels) {
+				for (auto & event : hurricane.getAllSampleEvents()) {
+					event.normalizedTime = getNormalizedTime(event.timestamp);
+				}
+			}
+			for (auto & floater : mFloatMap) {
+				for (auto & event : floater.second.getAllSampleEvents()) {
+					event.normalizedTime = getNormalizedTime(event.timestamp);
+				}
+			}
+
+			mIsLoading = false;
+		});
+	};
+
+	void DataManager::parseDrifterDirectoryData(const ci::fs::path & path) {
 		std::ifstream file;
-		file.open(fileName);
+		file.open(path);
+		bool didReadFirstLine = false;
+		while (file.good()) {
+			std::vector<string> results = getNextLineAndSplitIntoTokens(file, ' ');
+			if (didReadFirstLine && results.size() > 16) {
+				DrifterModel drifter = DrifterModel();
+				drifter.setId(results[mDirectory_IdIndex]);
+				mDrifterMap[drifter.getId()] = drifter;
+			}
+			didReadFirstLine = true;
+		}
+
+
+		CI_LOG_I("Done parsing DRIFTER DIRECTORY:");
+		CI_LOG_I(mDrifterMap.size());
+		CI_LOG_I("");
+	}
+
+	void DataManager::parseDrifterData(const ci::fs::path & path) {
+		std::ifstream file;
+		file.open(path);
 		bool didReadFirstLine = false;
 		while (file.good()) {
 			std::vector<string> results = getNextLineAndSplitIntoTokens(file, ' ');
@@ -81,32 +102,30 @@ namespace amnh {
 		CI_LOG_I("Done parsing DRIFTERS DATA");
 	}
 
-	void DataManager::parseDrifterDirectoryData() {
-		std::string fileName = "../assets/data/directory.dat";
-		std::ifstream file;
-		file.open(fileName);
-		bool didReadFirstLine = false;
-		while (file.good()) {
-			std::vector<string> results = getNextLineAndSplitIntoTokens(file, ' ');
-			if (didReadFirstLine && results.size() > 16) {
-				DrifterModel drifter = DrifterModel();
-				drifter.setId(results[mDirectory_IdIndex]);
-				mDrifterMap[drifter.getId()] = drifter;
+	void DataManager::parseDrfiterJson(const ci::fs::path & path, double startTime) {
+		try {
+			auto source = loadFile(path);
+
+			if (!source) {
+				throw ci::Exception("Can't find file '" + path.string() + "'");
 			}
-			didReadFirstLine = true;
+
+			const JsonTree json(source);
+
+			const JsonTree & times = json.getChild("drifters.times");
+			const JsonTree & lats = json.getChild("drifters.lats");
+			const JsonTree & lons = json.getChild("drifters.lons");
+			const JsonTree & depths = json.getChild("drifters.depths");
+
+		} catch (exception e) {
+			CI_LOG_EXCEPTION("Can't load drifter json at '" + path.string() + "'", e);
 		}
-
-
-		CI_LOG_I("Done parsing DRIFTER DIRECTORY:");
-		CI_LOG_I(mDrifterMap.size());
-		CI_LOG_I("");
 	}
 
-	void DataManager::parseHurricanData()
+	void DataManager::parseHurricaneData(const ci::fs::path & path)
 	{
-		std::string fileName = "../assets/data/storm_track_statistics.csv";
 		std::ifstream file;
-		file.open(fileName);
+		file.open(path);
 		bool didReadFirstLine = false;
 		HurricaneModel hurricane = HurricaneModel(); // Hard coded because we're only handling one hurricane
 		hurricane.setId("Maria");
@@ -144,9 +163,9 @@ namespace amnh {
 		CI_LOG_I("");
 	}
 
-	void DataManager::parseFloatData() {
+	void DataManager::parseFloaterData(const ci::fs::path & path) {
 		try {
-			fs::path filePath = getAssetPath("data/floats.json");
+			fs::path filePath = path;
 			if (fs::exists(filePath)) {
 				DataSourceRef floatSource = loadFile(filePath);
 				ci::JsonTree floatTree = (JsonTree)floatSource;
