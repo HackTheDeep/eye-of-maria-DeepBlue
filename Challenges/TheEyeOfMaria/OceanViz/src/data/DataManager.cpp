@@ -44,6 +44,10 @@ namespace amnh {
 	//		setFieldFromJsonIfExists(&mVideosAssetDir, "videos.assetDir");
 
 
+	void DataManager::parseDrfiterJson(const ci::fs::path & jsonPath) {
+
+	}
+
 	void DataManager::parseDrifterData() {
 		std::string fileName = "../assets/data/drifer_data.dat";
 		std::ifstream file;

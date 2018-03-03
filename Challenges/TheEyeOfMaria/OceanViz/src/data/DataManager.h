@@ -43,6 +43,7 @@ namespace amnh {
 
 	protected:
 		// Functions
+		void									parseDrfiterJson(const ci::fs::path & jsonPath);
 		void									parseDrifterData();
 		void									parseDrifterDirectoryData();
 		void									parseHurricanData();

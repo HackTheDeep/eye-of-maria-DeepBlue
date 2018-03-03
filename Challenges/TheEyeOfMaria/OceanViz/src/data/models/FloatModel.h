@@ -25,7 +25,7 @@ namespace amnh {
 		inline std::vector<SampleEvent> &	getAllSampleEvents() { return mSampleEvents; };
 
 		void							setId(std::string id) { mId = id; };
-		std::string						getId() { return mId; };
+		const std::string &				getId() const { return mId; };
 		void							sortEvents();
 	protected:
 		// Functions

@@ -9,11 +9,11 @@ namespace amnh {
 	struct DrifterModel {
 	public:
 		struct SampleEvent {
-			std::time_t		timestamp;
-			float			normalizedTime;
-			float			latitude;
-			float			longitude;
-			float			qualityIndex;
+			std::time_t		timestamp = 0;
+			float			normalizedTime = 0;
+			float			latitude = 0;
+			float			longitude = 0;
+			float			qualityIndex = 0;
 		};
 
 		DrifterModel();
@@ -24,7 +24,7 @@ namespace amnh {
 		inline std::vector<SampleEvent> &	getAllSampleEvents() { return mSampleEvents; };
 
 		void							setId(std::string id) { mId = id; };
-		std::string						getId() { return mId; };
+		const std::string &				getId() const { return mId; };
 
 	protected:
 		// Functions
