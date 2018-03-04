@@ -85,6 +85,11 @@ void DataPointController::addDrifterData() {
 
 		for (const auto & event : events) {
 
+			if (event.normalizedTime < 0) {
+				// skip invalid drifters
+				continue;
+			}
+
 			mPointsList[mNumUsedPoints].setup(getPolarFromLatLong( event.latitude, event.longitude ));
 			mPointsList[mNumUsedPoints].setType(DataPoint::DataType::DRIFTER);
 			mPointsList[mNumUsedPoints].mTimeStamp = event.normalizedTime;

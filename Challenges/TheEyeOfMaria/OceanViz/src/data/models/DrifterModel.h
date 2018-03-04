@@ -17,7 +17,7 @@ namespace amnh {
 			float			depth = 0;
 		};
 
-		DrifterModel(std::string id = "", ci::ColorA color = ci::ColorA::zero()) : mId(id), mColor(color){};
+		DrifterModel(std::string id = "", int numEvents = 0, ci::ColorA color = ci::ColorA::zero()) : mId(id), mSampleEvents(numEvents), mColor(color){};
 		~DrifterModel();
 
 		// Functions

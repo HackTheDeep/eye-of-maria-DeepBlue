@@ -29,23 +29,26 @@ namespace amnh {
 			parseDrifterData(getAssetPath("data/drifer_data.dat"));
 			parseHurricaneData(getAssetPath("data/storm_track_statistics.csv"));
 			parseFloaterData(getAssetPath("data/floats.json"));*/
-			parseDrfiterJson(getAssetPath("data/Drifters1800.json"), dateStringToTimestamp("2009.03.01 12:00:00"), ci::Color(1, 1, 0));
+			parseDrfiterJson(getAssetPath("data/Drifters1800.json"), {"time", "lat", "lon"}, dateStringToTimestamp("2009.03.01 12:00:00"), ci::Color(1, 1, 0));
 
 			// get min/max timestamps
 			for (auto & drifter : mDrifterMap) {
 				for (auto & event : drifter.second.getAllSampleEvents()) {
+					if (event.timestamp < 0) { continue; }
 					if (event.timestamp > mMaxTimeStamp) { mMaxTimeStamp = event.timestamp;	}
 					if (event.timestamp < mMinTimeStamp) { mMinTimeStamp = event.timestamp; }
 				}
 			}
 			for (auto & hurricane : mHurricaneModels) {
 				for (auto & event : hurricane.getAllSampleEvents()) {
+					if (event.timestamp < 0) { continue; }
 					if (event.timestamp > mMaxTimeStamp) { mMaxTimeStamp = event.timestamp; }
 					if (event.timestamp < mMinTimeStamp) { mMinTimeStamp = event.timestamp; }
 				}
 			}
 			for (auto & floater : mFloatMap) {
 				for (auto & event : floater.second.getAllSampleEvents()) {
+					if (event.timestamp < 0) { continue; }
 					if (event.timestamp > mMaxTimeStamp) { mMaxTimeStamp = event.timestamp; }
 					if (event.timestamp < mMinTimeStamp) { mMinTimeStamp = event.timestamp; }
 				}
@@ -125,7 +128,7 @@ namespace amnh {
 		CI_LOG_I("Done parsing DRIFTERS DATA");
 	}
 
-	void DataManager::parseDrfiterJson(const ci::fs::path & path, double startTime, ci::ColorA color) {
+	void DataManager::parseDrfiterJson(const ci::fs::path & path, const std::set<std::string> fields, double startTime, ci::ColorA color) {
 		try {
 			auto source = loadFile(path);
 
@@ -137,64 +140,70 @@ namespace amnh {
 
 			const JsonTree json(source);
 
-			const JsonTree & times = json.getChild("times");
-			const JsonTree & lats = json.getChild("lats");
-			const JsonTree & lons = json.getChild("lons");
-			const JsonTree & depths = json.getChild("depths");
+			// parse data
+			for (const auto & field : fields) {
 
-			CI_LOG_I("Generating " + to_string(times.getNumChildren()) + " drifters with " + to_string(times.getChildren().front().getNumChildren()) + " events each...");
-
-			int numSkipped = 0;
-
-			for (int i = 0; i < times.getNumChildren(); i++) {
-				const string id = path.filename().string() + "_" + to_string(i);
+				const JsonTree & jsonDrifters = json.getChild(field);
 				
-				DrifterModel drifter(id, color);
+				const int numDrifters = jsonDrifters.getNumChildren();
+				const int numEvents = jsonDrifters.getChildren().front().getNumChildren();
+				
+				CI_LOG_I("Parsing " + to_string(numEvents) + " " + field + " samples from " + to_string(numDrifters) + " drifters...");
 
-				auto & events = drifter.getAllSampleEvents();
+				int numSkipped = 0;
 
-				const JsonTree & dTimes = times[i];
-				const JsonTree & dLats = lats[i];
-				const JsonTree & dLons = lons[i];
-				const JsonTree & dDepths = depths[i];
+				for (int i = 0; i < jsonDrifters.getNumChildren(); i++) {
+					
+					// create or find existing drifter
+					const string id = path.filename().string() + "_" + to_string(i);
 
-				try {
+					auto drifterIt = mDrifterMap.find(id);
 
-					auto itTime = dTimes.begin();
-					auto itLat = dLats.begin();
-					auto itLon = dLons.begin();
-					auto itDepth = dDepths.begin();
+					if (drifterIt == mDrifterMap.end()) {
+						mDrifterMap[id] = DrifterModel(id, numEvents, color);
+						drifterIt = mDrifterMap.find(id);
+					}
+					
+					// parse samples
+					const auto & values = jsonDrifters[i];
+					auto & samples = drifterIt->second.getAllSampleEvents();
 
-					for (int j = 0; j < dTimes.getNumChildren(); j++) {
-						DrifterModel::SampleEvent drifterEvent;
-						drifterEvent.timestamp = itTime->getValue<time_t>();
-						drifterEvent.latitude = itLat->getValue<float>();
-						drifterEvent.longitude = itLon->getValue<float>();
-						drifterEvent.depth = itDepth->getValue<float>();
+					auto & valueIt = values.begin();
+					auto & sampleIt = samples.begin();
 
-						itTime++;
-						itLat++;
-						itLon++;
-						itDepth++;
+					try {
+						for (int j = 0; j < numEvents; j++) {
 
-						if (drifterEvent.timestamp <= 0) {
-							// skip invalid data
-							continue;
+							if (field == "time") {
+								sampleIt->timestamp = valueIt->getValue<time_t>();
+								if (sampleIt->timestamp >= 0) { sampleIt->timestamp += startTime; }
+
+							} else if (field == "j1") { // days
+								static const time_t secondsPerDay = 24 * 60 * 60;
+								sampleIt->timestamp = valueIt->getValue<time_t>() * secondsPerDay;
+								if (sampleIt->timestamp >= 0) { sampleIt->timestamp += startTime; }
+
+							} else if (field == "lat") {
+								sampleIt->latitude = valueIt->getValue<float>();
+
+							} else if (field == "lon") {
+								sampleIt->longitude = valueIt->getValue<float>();
+
+							} else if (field == "depth") {
+								sampleIt->depth = valueIt->getValue<float>();
+							}
+
+							sampleIt++;
+							valueIt++;
 						}
 
-						drifterEvent.timestamp += startTime;
-
-						events.push_back(drifterEvent);
+					} catch (exception e) {
+						CI_LOG_EXCEPTION("Could not parse drifter value", e);
 					}
-
-					mDrifterMap[id] = drifter;
-
-				} catch (exception e) {
-					CI_LOG_EXCEPTION("Could not parse drifter value", e);
 				}
 			}
 
-			CI_LOG_I("...Drifter data generated (skipped " + to_string(numSkipped) + " invalid events)");
+			CI_LOG_I("...Drifter data generated");
 
 		} catch (exception e) {
 			CI_LOG_EXCEPTION("Can't load drifter json at '" + path.string() + "'", e);

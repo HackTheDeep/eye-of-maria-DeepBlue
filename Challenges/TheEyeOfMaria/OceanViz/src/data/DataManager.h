@@ -47,7 +47,7 @@ namespace amnh {
 
 	protected:
 		// Functions
-		void									parseDrfiterJson(const ci::fs::path & path, double startTime = 0, ci::ColorA color = ci::ColorA::zero());
+		void									parseDrfiterJson(const ci::fs::path & path, const std::set<std::string> fields, double startTime = 0, ci::ColorA color = ci::ColorA::zero());
 		void									parseDrifterData(const ci::fs::path & path);
 		void									parseDrifterDirectoryData(const ci::fs::path & path);
 		void									parseHurricaneData(const ci::fs::path & path);

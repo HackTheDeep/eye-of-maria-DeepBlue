@@ -33,8 +33,8 @@ for field in args.fields:
         values = values[:args.clamp]
 
     # remove nan and inf values
-    values[numpy.where(numpy.isnan(values))] = 0
-    values[numpy.where(numpy.isinf(values))] = 0
+    values[numpy.where(numpy.isnan(values))] = -1
+    values[numpy.where(numpy.isinf(values))] = -1
 
     results[field] = values.tolist()
 
