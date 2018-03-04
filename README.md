@@ -52,7 +52,8 @@ Before you parse an .NC file, you can download the Net CDF4 binaries from [https
 
 1. Install NET CDF4 python package to parse .NC files:
   ```bash
-  pip install netCDF4
+  pip install netCDF4 # to parse nc files
+  pip install jd2gcal # to parse julian dates
   ```
 2. Convert NC file to JSON
   ```bash

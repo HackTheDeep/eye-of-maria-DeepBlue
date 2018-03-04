@@ -1,10 +1,12 @@
 import datetime
+import time
 import math
 import json
-import netCDF4
+import netCDF4 # parse nc files
 import numpy
 import sys
 import argparse
+import jdcal # convert julian dates
 
 # Define the parser
 parser = argparse.ArgumentParser(description='NC to JSON converter')
@@ -22,8 +24,19 @@ ncfile = netCDF4.Dataset(args.input, 'r')
 
 results = {}
 
+def jul2Unix(julian):
+    greg = jdcal.jd2gcal(julian, 0)
+    dt = datetime.datetime(greg[0], greg[1], greg[2], int(greg[3] * 24), int((greg[3] * 24) % 60))
+    return time.mktime(dt.timetuple())
+
+vJul2Unix = numpy.vectorize(jul2Unix)
+
 for field in args.fields:
     values = ncfile.variables[field][:]
+
+    if (field == 'j1'):
+        values = vJul2Unix(values)
+        field = 'time'
 
     # sample every N-th events
     if args.interval != 1:
