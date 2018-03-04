@@ -30,8 +30,8 @@ namespace amnh {
 			parseHurricaneData(getAssetPath("data/storm_track_statistics.csv"));
 			parseFloaterData(getAssetPath("data/floats.json"));*/
 			//parseDrfitersJson(getAssetPath("data/Drifters1800.json"), {"time", "lat", "lon"}, dateStringToTimestamp("2009.03.01 12:00:00"), ci::Color(1, 1, 0));
-			parseDrfitersJson(getAssetPath("data/Anticyclonic.json"), {"time", "lat", "lon"}, dateStringToTimestamp("2009.03.01 12:00:00"), ci::Color(1, 0, 0));
-			parseDrfitersJson(getAssetPath("data/Cyclonic.json"), {"time", "lat", "lon"}, dateStringToTimestamp("2009.03.01 12:00:00"), ci::Color(0, 1, 1));
+			parseDrfitersJson(getAssetPath("data/Anticyclonic.json"), {"time", "lat", "lon"}, 0, ci::Color(1, 0, 0));
+			parseDrfitersJson(getAssetPath("data/Cyclonic.json"), {"time", "lat", "lon"}, 0, ci::Color(0, 1, 1));
 
 			// get min/max timestamps
 			for (auto & drifter : mDrifterMap) {

@@ -69,7 +69,7 @@ void MainController::draw() {
 
 	mEarth.draw();
 
-	DataPointController::getInstance()->draw();
+	DataPointController::getInstance()->draw(bEnableDepthTest);
 }
 
 void MainController::finishSetup() {

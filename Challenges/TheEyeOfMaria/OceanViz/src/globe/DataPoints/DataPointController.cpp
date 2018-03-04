@@ -484,16 +484,23 @@ void DataPointController::toggleHurricane() {
 	}
 }
 
-void DataPointController::draw() {
+void DataPointController::draw(bool depthTest) {
 
 	drawLines();
 
+	float t = TimelineManager::getInstance()->getNormProgress();
+	mPointsShader->uniform("uPlayhead", t);
 	mPointsShader->uniform("uTrailDuration", OceanSettings::getInstance()->mTrailDuration);
 	mPointsShader->uniform("uTrailFadePower", OceanSettings::getInstance()->mTrailFadePower);
-	float t = TimelineManager::getInstance()->getNormProgress();
-	gl::ScopedBlendAdditive scopedBlend;
-	mPointsShader->uniform("uPlayhead", t);
-	mPointsBatch->draw();
+	
+	if (depthTest) {
+		gl::ScopedBlendAdditive scopedBlend;
+		mPointsBatch->draw();
+
+	} else {
+		gl::ScopedBlendAlpha scopedBlend;
+		mPointsBatch->draw();
+	}
 }
 
 void DataPointController::drawLines() {

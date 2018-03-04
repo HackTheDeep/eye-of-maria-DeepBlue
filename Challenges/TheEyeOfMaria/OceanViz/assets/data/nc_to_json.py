@@ -34,6 +34,7 @@ vJul2Unix = numpy.vectorize(jul2Unix)
 for field in args.fields:
     values = ncfile.variables[field][:]
 
+    # convert julian dates to unix times
     if (field == 'j1'):
         values = vJul2Unix(values)
         field = 'time'

@@ -40,7 +40,7 @@ namespace amnh {
 
 		void setup();
 		void update();
-		void draw();
+		void draw(bool depthTest);
 
 		void setupLines();
 		void drawLines();
