@@ -61,14 +61,14 @@ Before you parse an .NC file, you can download the Net CDF4 binaries from [https
   ```
   Type `python nc_to_json.py -h` to get a list of all options. Below is a full example
   ```bash
-  python nc_to_json.py Drifters1800.nc Drifters1800.json --fields time lat lon --clamp 16 --interval 8
+  python nc_to_json.py Drifters1800.nc Drifters1800.json --fields time lat lon --subinterval 8 --clamp 16
   ```
 ### Example Parse Configs
 
 ```bash
-python nc_to_json.py Drifters1800.nc Drifters1800.json --fields time lat lon --clamp 32 --interval 8
-python nc_to_json.py Anticyclonic.nc Anticyclonic.json --fields j1 lat lon
-python nc_to_json.py Cyclonic.nc Cyclonic.json --fields j1 lat lon
+python nc_to_json.py Drifters1800.nc Drifters1800.json --fields time lat lon --subinterval 8 --clamp 32
+python nc_to_json.py Anticyclonic.nc Anticyclonic.json --fields j1 lat lon --interval 8
+python nc_to_json.py Cyclonic.nc Cyclonic.json --fields j1 lat lon --interval 8
 ```
 
 
