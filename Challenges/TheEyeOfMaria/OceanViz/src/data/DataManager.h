@@ -47,7 +47,8 @@ namespace amnh {
 
 	protected:
 		// Functions
-		void									parseDrfiterJson(const ci::fs::path & path, const std::set<std::string> fields, double startTime = 0, ci::ColorA color = ci::ColorA::zero());
+		void									parseDrfitersJson(const ci::fs::path & path, const std::set<std::string> fields, double startTime = 0, ci::ColorA color = ci::ColorA::zero());
+		inline void								parseDrifterSamples(DrifterModel & model, const ci::JsonTree & jsonValues, const std::string & field, double startTime = 0);
 		void									parseDrifterData(const ci::fs::path & path);
 		void									parseDrifterDirectoryData(const ci::fs::path & path);
 		void									parseHurricaneData(const ci::fs::path & path);
@@ -63,6 +64,8 @@ namespace amnh {
 		std::string						getDrifterDateString(std::string year, std::string month, std::string day);
 		std::string						getHurricaneDateString(std::string date, std::string time);
 		std::string						getFloatDateString(std::string date);
+
+		inline DrifterModel &			getOrCreateDrifter(const std::string & id, const int numEvents, const ci::ColorA & color);
 
 
 		// Properties

@@ -11,7 +11,7 @@ parser = argparse.ArgumentParser(description='NC to JSON converter')
 parser.add_argument('input', action='store', help='NC file to read from')
 parser.add_argument('output', action='store', help='JSON file to write to (defaults to <input.json>)')
 parser.add_argument('--clamp', action='store', dest='clamp', type=int, default=-1, help='Max number of samples to parse. Defaults to -1 to parse all samples.')
-parser.add_argument('--interval', action='store', dest='interval', type=int, default=-1, help='The interval used to sample every n-th element. Defaults to 1.\n')
+parser.add_argument('--interval', action='store', dest='interval', type=int, default=1, help='The interval used to sample every n-th element. Defaults to 1.\n')
 parser.add_argument('--fields', action='store', dest='fields', nargs='*', default=-1, help='The fields to parse from the NC file. You can use `ncdump -h` to get a list of fields.')
 args = parser.parse_args()
 

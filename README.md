@@ -63,7 +63,13 @@ Before you parse an .NC file, you can download the Net CDF4 binaries from [https
   ```bash
   python nc_to_json.py Drifters1800.nc Drifters1800.json --fields time lat lon --clamp 16 --interval 8
   ```
+### Example Parse Configs
 
+```bash
+python nc_to_json.py Drifters1800.nc Drifters1800.json --fields time lat lon --clamp 32 --interval 8
+python nc_to_json.py Anticyclonic.nc Anticyclonic.json --fields j1 lat lon
+python nc_to_json.py Cyclonic.nc Cyclonic.json --fields j1 lat lon
+```
 
 
 ## Challenge Report
