@@ -22,7 +22,7 @@ namespace amnh {
 		static DataManagerRef getInstance() {
 			static DataManagerRef instance = nullptr;
 			if (!instance) {
-				instance = DataManagerRef(new DataManager());
+				instance = std::make_shared<DataManager>();
 			}
 			return instance;
 		}
@@ -39,6 +39,7 @@ namespace amnh {
 		std::time_t									getMinTimestamp() { return mMinTimeStamp; }
 		std::time_t									getMaxTimestamp() { return mMaxTimeStamp; }
 		std::string									getDateStringFromTimestamp(time_t timestamp);
+		int											getNumEvents() const { return mNumEvents; }
 
 		inline float							getNormalizedTime(float absoluteTimestamp);
 
@@ -46,7 +47,7 @@ namespace amnh {
 
 	protected:
 		// Functions
-		void									parseDrfiterJson(const ci::fs::path & path, double startTime = 0);
+		void									parseDrfiterJson(const ci::fs::path & path, double startTime = 0, ci::ColorA color = ci::ColorA::zero());
 		void									parseDrifterData(const ci::fs::path & path);
 		void									parseDrifterDirectoryData(const ci::fs::path & path);
 		void									parseHurricaneData(const ci::fs::path & path);
@@ -70,6 +71,8 @@ namespace amnh {
 
 		std::atomic_bool				mIsLoading = true;
 		std::shared_ptr<std::thread>	mLoaderThread = nullptr;
+		
+		int								mNumEvents = 0;
 
 		// Model Vectors
 		std::vector<HurricaneModel>			mHurricaneModels;

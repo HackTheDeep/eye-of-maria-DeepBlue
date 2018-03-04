@@ -10,7 +10,7 @@ namespace amnh {
 	DataManager::DataManager() {
 		mMinTimeStamp = std::numeric_limits<time_t>::max() - 1;
 		mMaxTimeStamp = std::numeric_limits<time_t>::min();
-
+		mIsLoading = true;
 	}
 
 	DataManager::~DataManager() {
@@ -21,13 +21,15 @@ namespace amnh {
 
 	void DataManager::setup() {
 		mIsLoading = true;
-
+		
 		mLoaderThread = make_shared<thread>([=] {
+			mNumEvents = 0;
+
 			/*parseDrifterDirectoryData(getAssetPath("data/directory.dat"));
 			parseDrifterData(getAssetPath("data/drifer_data.dat"));
 			parseHurricaneData(getAssetPath("data/storm_track_statistics.csv"));
 			parseFloaterData(getAssetPath("data/floats.json"));*/
-			parseDrfiterJson(getAssetPath("data/Drifters1800.json"));
+			parseDrfiterJson(getAssetPath("data/Drifters1800.json"), dateStringToTimestamp("2009.03.01 12:00:00"), ci::Color(1, 1, 0));
 
 			// get min/max timestamps
 			for (auto & drifter : mDrifterMap) {
@@ -51,16 +53,19 @@ namespace amnh {
 
 			// normalize timestamps
 			for (auto & drifter : mDrifterMap) {
+				mNumEvents += drifter.second.getAllSampleEvents().size();
 				for (auto & event : drifter.second.getAllSampleEvents()) {
 					event.normalizedTime = getNormalizedTime(event.timestamp);
 				}
 			}
 			for (auto & hurricane : mHurricaneModels) {
+				mNumEvents += hurricane.getAllSampleEvents().size();
 				for (auto & event : hurricane.getAllSampleEvents()) {
 					event.normalizedTime = getNormalizedTime(event.timestamp);
 				}
 			}
 			for (auto & floater : mFloatMap) {
+				mNumEvents += floater.second.getAllSampleEvents().size();
 				for (auto & event : floater.second.getAllSampleEvents()) {
 					event.normalizedTime = getNormalizedTime(event.timestamp);
 				}
@@ -120,7 +125,7 @@ namespace amnh {
 		CI_LOG_I("Done parsing DRIFTERS DATA");
 	}
 
-	void DataManager::parseDrfiterJson(const ci::fs::path & path, double startTime) {
+	void DataManager::parseDrfiterJson(const ci::fs::path & path, double startTime, ci::ColorA color) {
 		try {
 			auto source = loadFile(path);
 
@@ -132,20 +137,20 @@ namespace amnh {
 
 			const JsonTree json(source);
 
-			const JsonTree & times = json.getChild("drifters.times");
-			const JsonTree & lats = json.getChild("drifters.lats");
-			const JsonTree & lons = json.getChild("drifters.lons");
-			const JsonTree & depths = json.getChild("drifters.depths");
+			const JsonTree & times = json.getChild("times");
+			const JsonTree & lats = json.getChild("lats");
+			const JsonTree & lons = json.getChild("lons");
+			const JsonTree & depths = json.getChild("depths");
 
 			CI_LOG_I("Generating " + to_string(times.getNumChildren()) + " drifters with " + to_string(times.getChildren().front().getNumChildren()) + " events each...");
-
-			const time_t startTime = 1235995200; // 2009-03-02 12:00:00 (TODO: make this a parameter)
 
 			int numSkipped = 0;
 
 			for (int i = 0; i < times.getNumChildren(); i++) {
 				const string id = path.filename().string() + "_" + to_string(i);
-				DrifterModel drifter(id);
+				
+				DrifterModel drifter(id, color);
+
 				auto & events = drifter.getAllSampleEvents();
 
 				const JsonTree & dTimes = times[i];

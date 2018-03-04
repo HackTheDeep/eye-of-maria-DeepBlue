@@ -17,7 +17,7 @@ namespace amnh {
 			float			depth = 0;
 		};
 
-		DrifterModel(std::string id = "") : mId(id) {};
+		DrifterModel(std::string id = "", ci::ColorA color = ci::ColorA::zero()) : mId(id), mColor(color){};
 		~DrifterModel();
 
 		// Functions
@@ -26,13 +26,16 @@ namespace amnh {
 		inline std::vector<SampleEvent> &	getAllSampleEvents() { return mSampleEvents; };
 
 		void							setId(std::string id) { mId = id; };
-		const std::string &				getId() const { return mId; };
+		inline const std::string &		getId() const { return mId; };
+
+		inline const ci::ColorA &		getColor() const { return mColor; }
+		inline void						setColor(ci::ColorA c) { mColor = c; }
 
 	protected:
-		// Functions
 
 		// Properties
 		std::string						mId;
+		ci::ColorA						mColor = ci::ColorA::zero(); // zero = use default color
 		std::vector<SampleEvent>		mSampleEvents;
 	};
 }

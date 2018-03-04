@@ -41,18 +41,20 @@ git submodule update --init --recursive
 
 ## Parsing new Data
 
-1. Install NET CDF4 to parse .NC files:
+Before you parse an .NC file, you can download the Net CDF4 binaries from [https://www.unidata.ucar.edu/downloads/netcdf/index.jsp](https://www.unidata.ucar.edu/downloads/netcdf/index.jsp). In the bin folder you'll find `ncdump.exe`, which you can use to investigate the headers of your .NC file by typing: `ncdump -h <data.nc>`.
+
+1. Install NET CDF4 python package to parse .NC files:
   ```bash
   pip install netCDF4
   ```
 2. Convert NC file to JSON
   ```bash
   cd Challenges/TheEyeOfMaria/OceanViz/assets/data
-  python tnc_to_json.py Drifters1800.nc Drifters1800.json
+  python nc_to_json.py Drifters1800.nc Drifters1800.json --fields time lat lon
   ```
-  You can optionally pass limit for # of drifters to parse:
+  Type `python nc_to_json.py -h` to get a list of all options. Below is a full example
   ```bash
-  python tnc_to_json.py Drifters1800.nc Drifters1800.json 64
+  python nc_to_json.py Drifters1800.nc Drifters1800.json --fields time lat lon --clamp 16 --interval 8
   ```
 
 

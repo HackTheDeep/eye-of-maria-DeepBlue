@@ -23,7 +23,7 @@ void DataPointController::setup() {
 
 
 	//int numPoints = 101000;
-	const int numPoints = 400000; // the max num of points we can display
+	const int numPoints = DataManager::getInstance()->getNumEvents(); // the max num of points we can display
 	for (int i = 0; i < numPoints; i++) {
 		//setup all the placeholder points
 		DataPoint p;
@@ -31,7 +31,6 @@ void DataPointController::setup() {
 		p.setup(pos);
 		p.mColor = ColorA::gray(0.0f, 0.0f);
 		mPointsList.push_back(p);
-
 	}
 
 
@@ -81,12 +80,17 @@ void DataPointController::addDrifterData() {
 		//go through each drifter model and get all the data points
 		const auto & events = drifter.second.getAllSampleEventsConst();
 
+		const auto & color = drifter.second.getColor();
+		const bool lockedColor = color != ci::ColorA::zero();
+
 		for (const auto & event : events) {
 
 			mPointsList[mNumUsedPoints].setup(getPolarFromLatLong( event.latitude, event.longitude ));
 			mPointsList[mNumUsedPoints].setType(DataPoint::DataType::DRIFTER);
 			mPointsList[mNumUsedPoints].mTimeStamp = event.normalizedTime;
 			mPointsList[mNumUsedPoints].mQualityIndex = event.qualityIndex;
+			mPointsList[mNumUsedPoints].mColor = color;
+			mPointsList[mNumUsedPoints].mLockedColor = lockedColor;
 
 			if (event.qualityIndex > maxDrifterQuality) maxDrifterQuality = event.qualityIndex;
 			if (event.qualityIndex < minDrifterQuality) minDrifterQuality = event.qualityIndex;
@@ -371,9 +375,15 @@ void DataPointController::reMapDrifterColors(DrifterColor colorType) {
 
 	for (int i = driftersStartIndex; i < driftersStartIndex + mNumDrifterPts; i++) {
 
+		auto & point = mPointsList[i];
+
+		if (point.mLockedColor) {
+			continue;
+		}
+
 		switch (colorType) {
 		case DrifterColor::QUALITY:
-			val = (float)mPointsList[i].mQualityIndex;
+			val = (float)point.mQualityIndex;
 			break;
 
 		default:
@@ -381,7 +391,7 @@ void DataPointController::reMapDrifterColors(DrifterColor colorType) {
 		}
 
 		float pct = (startVal == endVal) ? 1.0f : clamp(lmap(val, startVal, endVal, 0.0f, 1.0f), 0.0f, 1.0f);
-		mPointsList[i].mColor = startCol.lerp(pct, endCol);
+		point.mColor = startCol.lerp(pct, endCol);
 	}
 
 
@@ -473,7 +483,6 @@ void DataPointController::draw() {
 
 	drawLines();
 
-	mPointsShader->uniform("uViewScale", 1.0f);
 	mPointsShader->uniform("uTrailDuration", OceanSettings::getInstance()->mTrailDuration);
 	mPointsShader->uniform("uTrailFadePower", OceanSettings::getInstance()->mTrailFadePower);
 	float t = TimelineManager::getInstance()->getNormProgress();

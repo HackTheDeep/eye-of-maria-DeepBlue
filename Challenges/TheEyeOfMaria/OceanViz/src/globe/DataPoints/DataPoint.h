@@ -35,6 +35,7 @@ public:
 	ci::ColorA	mColor;
 	float		mRadius;
 	float		bShow;
+	bool		mLockedColor = false; // don't dynamically calc color
 
 	//for drifters
 	float mTimeStamp = std::numeric_limits<float>::max();
